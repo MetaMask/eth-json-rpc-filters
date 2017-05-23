@@ -1,0 +1,14 @@
+{
+  "name": "eth-json-rpc-filters",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eth-json-rpc-middleware": "^1.0.0"
+  }
+}
