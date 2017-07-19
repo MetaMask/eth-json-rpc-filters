@@ -1,70 +1,48 @@
-function LogFilter(opts) {
-  const self = this
-  self.type = 'log'
-  self.fromBlock = opts.fromBlock || 'latest'
-  self.toBlock = opts.toBlock || 'latest'
-  self.address = opts.address ? normalizeHex(opts.address) : opts.address
-  self.topics = opts.topics || []
-  self.updates = []
-  self.allResults = []
+const BaseFilter = require('./base-filter')
+
+class LogFilter extends BaseFilter {
+
+  constructor ({ ethQuery, params }) {
+    _super()
+    this.type = 'log'
+    this.ethQuery = ethQuery
+    this.params = Object.assign({
+      fromBlock: 'earliest',
+      toBlock: 'latest',
+      address: undefined,
+      topics: [],
+    }, params)
+  }
+
+  async update ({ oldBlock, newBlock }) {
+    // configure params for this update
+    // oldBlock is empty on boot
+    if (!oldBlock) oldBlock = newBlock
+    const fromBlock = maxBlockRef(this.params.fromBlock, oldBlock.number)
+    const toBlock = minBlockRef(this.params.toBlock, newBlock.number)
+    const params = Object.assign({}, this.params, { fromBlock, toBlock })
+    // fetch logs
+    const newLogs = await ethQuery.getLogs(params)
+    // add to results
+    this.addResults(newLogs)
+  }
+
 }
 
-LogFilter.prototype.validateLog = function(log){
-  const self = this
-
-  // check if block number in bounds:
-  if (blockTagIsNumber(self.fromBlock) && hexToInt(self.fromBlock) >= hexToInt(log.blockNumber)) return false
-  if (blockTagIsNumber(self.toBlock) && hexToInt(self.toBlock) <= hexToInt(log.blockNumber)) return false
-
-  // address is correct:
-  if (self.address && self.address !== log.address) return false
-
-  // topics match:
-  // topics are position-dependant
-  // topics can be nested to represent `or` [[a || b], c]
-  // topics can be null, representing a wild card for that position
-  var topicsMatch = self.topics.reduce(function(previousMatched, topicPattern, index){
-    // abort in progress
-    if (!previousMatched) return false
-    // wild card
-    if (!topicPattern) return true
-    // pattern is longer than actual topics
-    var logTopic = log.topics[index]
-    if (!logTopic) return false
-    // check each possible matching topic
-    var subtopicsToMatch = Array.isArray(topicPattern) ? topicPattern : [topicPattern]
-    var topicDoesMatch = subtopicsToMatch.filter(function(subTopic){
-      return logTopic === subTopic
-    }).length > 0
-    return topicDoesMatch
-  }, true)
-
-  return topicsMatch
+function minBlockRef(...refs) {
+  const sortedRefs = sortBlockRefs(refs)
+  return sortedRefs[0]
 }
 
-LogFilter.prototype.update = function(log){
-  const self = this
-  // validate filter match
-  var validated = self.validateLog(log)
-  if (!validated) return
-  // add to results
-  self.updates.push(log)
-  self.allResults.push(log)
+function maxBlockRef(...refs) {
+  const sortedRefs = sortBlockRefs(refs)
+  return sortedRefs[sortedRefs.length-1]
 }
 
-LogFilter.prototype.getChanges = function(){
-  const self = this
-  var results = self.updates
-  return results
-}
-
-LogFilter.prototype.getAllResults = function(){
-  const self = this
-  var results = self.allResults
-  return results
-}
-
-LogFilter.prototype.clearChanges = function(){
-  const self = this
-  self.updates = []
+function sortBlockRefs(refs) {
+  return refs.sort((refA, refB) => {
+    if (refA === 'latest' || refB === 'earliest') return 1
+    if (refB === 'latest' || refA === 'earliest') return -1
+    return (Number.parseInt(refA, 16) > Number.parseInt(refB, 16)) ? 1 : -1
+  })
 }

@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eth-json-rpc-middleware": "^1.0.0"
+    "eth-json-rpc-middleware": "^1.0.0",
+    "ethjs-query": "^0.2.6",
+    "lodash.flatmap": "^4.5.0"
   }
 }
