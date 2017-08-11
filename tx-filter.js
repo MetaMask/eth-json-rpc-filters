@@ -5,7 +5,7 @@ const getBlocksForRange = require('./getBlocksForRange')
 class TxFilter extends BaseFilter {
 
   constructor ({ ethQuery, params }) {
-    _super()
+    super()
     this.type = 'tx'
     this.ethQuery = ethQuery
   }

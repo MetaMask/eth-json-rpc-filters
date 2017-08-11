@@ -3,7 +3,7 @@ const BaseFilter = require('./base-filter')
 class LogFilter extends BaseFilter {
 
   constructor ({ ethQuery, params }) {
-    _super()
+    super()
     this.type = 'log'
     this.ethQuery = ethQuery
     this.params = Object.assign({
@@ -22,7 +22,7 @@ class LogFilter extends BaseFilter {
     const toBlock = minBlockRef(this.params.toBlock, newBlock.number)
     const params = Object.assign({}, this.params, { fromBlock, toBlock })
     // fetch logs
-    const newLogs = await ethQuery.getLogs(params)
+    const newLogs = await this.ethQuery.getLogs(params)
     // add to results
     this.addResults(newLogs)
   }
@@ -46,3 +46,5 @@ function sortBlockRefs(refs) {
     return (Number.parseInt(refA, 16) > Number.parseInt(refB, 16)) ? 1 : -1
   })
 }
+
+module.exports = LogFilter

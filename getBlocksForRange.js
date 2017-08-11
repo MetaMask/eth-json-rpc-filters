@@ -18,6 +18,8 @@ async function getBlocksForRange({ ethQuery, oldBlock, newBlock }) {
     blocks = blocks.concat(missingblocks)
   }
   blocks.push(newBlock)
+
+  return blocks
 }
 
 function intToHex(int) {

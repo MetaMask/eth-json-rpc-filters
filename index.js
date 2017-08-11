@@ -1,10 +1,10 @@
+const Mutex = require('await-semaphore').Mutex
 const EthQuery = require('ethjs-query')
 const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
 const waitForBlock = require('eth-json-rpc-middleware/waitForBlock')
 const LogFilter = require('./log-filter.js')
 const BlockFilter = require('./block-filter.js')
 const TxFilter = require('./tx-filter.js')
-const checkLogMatch = require('./checkLogMatch.js')
 
 module.exports = createEthFilterMiddleware
 
@@ -13,27 +13,32 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   let filterIndex = 0
   const filters = {}
 
-  const ethQuery = new Eth(provider)
+  const mutex = new Mutex()
+  const waitForFree = mutexMiddlewareWrapper({ mutex })
+
+  const ethQuery = new EthQuery(provider)
 
   blockTracker.on('sync', async ({ oldBlock, newBlock }) => {
     // lock update reads
+    const releaseLock = await mutex.acquire()
     // process all filters in parallel
     await Promise.all(objValues(filters).map((filter) => {
       return filter.update({ oldBlock, newBlock })
     }))
     // unlock update reads
+    releaseLock()
   })
 
   return createJsonRpcMiddleware({
     // install filters
-    eth_newFilter:                   newLogFilter,
-    eth_newBlockFilter:              newBlockFilter,
-    eth_newPendingTransactionFilter: newPendingTransactionFilter,
+    eth_newFilter:                   waitForFree(newLogFilter),
+    eth_newBlockFilter:              waitForFree(newBlockFilter),
+    eth_newPendingTransactionFilter: waitForFree(newPendingTransactionFilter),
     // uninstall filters
-    eth_uninstallFilter:             uninstallFilter,
+    eth_uninstallFilter:             waitForFree(uninstallFilter),
     // checking filter changes
-    eth_getFilterChanges:            getFilterChanges,
-    eth_getFilterLogs:               getFilterLogs,
+    eth_getFilterChanges:            waitForFree(getFilterChanges),
+    eth_getFilterLogs:               waitForFree(getFilterLogs),
   })
 
   //
@@ -78,7 +83,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
       return end(err)
     }
     const results = filter.getChangesAndClear()
-    res.results = results
+    res.result = results
     end()
   }
 
@@ -91,7 +96,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
       return end(err)
     }
     const results = filter.getAllResults()
-    res.results = results
+    res.result = results
     end()
   }
 
@@ -107,7 +112,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     const filter = filters[filterIndex]
     const results = Boolean(filter)
     delete filters[filterIndex]
-    res.results = results
+    res.result = results
     end()
   }
 
@@ -121,6 +126,19 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     return filterIndex
   }
 
+}
+
+function mutexMiddlewareWrapper({ mutex }) {
+  return (middleware) => {
+    return async (req, res, next, end) => {
+      // wait for mutex available
+      // we can release immediately because
+      // we just need to make sure updates aren't active
+      const releaseLock = await mutex.acquire()
+      releaseLock()
+      middleware(req, res, next, end)
+    }
+  }
 }
 
 function objValues(obj, fn){
