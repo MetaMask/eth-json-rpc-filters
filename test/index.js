@@ -5,6 +5,7 @@ const JsonRpcEngine = require('json-rpc-engine')
 const asMiddleware = require('json-rpc-engine/src/asMiddleware')
 const createBlockRefMiddleware = require('eth-json-rpc-middleware/block-ref')
 const TestBlockMiddleware = require('eth-block-tracker/test/util/testBlockMiddleware')
+const createScaffoldMiddleware = require('eth-json-rpc-middleware/scaffold')
 const createFilterMiddleware = require('../index.js')
 
 
@@ -281,10 +282,15 @@ function createTestSetup () {
   const provider = providerFromEngine(engine)
   // add block ref middleware
   engine.push(createBlockRefMiddleware({ blockTracker }))
+  // matching logs middleware
+  const matchingLogs = []
+  engine.push(createScaffoldMiddleware({
+    eth_getLogs: matchingLogs,
+  }))
   // add data source
   engine.push(asMiddleware(dataEngine))
   const query = new EthQuery(provider)
-  return { engine, provider, dataEngine, dataProvider, query, blockTracker, testBlockSource }
+  return { engine, provider, dataEngine, dataProvider, query, blockTracker, testBlockSource, matchingLogs }
 }
 
 function createEngineForTestData () {
