@@ -1,4 +1,5 @@
 const test = require('tape')
+const clone = require('deep-clone')
 const RpcBlockTracker = require('eth-block-tracker')
 const EthQuery = require('ethjs-query')
 const JsonRpcEngine = require('json-rpc-engine')
@@ -47,6 +48,9 @@ filterTest('log filter - basic', {
     testMeta.badTx = testMeta.testBlockSource.addTx({
       topics: ['0x00000000000000000000000000000000000000000000000000deadbeefcafe02']
     })
+    // add result to matching tx array
+    testMeta.matchingTxs.push(clone(testMeta.tx))
+    // trigger next block
     testMeta.blockTracker.once('sync', () => cb())
     testMeta.testBlockSource.nextBlock()
   },
@@ -283,14 +287,12 @@ function createTestSetup () {
   // add block ref middleware
   engine.push(createBlockRefMiddleware({ blockTracker }))
   // matching logs middleware
-  const matchingLogs = []
-  engine.push(createScaffoldMiddleware({
-    eth_getLogs: matchingLogs,
-  }))
+  const matchingTxs = []
+  engine.push(createScaffoldMiddleware({ eth_getLogs: matchingTxs }))
   // add data source
   engine.push(asMiddleware(dataEngine))
   const query = new EthQuery(provider)
-  return { engine, provider, dataEngine, dataProvider, query, blockTracker, testBlockSource, matchingLogs }
+  return { engine, provider, dataEngine, dataProvider, query, blockTracker, testBlockSource, matchingTxs }
 }
 
 function createEngineForTestData () {
