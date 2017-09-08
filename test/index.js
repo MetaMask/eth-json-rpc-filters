@@ -21,7 +21,6 @@ filterTest('basic block filter', { method: 'eth_newBlockFilter' },
   },
   function filterChangesOne(t, testMeta, response, cb){
     const results = response.result
-    console.log(response)
     const returnedBlockHash = results[0]
     t.equal(results.length, 1, 'correct number of results')
     const block = testMeta.blockTracker.getCurrentBlock()
@@ -58,7 +57,7 @@ filterTest('log filter - basic', {
     const results = response.result
     const matchedTx = response.result[0]
     t.equal(results.length, 1, 'correct number of results')
-    t.equal(matchedTx, testMeta.tx, 'correct result')
+    t.equal(matchedTx.hash, testMeta.tx.hash, 'correct result')
     cb()
   },
   function filterChangesTwo(t, testMeta, response, cb){
@@ -90,6 +89,9 @@ filterTest('log filter - and logic', {
         '0x00000000000000000000000000000000000000000000000000deadbeefcafe01',
       ],
     })
+    // add result to matching tx array
+    testMeta.matchingTxs.push(clone(testMeta.tx))
+    // trigger next block
     testMeta.blockTracker.once('sync', () => cb())
     testMeta.testBlockSource.nextBlock()
   },
@@ -97,7 +99,7 @@ filterTest('log filter - and logic', {
     const results = response.result
     const matchedTx = response.result[0]
     t.equal(results.length, 1, 'correct number of results')
-    t.equal(matchedTx, testMeta.tx, 'correct result')
+    t.equal(matchedTx.hash, testMeta.tx.hash, 'correct result')
     cb()
   },
   function filterChangesTwo(t, testMeta, response, cb){
@@ -134,6 +136,10 @@ filterTest('log filter - or logic', {
         '0x00000000000000000000000000000000000000000000000000deadbeefcafe03',
       ],
     })
+    // add result to matching tx array
+    testMeta.matchingTxs.push(clone(testMeta.tx1))
+    testMeta.matchingTxs.push(clone(testMeta.tx2))
+    // trigger next block
     testMeta.blockTracker.once('sync', () => cb())
     testMeta.testBlockSource.nextBlock()
   },
@@ -142,8 +148,8 @@ filterTest('log filter - or logic', {
     const matchedTx1 = response.result[0]
     const matchedTx2 = response.result[1]
     t.equal(results.length, 2, 'correct number of results')
-    t.equal(matchedTx1, testMeta.tx1, 'correct result')
-    t.equal(matchedTx2, testMeta.tx2, 'correct result')
+    t.equal(matchedTx1.hash, testMeta.tx1.hash, 'correct result')
+    t.equal(matchedTx2.hash, testMeta.tx2.hash, 'correct result')
     cb()
   },
   function filterChangesTwo(t, testMeta, response, cb){
@@ -181,6 +187,10 @@ filterTest('log filter - wildcard logic', {
         '0x00000000000000000000000000000000000000000000000000deadbeefcafe01',
       ],
     })
+    // add result to matching tx array
+    testMeta.matchingTxs.push(clone(testMeta.tx1))
+    testMeta.matchingTxs.push(clone(testMeta.tx2))
+    // trigger next block
     testMeta.blockTracker.once('sync', () => cb())
     testMeta.testBlockSource.nextBlock()
   },
@@ -189,8 +199,8 @@ filterTest('log filter - wildcard logic', {
     const matchedTx1 = response.result[0]
     const matchedTx2 = response.result[1]
     t.equal(results.length, 2, 'correct number of results')
-    t.equal(matchedTx1, testMeta.tx1, 'correct result')
-    t.equal(matchedTx2, testMeta.tx2, 'correct result')
+    t.equal(matchedTx1.hash, testMeta.tx1.hash, 'correct result')
+    t.equal(matchedTx2.hash, testMeta.tx2.hash, 'correct result')
     cb()
   },
   function filterChangesTwo(t, testMeta, response, cb){
