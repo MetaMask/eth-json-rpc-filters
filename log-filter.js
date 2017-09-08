@@ -23,6 +23,12 @@ class LogFilter extends BaseFilter {
     const params = Object.assign({}, this.params, { fromBlock, toBlock })
     // fetch logs
     const newLogs = await this.ethQuery.getLogs(params)
+    // de-BN ethQuery results
+    newLogs.forEach((log) => {
+      log.blockNumber = bnToHex(log.blockNumber)
+      log.logIndex = bnToHex(log.logIndex)
+      log.transactionIndex = bnToHex(log.transactionIndex)
+    })
     // add to results
     this.addResults(newLogs)
   }
@@ -45,6 +51,10 @@ function sortBlockRefs(refs) {
     if (refB === 'latest' || refA === 'earliest') return -1
     return (Number.parseInt(refA, 16) > Number.parseInt(refB, 16)) ? 1 : -1
   })
+}
+
+function bnToHex(bn) {
+  return '0x' + bn.toString(16)
 }
 
 module.exports = LogFilter
