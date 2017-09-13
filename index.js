@@ -10,26 +10,16 @@ module.exports = createEthFilterMiddleware
 
 function createEthFilterMiddleware({ blockTracker, provider }) {
 
+  // ethQuery for log lookups
+  const ethQuery = new EthQuery(provider)
+  // create filter collection
   let filterIndex = 0
   const filters = {}
-
+  // create update mutex
   const mutex = new Mutex()
   const waitForFree = mutexMiddlewareWrapper({ mutex })
 
-  const ethQuery = new EthQuery(provider)
-
-  blockTracker.on('sync', async ({ oldBlock, newBlock }) => {
-    // lock update reads
-    const releaseLock = await mutex.acquire()
-    // process all filters in parallel
-    await Promise.all(objValues(filters).map((filter) => {
-      return filter.update({ oldBlock, newBlock })
-    }))
-    // unlock update reads
-    releaseLock()
-  })
-
-  return createJsonRpcMiddleware({
+  const middleware = createJsonRpcMiddleware({
     // install filters
     eth_newFilter:                   waitForFree(newLogFilter),
     eth_newBlockFilter:              waitForFree(newBlockFilter),
@@ -40,6 +30,25 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     eth_getFilterChanges:            waitForFree(getFilterChanges),
     eth_getFilterLogs:               waitForFree(getFilterLogs),
   })
+
+  // setup filter updating and destroy handler
+  const filterUpdater = async ({ oldBlock, newBlock }) => {
+    if (filters.length === 0) return
+    // lock update reads
+    const releaseLock = await mutex.acquire()
+    // process all filters in parallel
+    await Promise.all(objValues(filters).map((filter) => {
+      return filter.update({ oldBlock, newBlock })
+    }))
+    // unlock update reads
+    releaseLock()
+  }
+  blockTracker.on('sync', filterUpdater)
+  middleware.destroy = () => {
+    blockTracker.removeListener('sync', filterUpdater)
+  }
+
+  return middleware
 
   //
   // new filters

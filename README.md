@@ -12,7 +12,15 @@ Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) 
 - `eth_getFilterLogs`
 
 ### usage
-```
+
+basic usage:
+```js
 const filterMiddleware = createFilterMiddleware({ blockTracker, provider })
 engine.push(filterMiddleware)
+```
+
+cleanup:
+```js
+// remove blockTracker handler to free middleware for garbage collection
+filterMiddleware.destroy()
 ```
