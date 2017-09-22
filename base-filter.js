@@ -5,6 +5,12 @@ class BaseFilter {
     this.allResults = []
   }
 
+  async initialize () {}
+
+  async update () {
+    throw new Error('BaseFilter - no update method specified')
+  }
+
   addResults (newResults) {
     this.updates = this.updates.concat(newResults)
     this.allResults = this.allResults.concat(newResults)

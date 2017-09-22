@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "deep-clone": "^3.0.2",
-    "eth-block-tracker": "^2.1.2",
+    "eth-block-tracker": "^2.2.0",
     "eth-json-rpc-middleware": "^1.2.7",
     "ethjs-query": "^0.2.9",
     "json-rpc-engine": "^3.0.1",

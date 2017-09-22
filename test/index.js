@@ -1,6 +1,6 @@
 const test = require('tape')
 const clone = require('deep-clone')
-const RpcBlockTracker = require('eth-block-tracker')
+const EthBlockTracker = require('eth-block-tracker')
 const EthQuery = require('ethjs-query')
 const JsonRpcEngine = require('json-rpc-engine')
 const asMiddleware = require('json-rpc-engine/src/asMiddleware')
@@ -290,7 +290,10 @@ function createTestSetup () {
   const { engine: dataEngine, testBlockSource } = createEngineForTestData()
   const dataProvider = providerFromEngine(dataEngine)
   // create block trackerfilterId
-  const blockTracker = new RpcBlockTracker({ provider: dataProvider })
+  const blockTracker = new EthBlockTracker({
+    provider: dataProvider,
+    pollingInterval: 200,
+  })
   // create higher level
   const engine = new JsonRpcEngine()
   const provider = providerFromEngine(engine)
