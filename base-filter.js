@@ -16,6 +16,10 @@ class BaseFilter {
     this.allResults = this.allResults.concat(newResults)
   }
 
+  addInitialResults (newResults) {
+    this.allResults = this.allResults.concat(newResults)
+  }
+
   getChangesAndClear () {
     const updates = this.updates
     this.updates = []

@@ -18,7 +18,11 @@ class LogFilter extends BaseFilter {
     // take earliest of range
     const fromBlock = minBlockRef(this.params.fromBlock, currentBlock.number)
     const toBlock = minBlockRef(this.params.toBlock, currentBlock.number)
-    await this._fetchAndAddNewLogs({ fromBlock, toBlock })
+    const params = Object.assign({}, this.params, { fromBlock, toBlock })
+    // fetch logs
+    const newLogs = await this._fetchLogs(params)
+    // add to results
+    this.addInitialResults(newLogs)
   }
 
   async update ({ oldBlock, newBlock }) {
@@ -28,10 +32,6 @@ class LogFilter extends BaseFilter {
     // take smallest range overlap
     const fromBlock = maxBlockRef(this.params.fromBlock, oldBlock.number)
     const toBlock = minBlockRef(this.params.toBlock, newBlock.number)
-    await this._fetchAndAddNewLogs({ fromBlock, toBlock })
-  }
-
-  async _fetchAndAddNewLogs({ fromBlock, toBlock }) {
     const params = Object.assign({}, this.params, { fromBlock, toBlock })
     // fetch logs
     const newLogs = await this._fetchLogs(params)
