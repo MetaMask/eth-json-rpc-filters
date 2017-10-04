@@ -7,7 +7,7 @@ class LogFilter extends BaseFilter {
     this.type = 'log'
     this.ethQuery = ethQuery
     this.params = Object.assign({
-      fromBlock: 'earliest',
+      fromBlock: 'latest',
       toBlock: 'latest',
       address: undefined,
       topics: [],
