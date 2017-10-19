@@ -67,6 +67,44 @@ filterTest('log filter - basic', {
   }
 )
 
+test('log filter - initialization failure', (t) => {
+  const testMeta = createTestSetup()
+  const { engine, blockTracker, provider } = testMeta
+
+  // create filter middleware thats rigged to explode
+  const errorMessage = 'simulated log query timeout'
+  const hookedEngine = new JsonRpcEngine()
+  hookedEngine.push(createScaffoldMiddleware({
+    eth_getLogs: (req, res, next, end) => end(new Error(errorMessage)),
+  }))
+  hookedEngine.push(asMiddleware(engine))
+  const hookedProvider = providerFromEngine(hookedEngine)
+  const filterMiddleware = createFilterMiddleware({ blockTracker, provider: hookedProvider })
+  engine.push(filterMiddleware)
+
+  // any filter will do
+  const filterPayload =  {
+    method: 'eth_newFilter',
+    params: [{
+      topics: ['0x00000000000000000000000000000000000000000000000000deadbeefcafe01']
+    }],
+  }
+
+  // start test
+  blockTracker.once('sync', startTest)
+  blockTracker.start()
+
+  function startTest(){
+    // install block filter
+    engine.handle(createPayload(filterPayload), function(err, response){
+      t.ok(err, 'did encounter error')
+      t.ok(err.message.includes(errorMessage), 'error matched expected')
+      blockTracker.stop()
+      t.end()
+    })
+  }
+})
+
 filterTest('log filter - and logic', {
     method: 'eth_newFilter',
     params: [{

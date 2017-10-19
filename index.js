@@ -1,5 +1,6 @@
 const Mutex = require('await-semaphore').Mutex
 const EthQuery = require('ethjs-query')
+const createAsyncMiddleware = require('json-rpc-engine/src/createAsyncMiddleware')
 const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
 const waitForBlock = require('eth-json-rpc-middleware/waitForBlock')
 const LogFilter = require('./log-filter.js')
@@ -21,14 +22,14 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
   const middleware = createJsonRpcMiddleware({
     // install filters
-    eth_newFilter:                   waitForFree(newLogFilter),
-    eth_newBlockFilter:              waitForFree(newBlockFilter),
-    eth_newPendingTransactionFilter: waitForFree(newPendingTransactionFilter),
+    eth_newFilter:                   waitForFree(createAsyncMiddleware(newLogFilter)),
+    eth_newBlockFilter:              waitForFree(createAsyncMiddleware(newBlockFilter)),
+    eth_newPendingTransactionFilter: waitForFree(createAsyncMiddleware(newPendingTransactionFilter)),
     // uninstall filters
-    eth_uninstallFilter:             waitForFree(uninstallFilter),
+    eth_uninstallFilter:             waitForFree(createAsyncMiddleware(uninstallFilter)),
     // checking filter changes
-    eth_getFilterChanges:            waitForFree(getFilterChanges),
-    eth_getFilterLogs:               waitForFree(getFilterLogs),
+    eth_getFilterChanges:            waitForFree(createAsyncMiddleware(getFilterChanges)),
+    eth_getFilterLogs:               waitForFree(createAsyncMiddleware(getFilterLogs)),
   })
 
   // setup filter updating and destroy handler
@@ -54,59 +55,52 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   // new filters
   //
 
-  async function newLogFilter(req, res, next, end) {
+  async function newLogFilter(req, res, next) {
     const params = req.params[0]
     const filter = new LogFilter({ ethQuery, params })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     res.result = result
-    end()
   }
 
-  async function newBlockFilter(req, res, next, end) {
+  async function newBlockFilter(req, res, next) {
     const filter = new BlockFilter({ ethQuery })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     res.result = result
-    end()
   }
 
-  async function newPendingTransactionFilter(req, res, next, end) {
+  async function newPendingTransactionFilter(req, res, next) {
     const filter = new TxFilter({ ethQuery })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     res.result = result
-    end()
   }
 
   //
   // get filter changes
   //
 
-  function getFilterChanges(req, res, next, end) {
+  async function getFilterChanges(req, res, next) {
     const filterIndexHex = req.params[0]
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
-      const err = new Error('No filter for index "${filterIndex}"')
-      return end(err)
+      throw new Error('No filter for index "${filterIndex}"')
     }
     const results = filter.getChangesAndClear()
     res.result = results
-    end()
   }
 
-  function getFilterLogs(req, res, next, end) {
+  async function getFilterLogs(req, res, next, end) {
     const filterIndexHex = req.params[0]
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
-      const err = new Error('No filter for index "${filterIndex}"')
-      return end(err)
+      throw new Error('No filter for index "${filterIndex}"')
     }
     const results = filter.getAllResults()
     res.result = results
-    end()
   }
 
 
@@ -115,14 +109,13 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
 
-  function uninstallFilter(req, res, next, end) {
+  async function uninstallFilter(req, res, next) {
     const filterIndexHex = req.params[0]
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     const results = Boolean(filter)
     delete filters[filterIndex]
     res.result = results
-    end()
   }
 
   //
