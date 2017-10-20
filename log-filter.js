@@ -15,13 +15,16 @@ class LogFilter extends BaseFilter {
   }
 
   async initialize({ currentBlock }) {
-    // take earliest of range
-    const fromBlock = minBlockRef(this.params.fromBlock, currentBlock.number)
+    // resolve params.fromBlock
+    let fromBlock = this.params.fromBlock
+    if (['latest', 'pending'].includes(fromBlock)) fromBlock = currentBlock.number
+    if ('earliest' === fromBlock) fromBlock = '0x0'
+    this.params.fromBlock = fromBlock
+    // set toBlock for initial lookup
     const toBlock = minBlockRef(this.params.toBlock, currentBlock.number)
-    const params = Object.assign({}, this.params, { fromBlock, toBlock })
-    // fetch logs
+    const params = Object.assign({}, this.params, { toBlock })
+    // fetch logs and add to results
     const newLogs = await this._fetchLogs(params)
-    // add to results
     this.addInitialResults(newLogs)
   }
 
@@ -29,14 +32,15 @@ class LogFilter extends BaseFilter {
     // configure params for this update
     // oldBlock is empty on boot
     if (!oldBlock) oldBlock = newBlock
-    // take smallest range overlap
-    const fromBlock = maxBlockRef(this.params.fromBlock, oldBlock.number)
-    const toBlock = minBlockRef(this.params.toBlock, newBlock.number)
-    const params = Object.assign({}, this.params, { fromBlock, toBlock })
     // fetch logs
-    const newLogs = await this._fetchLogs(params)
+    const newLogs = await this._fetchLogs({
+      fromBlock: oldBlock.number,
+      toBlock: newBlock.number,
+    })
+    const matchingLogs = newLogs.filter(log => this.matchLog(log))
+
     // add to results
-    this.addResults(newLogs)
+    this.addResults(matchingLogs)
   }
 
   async _fetchLogs (params) {
@@ -49,6 +53,41 @@ class LogFilter extends BaseFilter {
     })
     // add to results
     return newLogs
+  }
+
+  matchLog(log) {
+    // console.log('LogFilter - validateLog:', log)
+
+    // check if block number in bounds:
+    // console.log('LogFilter - validateLog - blockNumber', this.fromBlock, this.toBlock)
+    if (hexToInt(this.params.fromBlock) >= hexToInt(log.blockNumber)) return false
+    if (blockTagIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
+
+    // address is correct:
+    // console.log('LogFilter - validateLog - address', this.params.address)
+    if (this.params.address && this.params.address !== log.address) return false
+
+    // topics match:
+    // topics are position-dependant
+    // topics can be nested to represent `or` [[a || b], c]
+    // topics can be null, representing a wild card for that position
+    // console.log('LogFilter - validateLog - topics', log.topics)
+    // console.log('LogFilter - validateLog - against topics', this.params.topics)
+    const topicsMatch = this.params.topics.every((topicPattern, index) => {
+      // pattern is longer than actual topics
+      const logTopic = log.topics[index]
+      if (!logTopic) return false
+      // wild card
+      const subtopicsToMatch = Array.isArray(topicPattern) ? topicPattern : [topicPattern]
+      const subtopicsIncludeWildcard = subtopicsToMatch.includes(null)
+      if (subtopicsIncludeWildcard) return true
+      // check each possible matching topic
+      const topicDoesMatch = subtopicsToMatch.includes(logTopic)
+      return topicDoesMatch
+    })
+
+    // console.log('LogFilter - validateLog - '+(topicsMatch ? 'approved!' : 'denied!')+' ==============')
+    return topicsMatch
   }
 
 }
@@ -67,12 +106,20 @@ function sortBlockRefs(refs) {
   return refs.sort((refA, refB) => {
     if (refA === 'latest' || refB === 'earliest') return 1
     if (refB === 'latest' || refA === 'earliest') return -1
-    return (Number.parseInt(refA, 16) > Number.parseInt(refB, 16)) ? 1 : -1
+    return hexToInt(refA) - hexToInt(refB)
   })
 }
 
 function bnToHex(bn) {
   return '0x' + bn.toString(16)
+}
+
+function hexToInt(hexString) {
+  return Number.parseInt(hexString, 16)
+}
+
+function blockTagIsNumber(blockTag){
+  return blockTag && !['earliest', 'latest', 'pending'].includes(blockTag)
 }
 
 module.exports = LogFilter
