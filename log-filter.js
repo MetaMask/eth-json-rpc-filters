@@ -56,23 +56,23 @@ class LogFilter extends BaseFilter {
   }
 
   matchLog(log) {
-    // console.log('LogFilter - validateLog:', log)
+    console.log('LogFilter - validateLog:', log)
 
     // check if block number in bounds:
-    // console.log('LogFilter - validateLog - blockNumber', this.fromBlock, this.toBlock)
+    console.log('LogFilter - validateLog - blockNumber', this.fromBlock, this.toBlock)
     if (hexToInt(this.params.fromBlock) >= hexToInt(log.blockNumber)) return false
     if (blockTagIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
 
     // address is correct:
-    // console.log('LogFilter - validateLog - address', this.params.address)
+    console.log('LogFilter - validateLog - address', this.params.address)
     if (this.params.address && this.params.address !== log.address) return false
 
     // topics match:
     // topics are position-dependant
     // topics can be nested to represent `or` [[a || b], c]
     // topics can be null, representing a wild card for that position
-    // console.log('LogFilter - validateLog - topics', log.topics)
-    // console.log('LogFilter - validateLog - against topics', this.params.topics)
+    console.log('LogFilter - validateLog - topics', log.topics)
+    console.log('LogFilter - validateLog - against topics', this.params.topics)
     const topicsMatch = this.params.topics.every((topicPattern, index) => {
       // pattern is longer than actual topics
       const logTopic = log.topics[index]
@@ -86,7 +86,7 @@ class LogFilter extends BaseFilter {
       return topicDoesMatch
     })
 
-    // console.log('LogFilter - validateLog - '+(topicsMatch ? 'approved!' : 'denied!')+' ==============')
+    console.log('LogFilter - validateLog - '+(topicsMatch ? 'approved!' : 'denied!')+' ==============')
     return topicsMatch
   }
 
