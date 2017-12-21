@@ -12,6 +12,9 @@ class LogFilter extends BaseFilter {
       address: undefined,
       topics: [],
     }, params)
+    // normalize address
+    if (this.params.address) this.params.address = this.params.address.toLowerCase()
+    // console.log('LogFilter - constructor - params', this.params)
   }
 
   async initialize({ currentBlock }) {
