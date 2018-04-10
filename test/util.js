@@ -10,13 +10,46 @@ const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const GanacheCore = require('ganache-core')
 
 module.exports = {
-  createTestSetup,
+  createPayload,
   createEngineFromGanacheCore,
   createEngineFromTestBlockMiddleware,
-  createPayload,
+  createTestSetup,
+  createTestBlockMiddlewareTestSetup,
 }
 
 function createTestSetup () {
+  // raw data source
+  const { provider: dataProvider, forceNextBlock } = createEngineFromGanacheCore()
+  // create block trackerfilterId
+  const blockTracker = new EthBlockTracker({
+    provider: dataProvider,
+    pollingInterval: 200,
+  })
+  // create higher level
+  const engine = new JsonRpcEngine()
+  const provider = providerFromEngine(engine)
+  // add block ref middleware
+  engine.push(createBlockRefMiddleware({ blockTracker }))
+  // matching logs middleware
+  const matchingTxs = []
+  engine.push(createScaffoldMiddleware({ eth_getLogs: matchingTxs }))
+  // add data source
+  engine.push(providerAsMiddleware(dataProvider))
+  const query = new EthQuery(provider)
+  return { dataProvider, forceNextBlock, engine, provider, query, blockTracker, matchingTxs }
+}
+
+function createEngineFromGanacheCore () {
+  const provider = GanacheCore.provider()
+  return { provider, forceNextBlock }
+
+  function forceNextBlock(cb) {
+    // custom ganache-core method
+    provider.sendAsync(createPayload({ method: 'evm_mine' }), cb)
+  }
+}
+
+function createTestBlockMiddlewareTestSetup () {
   // raw data source
   const { engine: dataEngine, testBlockSource } = createEngineFromTestBlockMiddleware()
   const dataProvider = providerFromEngine(dataEngine)
@@ -37,13 +70,6 @@ function createTestSetup () {
   engine.push(asMiddleware(dataEngine))
   const query = new EthQuery(provider)
   return { engine, provider, dataEngine, dataProvider, query, blockTracker, testBlockSource, matchingTxs }
-}
-
-function createEngineFromGanacheCore () {
-  const engine = new JsonRpcEngine()
-  const provider = GanacheCore.provider()
-  engine.push(providerAsMiddleware(provider))
-  return { engine, provider }
 }
 
 function createEngineFromTestBlockMiddleware () {
