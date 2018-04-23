@@ -70,7 +70,6 @@ test('ganache - multiple blocks', asyncTest(async (t) => {
   await tools.trackNextBlock()
 
   // trigger filter
-  console.log('triggering log')
   const triggeringTxHash = await eth.sendTransaction({ from: coinbase, to: contractAddress, data: targetTopic })
   await tools.trackNextBlock()
 
