@@ -33,13 +33,16 @@ class LogFilter extends BaseFilter {
 
   async update ({ oldBlock, newBlock }) {
     // configure params for this update
+    const toBlock = newBlock.number
+    let fromBlock
     // oldBlock is empty on boot
-    if (!oldBlock) oldBlock = newBlock
+    if (oldBlock) {
+      fromBlock = incrementHexInt(oldBlock.number)
+    } else {
+      fromBlock = newBlock.number
+    }
     // fetch logs
-    const newLogs = await this._fetchLogs({
-      fromBlock: oldBlock.number,
-      toBlock: newBlock.number,
-    })
+    const newLogs = await this._fetchLogs({ fromBlock, toBlock })
     const matchingLogs = newLogs.filter(log => this.matchLog(log))
 
     // add to results
@@ -113,8 +116,20 @@ function sortBlockRefs(refs) {
   })
 }
 
+function incrementHexInt(hexString){
+  const value = hexToInt(hexString)
+  return intToHex(value + 1)
+}
+
 function bnToHex(bn) {
   return '0x' + bn.toString(16)
+}
+
+function intToHex(int) {
+  let hexString = int.toString(16)
+  const needsLeftPad = hexString.length % 2
+  if (needsLeftPad) hexString = '0' + hexString
+  return '0x' + hexString
 }
 
 function hexToInt(hexString) {
