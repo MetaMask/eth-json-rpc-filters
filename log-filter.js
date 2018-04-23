@@ -42,7 +42,8 @@ class LogFilter extends BaseFilter {
       fromBlock = newBlock.number
     }
     // fetch logs
-    const newLogs = await this._fetchLogs({ fromBlock, toBlock })
+    const params = Object.assign({}, this.params, { fromBlock, toBlock })
+    const newLogs = await this._fetchLogs(params)
     const matchingLogs = newLogs.filter(log => this.matchLog(log))
 
     // add to results
