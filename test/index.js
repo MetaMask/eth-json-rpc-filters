@@ -4,3 +4,4 @@ process.on('unhandledRejection', function(err){
 
 require('./rpc')
 require('./logs')
+require('./ganache')

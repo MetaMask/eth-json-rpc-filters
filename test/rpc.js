@@ -6,7 +6,7 @@ const createScaffoldMiddleware = require('eth-json-rpc-middleware/scaffold')
 const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const createFilterMiddleware = require('../index.js')
 const {
-  createTestBlockMiddlewareTestSetup,
+  createLegacyTestSetup,
   createPayload,
 } = require('./util')
 
@@ -65,7 +65,7 @@ filterTest('log filter - basic', {
 )
 
 test('log filter - initialization failure', (t) => {
-  const testMeta = createTestBlockMiddlewareTestSetup()
+  const testMeta = createLegacyTestSetup()
   const { engine, blockTracker, provider } = testMeta
 
   // create filter middleware thats rigged to explode
@@ -255,7 +255,7 @@ function filterTest(label, filterPayload, afterInstall, filterChangesOne, filter
     // new block
     // check filter
 
-    const testMeta = createTestBlockMiddlewareTestSetup()
+    const testMeta = createLegacyTestSetup()
     const { engine, blockTracker, provider } = testMeta
     const filterMiddleware = createFilterMiddleware({ blockTracker, provider })
     engine.push(filterMiddleware)

@@ -8,48 +8,57 @@ const createScaffoldMiddleware = require('eth-json-rpc-middleware/scaffold')
 const providerAsMiddleware = require('eth-json-rpc-middleware/providerAsMiddleware')
 const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const GanacheCore = require('ganache-core')
+const pify = require('pify')
+const createFilterMiddleware = require('../index.js')
 
 module.exports = {
   createPayload,
   createEngineFromGanacheCore,
   createEngineFromTestBlockMiddleware,
   createTestSetup,
-  createTestBlockMiddlewareTestSetup,
+  createLegacyTestSetup,
 }
 
 function createTestSetup () {
   // raw data source
-  const { provider: dataProvider, forceNextBlock } = createEngineFromGanacheCore()
+  const { ganacheProvider, forceNextBlock } = createEngineFromGanacheCore()
   // create block trackerfilterId
   const blockTracker = new EthBlockTracker({
-    provider: dataProvider,
+    provider: ganacheProvider,
     pollingInterval: 200,
   })
   // create higher level
   const engine = new JsonRpcEngine()
   const provider = providerFromEngine(engine)
+  const query = new EthQuery(provider)
   // add block ref middleware
   engine.push(createBlockRefMiddleware({ blockTracker }))
-  // matching logs middleware
-  const matchingTxs = []
-  engine.push(createScaffoldMiddleware({ eth_getLogs: matchingTxs }))
+  // add filter middleware
+  engine.push(createFilterMiddleware({ blockTracker, provider }))
   // add data source
-  engine.push(providerAsMiddleware(dataProvider))
-  const query = new EthQuery(provider)
-  return { dataProvider, forceNextBlock, engine, provider, query, blockTracker, matchingTxs }
-}
+  engine.push(providerAsMiddleware(ganacheProvider))
 
-function createEngineFromGanacheCore () {
-  const provider = GanacheCore.provider()
-  return { provider, forceNextBlock }
+  // start the block tracker
+  blockTracker.start()
 
-  function forceNextBlock(cb) {
-    // custom ganache-core method
-    provider.sendAsync(createPayload({ method: 'evm_mine' }), cb)
+  return { ganacheProvider, forceNextBlock, engine, provider, query, blockTracker, trackNextBlock }
+
+  async function trackNextBlock() {
+    return new Promise((resolve) => blockTracker.once('latest', resolve))
   }
 }
 
-function createTestBlockMiddlewareTestSetup () {
+function createEngineFromGanacheCore () {
+  const ganacheProvider = GanacheCore.provider()
+  return { ganacheProvider, forceNextBlock }
+
+  async function forceNextBlock() {
+    // custom ganache-core method
+    await pify(ganacheProvider.sendAsync).call(ganacheProvider, createPayload({ method: 'evm_mine' }))
+  }
+}
+
+function createLegacyTestSetup () {
   // raw data source
   const { engine: dataEngine, testBlockSource } = createEngineFromTestBlockMiddleware()
   const dataProvider = providerFromEngine(dataEngine)
