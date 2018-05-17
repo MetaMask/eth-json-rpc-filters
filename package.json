@@ -11,15 +11,14 @@
   "dependencies": {
     "await-semaphore": "^0.1.1",
     "json-rpc-engine": "^3.4.0",
-    "lodash.flatmap": "^4.5.0"
+    "lodash.flatmap": "^4.5.0",
+    "eth-json-rpc-middleware": "^1.6.0"
   },
   "devDependencies": {
     "deep-clone": "^3.0.2",
     "eth-block-tracker": "^2.2.0",
-    "eth-json-rpc-middleware": "^1.6.0",
     "ethjs-query": "^0.3.6",
     "ganache-core": "^2.1.0",
-    "json-rpc-engine": "^3.0.1",
     "pify": "^3.0.0",
     "tape": "^4.8.0"
   },
