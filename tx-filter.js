@@ -1,6 +1,7 @@
 const flatMap = require('lodash.flatmap')
 const BaseFilter = require('./base-filter')
 const getBlocksForRange = require('./getBlocksForRange')
+const { incrementHexInt } = require('./hexUtils')
 
 class TxFilter extends BaseFilter {
 
@@ -11,9 +12,10 @@ class TxFilter extends BaseFilter {
   }
 
   async update ({ oldBlock, newBlock }) {
-    const blocks = await getBlocksForRange({ ethQuery: this.ethQuery, oldBlock, newBlock })
-    const blockTxs = flatMap(blocks, (block) => block.transactions)
-    const blockTxHashes = blockTxs.map((tx) => tx.hash)
+    const toBlock = oldBlock
+    const fromBlock = incrementHexInt(oldBlock)
+    const blocks = await getBlocksForRange({ ethQuery: this.ethQuery, fromBlock, toBlock })
+    const blockTxHashes = flatMap(blocks, (block) => block.transactions)
     // add to results
     this.addResults(blockTxHashes)
   }

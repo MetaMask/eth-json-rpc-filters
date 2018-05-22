@@ -1,5 +1,6 @@
 const BaseFilter = require('./base-filter')
 const getBlocksForRange = require('./getBlocksForRange')
+const { incrementHexInt } = require('./hexUtils')
 
 class BlockFilter extends BaseFilter {
 
@@ -10,15 +11,13 @@ class BlockFilter extends BaseFilter {
   }
 
   async update ({ oldBlock, newBlock }) {
-    const blocks = await getBlocksForRange({ ethQuery: this.ethQuery, oldBlock, newBlock })
-    const blockHashes = blocks.map((block) => block.hash)
+    const toBlock = newBlock
+    const fromBlock = incrementHexInt(oldBlock)
+    const blockBodies = await getBlocksForRange({ ethQuery: this.ethQuery, fromBlock, toBlock })
+    const blockHashes = blockBodies.map((block) => block.hash)
     this.addResults(blockHashes)
   }
 
 }
 
 module.exports = BlockFilter
-
-function hexToInt(hex) {
-  return Number.parseInt(hex, 16)
-}

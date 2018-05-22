@@ -24,3 +24,9 @@ cleanup:
 // remove blockTracker handler to free middleware for garbage collection
 filterMiddleware.destroy()
 ```
+
+### Changelog
+
+##### 2.0
+
+- expect EthBlockTracker@4

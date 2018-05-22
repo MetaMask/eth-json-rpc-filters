@@ -5,6 +5,7 @@ const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
 const LogFilter = require('./log-filter.js')
 const BlockFilter = require('./block-filter.js')
 const TxFilter = require('./tx-filter.js')
+const { intToHex, hexToInt } = require('./hexUtils')
 
 module.exports = createEthFilterMiddleware
 
@@ -36,16 +37,22 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     if (filters.length === 0) return
     // lock update reads
     const releaseLock = await mutex.acquire()
-    // process all filters in parallel
-    await Promise.all(objValues(filters).map((filter) => {
-      return filter.update({ oldBlock, newBlock })
-    }))
+    try {
+      // process all filters in parallel
+      await Promise.all(objValues(filters).map(async (filter) => {
+        try {
+         await filter.update({ oldBlock, newBlock })
+        } catch (err) {
+          // handle each error individually so filter update errors don't affect other filters
+          console.error(err)
+        }
+      }))
+    } catch (err) {
+      // log error so we don't skip the releaseLock
+      console.error(err)
+    }
     // unlock update reads
     releaseLock()
-  }
-  blockTracker.on('sync', filterUpdater)
-  middleware.destroy = () => {
-    blockTracker.removeListener('sync', filterUpdater)
   }
 
   return middleware
@@ -109,11 +116,16 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
 
   async function uninstallFilter(req, res, next) {
+    const prevFilterCount = objValues(filters).length
     const filterIndexHex = req.params[0]
+    // uninstall filter
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     const results = Boolean(filter)
     delete filters[filterIndex]
+    // update block tracker subs
+    const newFilterCount = objValues(filters).length
+    updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
     res.result = results
   }
 
@@ -122,11 +134,29 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
   async function installFilter(filter) {
-    const currentBlock = await blockTracker.awaitCurrentBlock()
+    const prevFilterCount = objValues(filters).length
+    // install filter
+    const currentBlock = await blockTracker.getLatestBlock()
     await filter.initialize({ currentBlock })
     filterIndex++
     filters[filterIndex] = filter
+    // update block tracker subs
+    const newFilterCount = objValues(filters).length
+    updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
     return filterIndex
+  }
+
+  function updateBlockTrackerSubs({ prevFilterCount, newFilterCount }) {
+    // subscribe
+    if (prevFilterCount === 0 && newFilterCount > 0) {
+      blockTracker.on('sync', filterUpdater)
+      return
+    }
+    // unsubscribe
+    if (prevFilterCount > 0 && newFilterCount === 0) {
+      blockTracker.removeListener('sync', filterUpdater)
+      return
+    }
   }
 
 }
@@ -150,12 +180,4 @@ function objValues(obj, fn){
     values.push(obj[key])
   }
   return values
-}
-
-function intToHex(int) {
-  return '0x' + int.toString(16)
-}
-
-function hexToInt(hex) {
-  return Number.parseInt(hex, 16)
 }

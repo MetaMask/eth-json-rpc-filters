@@ -1,4 +1,5 @@
 const BaseFilter = require('./base-filter')
+const { bnToHex, hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
 
 class LogFilter extends BaseFilter {
 
@@ -20,11 +21,11 @@ class LogFilter extends BaseFilter {
   async initialize({ currentBlock }) {
     // resolve params.fromBlock
     let fromBlock = this.params.fromBlock
-    if (['latest', 'pending'].includes(fromBlock)) fromBlock = currentBlock.number
+    if (['latest', 'pending'].includes(fromBlock)) fromBlock = currentBlock
     if ('earliest' === fromBlock) fromBlock = '0x0'
     this.params.fromBlock = fromBlock
     // set toBlock for initial lookup
-    const toBlock = minBlockRef(this.params.toBlock, currentBlock.number)
+    const toBlock = minBlockRef(this.params.toBlock, currentBlock)
     const params = Object.assign({}, this.params, { toBlock })
     // fetch logs and add to results
     const newLogs = await this._fetchLogs(params)
@@ -33,13 +34,13 @@ class LogFilter extends BaseFilter {
 
   async update ({ oldBlock, newBlock }) {
     // configure params for this update
-    const toBlock = newBlock.number
+    const toBlock = newBlock
     let fromBlock
-    // oldBlock is empty on boot
+    // oldBlock is empty on first sync
     if (oldBlock) {
-      fromBlock = incrementHexInt(oldBlock.number)
+      fromBlock = incrementHexInt(oldBlock)
     } else {
-      fromBlock = newBlock.number
+      fromBlock = newBlock
     }
     // fetch logs
     const params = Object.assign({}, this.params, { fromBlock, toBlock })
@@ -68,7 +69,7 @@ class LogFilter extends BaseFilter {
     // check if block number in bounds:
     // console.log('LogFilter - validateLog - blockNumber', this.fromBlock, this.toBlock)
     if (hexToInt(this.params.fromBlock) >= hexToInt(log.blockNumber)) return false
-    if (blockTagIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
+    if (blockRefIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
 
     // address is correct:
     // console.log('LogFilter - validateLog - address', this.params.address)
@@ -97,48 +98,6 @@ class LogFilter extends BaseFilter {
     return topicsMatch
   }
 
-}
-
-function minBlockRef(...refs) {
-  const sortedRefs = sortBlockRefs(refs)
-  return sortedRefs[0]
-}
-
-function maxBlockRef(...refs) {
-  const sortedRefs = sortBlockRefs(refs)
-  return sortedRefs[sortedRefs.length-1]
-}
-
-function sortBlockRefs(refs) {
-  return refs.sort((refA, refB) => {
-    if (refA === 'latest' || refB === 'earliest') return 1
-    if (refB === 'latest' || refA === 'earliest') return -1
-    return hexToInt(refA) - hexToInt(refB)
-  })
-}
-
-function incrementHexInt(hexString){
-  const value = hexToInt(hexString)
-  return intToHex(value + 1)
-}
-
-function bnToHex(bn) {
-  return '0x' + bn.toString(16)
-}
-
-function intToHex(int) {
-  let hexString = int.toString(16)
-  const needsLeftPad = hexString.length % 2
-  if (needsLeftPad) hexString = '0' + hexString
-  return '0x' + hexString
-}
-
-function hexToInt(hexString) {
-  return Number.parseInt(hexString, 16)
-}
-
-function blockTagIsNumber(blockTag){
-  return blockTag && !['earliest', 'latest', 'pending'].includes(blockTag)
 }
 
 module.exports = LogFilter

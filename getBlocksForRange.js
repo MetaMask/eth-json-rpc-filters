@@ -1,31 +1,36 @@
 module.exports = getBlocksForRange
 
-async function getBlocksForRange({ ethQuery, oldBlock, newBlock }) {
-  let blocks = []
+async function getBlocksForRange({ ethQuery, fromBlock, toBlock }) {
+  if (!fromBlock) fromBlock = toBlock
 
-  // oldBlock is empty on boot
-  if (!oldBlock) oldBlock = newBlock
+  const fromBlockNumber = hexToInt(fromBlock)
+  const toBlockNumber = hexToInt(toBlock)
+  const blockCountToQuery = toBlockNumber - fromBlockNumber + 1
+  // load all blocks from old to new (inclusive)
+  const missingBlockNumbers = Array(blockCountToQuery).fill()
+                              .map((_,index) => fromBlockNumber + index)
+                              .map(intToHex)
+  const blockBodies = await Promise.all(
+    missingBlockNumbers.map(blockNum => ethQuery.getBlockByNumber(blockNum, false))
+  )
+  return blockBodies
+}
 
-  const oldBlockNumber = hexToInt(newBlock.number)
-  const newBlockNumber = hexToInt(newBlock.number)
-  const blockNumDelta = newBlockNumber - oldBlockNumber
-  // load all blocks between old and new
-  if (blockNumDelta > 1) {
-    const missingBlockNumbers = Array(blockNumDelta - 1).fill()
-                                .map((_,index) => oldBlockNumber + index + 1)
-                                .map(intToHex)
-    const missingblocks = await Promise.all(missingBlockNumbers.map((blockNum) => ethQuery.getBlockByNumber(blockNum, true)))
-    blocks = blocks.concat(missingblocks)
-  }
-  blocks.push(newBlock)
+function hexToInt(hexString) {
+  if (hexString === undefined || hexString === null) return hexString
+  return Number.parseInt(hexString, 16)
+}
 
-  return blocks
+function incrementHexInt(hexString){
+  if (hexString === undefined || hexString === null) return hexString
+  const value = hexToInt(hexString)
+  return intToHex(value + 1)
 }
 
 function intToHex(int) {
-  return '0x' + int.toString(16)
-}
-
-function hexToInt(hex) {
-  return Number.parseInt(hex, 16)
+  if (int === undefined || int === null) return int
+  let hexString = int.toString(16)
+  const needsLeftPad = hexString.length % 2
+  if (needsLeftPad) hexString = '0' + hexString
+  return '0x' + hexString
 }
