@@ -15,7 +15,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   const ethQuery = new EthQuery(provider)
   // create filter collection
   let filterIndex = 0
-  const filters = {}
+  let filters = {}
   // create update mutex
   const mutex = new Mutex()
   const waitForFree = mutexMiddlewareWrapper({ mutex })
