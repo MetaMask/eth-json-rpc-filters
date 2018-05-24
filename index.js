@@ -26,7 +26,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     eth_newBlockFilter:              waitForFree(createAsyncMiddleware(newBlockFilter)),
     eth_newPendingTransactionFilter: waitForFree(createAsyncMiddleware(newPendingTransactionFilter)),
     // uninstall filters
-    eth_uninstallFilter:             waitForFree(createAsyncMiddleware(uninstallFilter)),
+    eth_uninstallFilter:             waitForFree(createAsyncMiddleware(uninstallFilterHandler)),
     // checking filter changes
     eth_getFilterChanges:            waitForFree(createAsyncMiddleware(getFilterChanges)),
     eth_getFilterLogs:               waitForFree(createAsyncMiddleware(getFilterLogs)),
@@ -53,6 +53,10 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     }
     // unlock update reads
     releaseLock()
+  }
+
+  middleware.destroy = () => {
+    uninstallAllFilters()
   }
 
   return middleware
@@ -115,18 +119,17 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
 
-  async function uninstallFilter(req, res, next) {
-    const prevFilterCount = objValues(filters).length
+  async function uninstallFilterHandler(req, res, next) {
     const filterIndexHex = req.params[0]
-    // uninstall filter
+    // check filter exists
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
-    const results = Boolean(filter)
-    delete filters[filterIndex]
-    // update block tracker subs
-    const newFilterCount = objValues(filters).length
-    updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
-    res.result = results
+    const result = Boolean(filter)
+    // uninstall filter
+    if (result) {
+      await uninstallFilter(filterIndex)
+    }
+    res.result = result
   }
 
   //
@@ -144,6 +147,21 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     const newFilterCount = objValues(filters).length
     updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
     return filterIndex
+  }
+
+  async function uninstallFilter(filterIndex) {
+    const prevFilterCount = objValues(filters).length
+    delete filters[filterIndex]
+    // update block tracker subs
+    const newFilterCount = objValues(filters).length
+    updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
+  }
+
+  async function uninstallAllFilters() {
+    const prevFilterCount = objValues(filters).length
+    filters = {}
+    // update block tracker subs
+    updateBlockTrackerSubs({ prevFilterCount, newFilterCount: 0 })
   }
 
   function updateBlockTrackerSubs({ prevFilterCount, newFilterCount }) {
