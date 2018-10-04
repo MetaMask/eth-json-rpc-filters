@@ -5,16 +5,16 @@ const { incrementHexInt } = require('./hexUtils')
 
 class TxFilter extends BaseFilter {
 
-  constructor ({ ethQuery, params }) {
+  constructor ({ provider, params }) {
     super()
     this.type = 'tx'
-    this.ethQuery = ethQuery
+    this.provider = provider
   }
 
   async update ({ oldBlock, newBlock }) {
     const toBlock = oldBlock
     const fromBlock = incrementHexInt(oldBlock)
-    const blocks = await getBlocksForRange({ ethQuery: this.ethQuery, fromBlock, toBlock })
+    const blocks = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
     const blockTxHashes = flatMap(blocks, (block) => block.transactions)
     // add to results
     this.addResults(blockTxHashes)

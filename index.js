@@ -76,21 +76,21 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
   async function newLogFilter(req) {
     const params = req.params[0]
-    const filter = new LogFilter({ ethQuery, params })
+    const filter = new LogFilter({ provider, ethQuery, params })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     return result
   }
 
   async function newBlockFilter(req) {
-    const filter = new BlockFilter({ ethQuery })
+    const filter = new BlockFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     return result
   }
 
   async function newPendingTransactionFilter(req) {
-    const filter = new TxFilter({ ethQuery })
+    const filter = new TxFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
     const result = intToHex(filterIndex)
     return result
