@@ -1,3 +1,4 @@
+const EventEmitter = require('events')
 const EthBlockTracker = require('eth-block-tracker')
 const EthQuery = require('ethjs-query')
 const JsonRpcEngine = require('json-rpc-engine')
@@ -6,12 +7,15 @@ const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const GanacheCore = require('ganache-core')
 const pify = require('pify')
 const createFilterMiddleware = require('../index.js')
+const createSubscriptionMiddleware = require('../subscriptionManager.js')
 
 module.exports = {
   createPayload,
   createEngineFromGanacheCore,
   createEngineFromTestBlockMiddleware,
   createTestSetup,
+  asyncTest,
+  timeout,
 }
 
 function createTestSetup () {
@@ -26,16 +30,61 @@ function createTestSetup () {
   const engine = new JsonRpcEngine()
   const provider = providerFromEngine(engine)
   const query = new EthQuery(provider)
-  // add block ref middleware
   // add filter middleware
   engine.push(createFilterMiddleware({ blockTracker, provider }))
+  // add subscription middleware
+  const subscriptionManager = createSubscriptionMiddleware({ blockTracker, provider })
+  engine.push(subscriptionManager.middleware)
+  subscriptionManager.events.on('notification', (message) => engine.emit('notification', message))
   // add data source
   engine.push(providerAsMiddleware(ganacheProvider))
 
-  return { ganacheProvider, forceNextBlock, engine, provider, query, blockTracker, trackNextBlock }
+  // subs helper
+  const subs = createSubsHelper({ provider })
+
+  return { ganacheProvider, forceNextBlock, engine, provider, query, subs, blockTracker, trackNextBlock }
 
   async function trackNextBlock() {
     return new Promise((resolve) => blockTracker.once('latest', resolve))
+  }
+}
+
+function createSubsHelper({ provider }) {
+  return {
+    logs: createSubGenerator({ subType: 'logs', provider }),
+    newPendingTransactions: createSubGenerator({ subType: 'newPendingTransactions', provider }),
+    newHeads: createSubGenerator({ subType: 'newHeads', provider }),
+  }
+}
+
+function createSubGenerator({ subType, provider }) {
+  return pify(function() {
+    const args = [].slice.call(arguments)
+    const cb = args.pop()
+    args.unshift(subType)
+    provider.sendAsync({ method: 'eth_subscribe', params: args }, (err, res) => {
+      if (err) return cb(err)
+      const hexId = res.result
+      const id = Number.parseInt(hexId, 16)
+      const result = createNewSub({ id, provider })
+      cb(null, result)
+    })
+  })
+}
+
+function createNewSub({ id, provider }) {
+  const events = new EventEmitter()
+  provider.on('data', (_, message) => {
+    if (message.method !== 'eth_subscription') return
+    const subHexId = message.params.subscription
+    const subId = Number.parseInt(subHexId, 16)
+    if (subId !== id) return
+    const value = message.params.result
+    events.emit('notification', value)
+  })
+  return {
+    id,
+    events,
   }
 }
 
@@ -58,4 +107,19 @@ function createEngineFromTestBlockMiddleware () {
 
 function createPayload(payload) {
   return Object.assign({ id: 1, jsonrpc: '2.0', params: [] }, payload)
+}
+
+function asyncTest(asyncTestFn){
+  return async function(t) {
+    try {
+      await asyncTestFn(t)
+      t.end()
+    } catch (err) {
+      t.end(err)
+    }
+  }
+}
+
+function timeout(duration) {
+  return new Promise(resolve => setTimeout(resolve, duration))
 }

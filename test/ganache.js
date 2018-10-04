@@ -8,6 +8,7 @@ const ethUtil = require('ethereumjs-util')
 const {
   createTestSetup,
   createPayload,
+  asyncTest,
 } = require('./util')
 
 test('LogFilter - basic', asyncTest(async (t) => {
@@ -136,7 +137,6 @@ test('BlockFilter - basic', asyncTest(async (t) => {
   await eth.uninstallFilter(filterId)
 }))
 
-
 async function deployLogEchoContract({ tools, from }){
   // https://github.com/kumavis/eth-needlepoint/blob/master/examples/emit-log.js
   const eth = tools.query
@@ -148,16 +148,5 @@ async function deployLogEchoContract({ tools, from }){
     deployTxHash,
     deployTxRx,
     contractAddress,
-  }
-}
-
-function asyncTest(asyncTestFn){
-  return async function(t) {
-    try {
-      await asyncTestFn(t)
-      t.end()
-    } catch (err) {
-      t.end(err)
-    }
   }
 }
