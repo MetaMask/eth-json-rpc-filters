@@ -16,6 +16,7 @@ module.exports = {
   createTestSetup,
   asyncTest,
   timeout,
+  deployLogEchoContract,
 }
 
 function createTestSetup () {
@@ -131,4 +132,19 @@ function asyncTest(asyncTestFn){
 
 function timeout(duration) {
   return new Promise(resolve => setTimeout(resolve, duration))
+}
+
+
+async function deployLogEchoContract({ tools, from }){
+  // https://github.com/kumavis/eth-needlepoint/blob/master/examples/emit-log.js
+  const eth = tools.query
+  const deployTxHash = await eth.sendTransaction({ from, data: '0x600e600c600039600e6000f336600060003760005160206000a1' })
+  await tools.trackNextBlock()
+  const deployTxRx = await eth.getTransactionReceipt(deployTxHash)
+  const contractAddress = deployTxRx.contractAddress
+  return {
+    deployTxHash,
+    deployTxRx,
+    contractAddress,
+  }
 }

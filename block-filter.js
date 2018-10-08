@@ -11,13 +11,11 @@ class BlockFilter extends BaseFilter {
   }
 
   async update ({ oldBlock, newBlock }) {
-    console.log('filter - adding results start')
     const toBlock = newBlock
     const fromBlock = incrementHexInt(oldBlock)
     const blockBodies = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
     const blockHashes = blockBodies.map((block) => block.hash)
     this.addResults(blockHashes)
-    console.log('filter - adding results done', blockHashes)
   }
 
 }

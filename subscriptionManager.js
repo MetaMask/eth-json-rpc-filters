@@ -33,8 +33,9 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
         sub = createSubNewHeads({ subId })
         break
       case 'logs':
-        const filterIdHex = await filterManager.newLogFilter(req)
-        sub = createSubFromFilter({ subId, filterIdHex })
+        const filterParams = req.params[1]
+        const filter = await filterManager.newLogFilter(filterParams)
+        sub = createSubFromFilter({ subId, filter })
         break
       default:
         throw new Error(`SubscriptionManager - unsupported subscription type "${subscriptionType}"`)
@@ -42,16 +43,13 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     }
     subscriptions[subId] = sub
 
-    // check for subscription updates on new block
-    blockTracker.on('sync', sub.update)
-
     res.result = subId
     return
 
     function createSubNewHeads({ subId }) {
       const sub = {
         type: subscriptionType,
-        destroy: () => {
+        destroy: async () => {
           blockTracker.removeListener('sync', sub.update)
         },
         update: async ({ oldBlock, newBlock }) => {
@@ -65,23 +63,18 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
           })
         }
       }
+      // check for subscription updates on new block
+      blockTracker.on('sync', sub.update)
       return sub
     }
 
-    function createSubFromFilter({ subId, filterIdHex }){
+    function createSubFromFilter({ subId, filter }){
+      filter.on('update', result => _emitSubscriptionResult(subId, result))
       const sub = {
         type: subscriptionType,
-        destroy: () => {
-          blockTracker.removeListener('sync', sub.update)
+        destroy: async () => {
+          return await filterManager.uninstallFilter(filter.idHex)
         },
-        update: async () => {
-          // check filter for updates
-          const results = await filterManager.getFilterChanges({ params: [filterIdHex] })
-          // emit updates
-          results.forEach(async (result) => {
-            _emitSubscriptionResult(subId, result)
-          })
-        }
       }
       return sub
     }
@@ -97,7 +90,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     }
     // cleanup subscription
     delete subscriptions[id]
-    subscription.destroy()
+    await subscription.destroy()
     res.result = true
   }
 

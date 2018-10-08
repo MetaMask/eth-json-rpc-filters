@@ -13,7 +13,8 @@
     "eth-json-rpc-middleware": "^2.6.0",
     "ethjs-query": "^0.3.8",
     "json-rpc-engine": "^3.8.0",
-    "lodash.flatmap": "^4.5.0"
+    "lodash.flatmap": "^4.5.0",
+    "safe-event-emitter": "^1.0.1"
   },
   "devDependencies": {
     "deep-clone": "^3.0.3",

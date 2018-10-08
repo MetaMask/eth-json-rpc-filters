@@ -1,6 +1,9 @@
-class BaseFilter {
+const SafeEventEmitter = require('safe-event-emitter')
+
+class BaseFilter extends SafeEventEmitter {
 
   constructor () {
+    super()
     this.updates = []
     this.allResults = []
   }
@@ -14,6 +17,7 @@ class BaseFilter {
   addResults (newResults) {
     this.updates = this.updates.concat(newResults)
     this.allResults = this.allResults.concat(newResults)
+    newResults.forEach(result => this.emit('update', result))
   }
 
   addInitialResults (newResults) {

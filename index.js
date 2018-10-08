@@ -22,9 +22,9 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
   const middleware = createJsonRpcMiddleware({
     // install filters
-    eth_newFilter:                   waitForFree(toAsyncRpcMiddleware(newLogFilter)),
-    eth_newBlockFilter:              waitForFree(toAsyncRpcMiddleware(newBlockFilter)),
-    eth_newPendingTransactionFilter: waitForFree(toAsyncRpcMiddleware(newPendingTransactionFilter)),
+    eth_newFilter:                   waitForFree(toFilterCreationMiddleware(newLogFilter)),
+    eth_newBlockFilter:              waitForFree(toFilterCreationMiddleware(newBlockFilter)),
+    eth_newPendingTransactionFilter: waitForFree(toFilterCreationMiddleware(newPendingTransactionFilter)),
     // uninstall filters
     eth_uninstallFilter:             waitForFree(toAsyncRpcMiddleware(uninstallFilterHandler)),
     // checking filter changes
@@ -59,7 +59,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   middleware.newLogFilter = newLogFilter
   middleware.newBlockFilter = newBlockFilter
   middleware.newPendingTransactionFilter = newPendingTransactionFilter
-  middleware.uninstallFilter = uninstallFilter
+  middleware.uninstallFilter = uninstallFilterHandler
   middleware.getFilterChanges = getFilterChanges
   middleware.getFilterLogs = getFilterLogs
 
@@ -74,34 +74,29 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   // new filters
   //
 
-  async function newLogFilter(req) {
-    const params = req.params[0]
+  async function newLogFilter(params) {
     const filter = new LogFilter({ provider, ethQuery, params })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    return result
+    return filter
   }
 
-  async function newBlockFilter(req) {
+  async function newBlockFilter() {
     const filter = new BlockFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    return result
+    return filter
   }
 
-  async function newPendingTransactionFilter(req) {
+  async function newPendingTransactionFilter() {
     const filter = new TxFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    return result
+    return filter
   }
 
   //
   // get filter changes
   //
 
-  async function getFilterChanges(req) {
-    const filterIndexHex = req.params[0]
+  async function getFilterChanges(filterIndexHex) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
@@ -111,8 +106,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     return results
   }
 
-  async function getFilterLogs(req) {
-    const filterIndexHex = req.params[0]
+  async function getFilterLogs(filterIndexHex) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
@@ -128,8 +122,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
 
-  async function uninstallFilterHandler(req) {
-    const filterIndexHex = req.params[0]
+  async function uninstallFilterHandler(filterIndexHex) {
     // check filter exists
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
@@ -148,12 +141,12 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   async function installFilter(filter) {
     const prevFilterCount = objValues(filters).length
     // install filter
-    console.log('install start')
     const currentBlock = await blockTracker.getLatestBlock()
     await filter.initialize({ currentBlock })
-    console.log('install done')
     filterIndex++
     filters[filterIndex] = filter
+    filter.id = filterIndex
+    filter.idHex = intToHex(filterIndex)
     // update block tracker subs
     const newFilterCount = objValues(filters).length
     updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
@@ -190,10 +183,19 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
 }
 
+// helper for turning filter constructors into rpc middleware
+function toFilterCreationMiddleware(createFilterFn) {
+  return toAsyncRpcMiddleware(async (...args) => {
+    const filter = await createFilterFn(...args)
+    const result = intToHex(filter.id)
+    return result
+  })
+}
+
+// helper for pulling out req.params and setting res.result
 function toAsyncRpcMiddleware(asyncFn) {
-  // set result on response + convert to middleware
   return createAsyncMiddleware(async (req, res) => {
-    const result = await asyncFn(req)
+    const result = await asyncFn.apply(null, req.params)
     res.result = result
   })
 }

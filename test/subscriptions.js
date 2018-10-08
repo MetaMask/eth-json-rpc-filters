@@ -4,9 +4,10 @@ const {
   createPayload,
   asyncTest,
   timeout,
+  deployLogEchoContract,
 } = require('./util')
 
-test('BlockFilter - basic', asyncTest(async (t) => {
+test('subscriptions - newHeads', asyncTest(async (t) => {
 
   const tools = createTestSetup()
   const eth = tools.query
@@ -26,7 +27,7 @@ test('BlockFilter - basic', asyncTest(async (t) => {
   })
   const subId = sub.id
   t.ok(subId, `got sub id: ${subId} (${typeof subId})`)
-  t.equal(typeof subId, 'string', `got sub id as number (${typeof subId})`)
+  t.equal(typeof subId, 'string', `got sub id as hex string (${typeof subId})`)
 
   // check sub
   t.equal(subResults.length, 0, 'no sub results yet')
@@ -50,5 +51,49 @@ test('BlockFilter - basic', asyncTest(async (t) => {
   t.equal(subResults.length, 3, 'three sub results')
 
   // uninstall subscription
+  await sub.uninstall()
+}))
+
+test('subscriptions - log', asyncTest(async (t) => {
+
+  const tools = createTestSetup()
+  const eth = tools.query
+  const { query, subs, blockTracker } = tools
+
+  // deploy log-echo contract
+  const coinbase = await query.coinbase()
+  const { contractAddress } = await deployLogEchoContract({ tools, from: coinbase })
+  t.ok(contractAddress, 'got deployed contract address')
+
+  // create subscription
+  const subResults = []
+  const blockNumber = await blockTracker.getLatestBlock()
+  const targetTopic = '0xaabbcce106361d4f6cd9098051596d565c1dbf7bc20b4c3acb3aaa4204aabbcc'
+  const filterParams = { address: contractAddress, topics: [targetTopic], fromBlock: blockNumber, toBlock: 'latest' }
+  const sub = await subs.logs(filterParams)
+  sub.events.on('notification', (value) => {
+    subResults.push(value)
+  })
+
+  // verify subId
+  const subId = sub.id
+  t.ok(subId, `got filter id: ${subId} (${typeof subId})`)
+  t.equal(typeof subId, 'string', `got sub id as hex string (${typeof subId})`)
+
+  // trigger matching log
+  const triggeringTxHash = await query.sendTransaction({ from: coinbase, to: contractAddress, data: targetTopic })
+  await tools.trackNextBlock()
+
+  // wait for subscription results to update
+  await timeout(200)
+
+  // check subscription results
+  t.equal(subResults.length, 1, 'only one matched filter')
+  const matchingResults = subResults[0]
+  t.equal(matchingResults.transactionHash, triggeringTxHash, 'tx hash should match')
+  t.equal(matchingResults.topics.length, 1, 'emitted a single log topic')
+  const matchedTopic = matchingResults.topics[0]
+  t.equal(matchedTopic, targetTopic, 'topic matches expected')
+
   await sub.uninstall()
 }))
