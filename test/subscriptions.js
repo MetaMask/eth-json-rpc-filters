@@ -69,6 +69,7 @@ test('subscriptions - log', asyncTest(async (t) => {
   const subResults = []
   const blockNumber = await blockTracker.getLatestBlock()
   const targetTopic = '0xaabbcce106361d4f6cd9098051596d565c1dbf7bc20b4c3acb3aaa4204aabbcc'
+  const wrongTopic = '0xffffffe106361d4f6cd9098051596d565c1dbf7bc20b4c3acb3aaa4204ffffff'
   const filterParams = { address: contractAddress, topics: [targetTopic], fromBlock: blockNumber, toBlock: 'latest' }
   const sub = await subs.logs(filterParams)
   sub.events.on('notification', (value) => {
@@ -82,6 +83,10 @@ test('subscriptions - log', asyncTest(async (t) => {
 
   // trigger matching log
   const triggeringTxHash = await query.sendTransaction({ from: coinbase, to: contractAddress, data: targetTopic })
+  await tools.trackNextBlock()
+
+  // trigger non-matching log
+  await query.sendTransaction({ from: coinbase, to: contractAddress, data: wrongTopic })
   await tools.trackNextBlock()
 
   // wait for subscription results to update
