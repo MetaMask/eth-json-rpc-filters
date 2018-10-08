@@ -8,6 +8,7 @@ module.exports = {
   hexToInt,
   incrementHexInt,
   intToHex,
+  unsafeRandomBytes,
 }
 
 function minBlockRef(...refs) {
@@ -53,4 +54,17 @@ function intToHex(int) {
   const needsLeftPad = hexString.length % 2
   if (needsLeftPad) hexString = '0' + hexString
   return '0x' + hexString
+}
+
+function unsafeRandomBytes(byteCount) {
+  let result = '0x'
+  for (let i = 0; i < byteCount; i++) {
+    result += unsafeRandomNibble()
+    result += unsafeRandomNibble()
+  }
+  return result
+}
+
+function unsafeRandomNibble() {
+  return Math.floor(Math.random() * 16).toString(16)
 }

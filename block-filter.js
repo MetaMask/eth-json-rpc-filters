@@ -4,16 +4,16 @@ const { incrementHexInt } = require('./hexUtils')
 
 class BlockFilter extends BaseFilter {
 
-  constructor ({ ethQuery, params }) {
+  constructor ({ provider, params }) {
     super()
     this.type = 'block'
-    this.ethQuery = ethQuery
+    this.provider = provider
   }
 
   async update ({ oldBlock, newBlock }) {
     const toBlock = newBlock
     const fromBlock = incrementHexInt(oldBlock)
-    const blockBodies = await getBlocksForRange({ ethQuery: this.ethQuery, fromBlock, toBlock })
+    const blockBodies = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
     const blockHashes = blockBodies.map((block) => block.hash)
     this.addResults(blockHashes)
   }

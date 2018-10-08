@@ -22,14 +22,14 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
   const middleware = createJsonRpcMiddleware({
     // install filters
-    eth_newFilter:                   waitForFree(createAsyncMiddleware(newLogFilter)),
-    eth_newBlockFilter:              waitForFree(createAsyncMiddleware(newBlockFilter)),
-    eth_newPendingTransactionFilter: waitForFree(createAsyncMiddleware(newPendingTransactionFilter)),
+    eth_newFilter:                   waitForFree(toFilterCreationMiddleware(newLogFilter)),
+    eth_newBlockFilter:              waitForFree(toFilterCreationMiddleware(newBlockFilter)),
+    eth_newPendingTransactionFilter: waitForFree(toFilterCreationMiddleware(newPendingTransactionFilter)),
     // uninstall filters
-    eth_uninstallFilter:             waitForFree(createAsyncMiddleware(uninstallFilterHandler)),
+    eth_uninstallFilter:             waitForFree(toAsyncRpcMiddleware(uninstallFilterHandler)),
     // checking filter changes
-    eth_getFilterChanges:            waitForFree(createAsyncMiddleware(getFilterChanges)),
-    eth_getFilterLogs:               waitForFree(createAsyncMiddleware(getFilterLogs)),
+    eth_getFilterChanges:            waitForFree(toAsyncRpcMiddleware(getFilterChanges)),
+    eth_getFilterLogs:               waitForFree(toAsyncRpcMiddleware(getFilterLogs)),
   })
 
   // setup filter updating and destroy handler
@@ -55,6 +55,15 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     releaseLock()
   }
 
+  // expose filter methods directly
+  middleware.newLogFilter = newLogFilter
+  middleware.newBlockFilter = newBlockFilter
+  middleware.newPendingTransactionFilter = newPendingTransactionFilter
+  middleware.uninstallFilter = uninstallFilterHandler
+  middleware.getFilterChanges = getFilterChanges
+  middleware.getFilterLogs = getFilterLogs
+
+  // expose destroy method for cleanup
   middleware.destroy = () => {
     uninstallAllFilters()
   }
@@ -65,52 +74,46 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   // new filters
   //
 
-  async function newLogFilter(req, res, next) {
-    const params = req.params[0]
-    const filter = new LogFilter({ ethQuery, params })
+  async function newLogFilter(params) {
+    const filter = new LogFilter({ provider, ethQuery, params })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    res.result = result
+    return filter
   }
 
-  async function newBlockFilter(req, res, next) {
-    const filter = new BlockFilter({ ethQuery })
+  async function newBlockFilter() {
+    const filter = new BlockFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    res.result = result
+    return filter
   }
 
-  async function newPendingTransactionFilter(req, res, next) {
-    const filter = new TxFilter({ ethQuery })
+  async function newPendingTransactionFilter() {
+    const filter = new TxFilter({ provider, ethQuery })
     const filterIndex = await installFilter(filter)
-    const result = intToHex(filterIndex)
-    res.result = result
+    return filter
   }
 
   //
   // get filter changes
   //
 
-  async function getFilterChanges(req, res, next) {
-    const filterIndexHex = req.params[0]
+  async function getFilterChanges(filterIndexHex) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
       throw new Error('No filter for index "${filterIndex}"')
     }
     const results = filter.getChangesAndClear()
-    res.result = results
+    return results
   }
 
-  async function getFilterLogs(req, res, next, end) {
-    const filterIndexHex = req.params[0]
+  async function getFilterLogs(filterIndexHex) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
       throw new Error('No filter for index "${filterIndex}"')
     }
     const results = filter.getAllResults()
-    res.result = results
+    return results
   }
 
 
@@ -119,8 +122,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
 
-  async function uninstallFilterHandler(req, res, next) {
-    const filterIndexHex = req.params[0]
+  async function uninstallFilterHandler(filterIndexHex) {
     // check filter exists
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
@@ -129,7 +131,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     if (result) {
       await uninstallFilter(filterIndex)
     }
-    res.result = result
+    return result
   }
 
   //
@@ -143,6 +145,8 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     await filter.initialize({ currentBlock })
     filterIndex++
     filters[filterIndex] = filter
+    filter.id = filterIndex
+    filter.idHex = intToHex(filterIndex)
     // update block tracker subs
     const newFilterCount = objValues(filters).length
     updateBlockTrackerSubs({ prevFilterCount, newFilterCount })
@@ -177,6 +181,23 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     }
   }
 
+}
+
+// helper for turning filter constructors into rpc middleware
+function toFilterCreationMiddleware(createFilterFn) {
+  return toAsyncRpcMiddleware(async (...args) => {
+    const filter = await createFilterFn(...args)
+    const result = intToHex(filter.id)
+    return result
+  })
+}
+
+// helper for pulling out req.params and setting res.result
+function toAsyncRpcMiddleware(asyncFn) {
+  return createAsyncMiddleware(async (req, res) => {
+    const result = await asyncFn.apply(null, req.params)
+    res.result = result
+  })
 }
 
 function mutexMiddlewareWrapper({ mutex }) {
