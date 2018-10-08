@@ -64,6 +64,8 @@ test('subscriptions - log', asyncTest(async (t) => {
   const coinbase = await query.coinbase()
   const { contractAddress } = await deployLogEchoContract({ tools, from: coinbase })
   t.ok(contractAddress, 'got deployed contract address')
+  // deploy secondary "wrong" log contract
+  const wrongContractAddress = (await deployLogEchoContract({ tools, from: coinbase })).contractAddress
 
   // create subscription
   const subResults = []
@@ -87,6 +89,10 @@ test('subscriptions - log', asyncTest(async (t) => {
 
   // trigger non-matching log
   await query.sendTransaction({ from: coinbase, to: contractAddress, data: wrongTopic })
+  await tools.trackNextBlock()
+
+  // trigger non-matching contract
+  await query.sendTransaction({ from: coinbase, to: wrongContractAddress, data: targetTopic })
   await tools.trackNextBlock()
 
   // wait for subscription results to update
