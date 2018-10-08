@@ -13,16 +13,10 @@ test('BlockFilter - basic', asyncTest(async (t) => {
   const subs = tools.subs
 
   const { blockTracker } = tools
-  // if you remove this the test breaks
-  blockTracker.on('sync', ({ oldBlock, newBlock }) => console.log('test sync', {oldBlock, newBlock}))
 
   // await first block
-  await tools.trackNextBlock()
   await tools.forceNextBlock()
-  console.log('tracking next block start')
-  const xyz = await tools.trackNextBlock()
-  console.log('tracking next block done', xyz)
-  await timeout(1000)
+  await tools.trackNextBlock()
 
   // create sub
   const subResults = []
@@ -32,35 +26,29 @@ test('BlockFilter - basic', asyncTest(async (t) => {
   })
   const subId = sub.id
   t.ok(subId, `got sub id: ${subId} (${typeof subId})`)
+  t.equal(typeof subId, 'string', `got sub id as number (${typeof subId})`)
 
   // check sub
   t.equal(subResults.length, 0, 'no sub results yet')
 
   // await one block
   await tools.forceNextBlock()
-  console.log('tracking next block start')
   await tools.trackNextBlock()
-  console.log('tracking next block done')
-  await timeout(1000)
-  // console.log(subResults)
 
-  // check sub
+  // await for subscription results to be processed, then check recorded sub results
+  await timeout(200)
   t.equal(subResults.length, 1, 'only one sub result')
 
   // await two blocks
   await tools.forceNextBlock()
-  console.log('tracking next block start')
   await tools.trackNextBlock()
-  console.log('tracking next block done')
   await tools.forceNextBlock()
-  console.log('tracking next block start')
   await tools.trackNextBlock()
-  console.log('tracking next block done')
-  await timeout(1000)
-  // console.log(subResults)
 
-  // check filter
+  // await for subscription results to be processed, then check recorded sub results
+  await timeout(200)
   t.equal(subResults.length, 3, 'three sub results')
 
-  // await eth.uninstallFilter(filterId)
+  // uninstall subscription
+  await sub.uninstall()
 }))

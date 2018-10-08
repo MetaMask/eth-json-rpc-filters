@@ -7,7 +7,6 @@ async function getBlocksForRange({ provider, fromBlock, toBlock }) {
   const toBlockNumber = hexToInt(toBlock)
   const blockCountToQuery = toBlockNumber - fromBlockNumber + 1
   // load all blocks from old to new (inclusive)
-  console.log({ fromBlock, toBlock })
   const missingBlockNumbers = Array(blockCountToQuery).fill()
                               .map((_,index) => fromBlockNumber + index)
                               .map(intToHex)

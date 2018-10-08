@@ -64,8 +64,7 @@ function createSubGenerator({ subType, provider }) {
     args.unshift(subType)
     provider.sendAsync({ method: 'eth_subscribe', params: args }, (err, res) => {
       if (err) return cb(err)
-      const hexId = res.result
-      const id = Number.parseInt(hexId, 16)
+      const id = res.result
       const result = createNewSub({ id, provider })
       cb(null, result)
     })
@@ -73,18 +72,28 @@ function createSubGenerator({ subType, provider }) {
 }
 
 function createNewSub({ id, provider }) {
+  // event emitter for emiting subscription hits
   const events = new EventEmitter()
+  // filter rpc notifications for matching subscription
   provider.on('data', (_, message) => {
     if (message.method !== 'eth_subscription') return
-    const subHexId = message.params.subscription
-    const subId = Number.parseInt(subHexId, 16)
+    const subId = message.params.subscription
     if (subId !== id) return
     const value = message.params.result
     events.emit('notification', value)
   })
+  // subscription uninstall method
+  function uninstall(cb) {
+    provider.sendAsync({ method: 'eth_unsubscribe', params: [id] }, (err, res) => {
+      if (err) return cb(err)
+      cb(null, res.result)
+    })
+  }
+  // return custom "subscription" api object
   return {
     id,
     events,
+    uninstall: pify(uninstall),
   }
 }
 

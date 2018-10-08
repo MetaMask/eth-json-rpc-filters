@@ -9,21 +9,20 @@ module.exports = createSubscriptionMiddleware
 
 
 function createSubscriptionMiddleware({ blockTracker, provider }) {
+  // state and utilities for handling subscriptions
+  const subscriptions = {}
   const filterManager = createFilterMiddleware({ blockTracker, provider })
+
+  // create subscriptionManager api object
   const events = new SafeEventEmitter()
   const middleware = createScaffoldMiddleware({
     eth_subscribe: createAsyncMiddleware(subscribe),
     eth_unsubscribe: createAsyncMiddleware(unsubscribe),
   })
-
-  const subscriptions = {}
-
   return { events, middleware }
 
   async function subscribe(req, res) {
     const subscriptionType = req.params[0]
-    // const filterIdHex = await _createFilter(req)
-    // const filterId = Number.parseInt(filterIdHex, 16)
     // subId is 16 byte hex string
     const subId = unsafeRandomBytes(16)
 
@@ -34,16 +33,17 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
         sub = createSubNewHeads({ subId })
         break
       case 'logs':
-        const filterIdHex = await _createFilter(req)
+        const filterIdHex = await filterManager.newLogFilter(req)
         sub = createSubFromFilter({ subId, filterIdHex })
         break
+      default:
+        throw new Error(`SubscriptionManager - unsupported subscription type "${subscriptionType}"`)
 
     }
     subscriptions[subId] = sub
 
     // check for subscription updates on new block
     blockTracker.on('sync', sub.update)
-    blockTracker.on('sync', ({ oldBlock, newBlock }) => console.log('sub sync', {oldBlock, newBlock}))
 
     res.result = subId
     return
@@ -51,15 +51,13 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     function createSubNewHeads({ subId }) {
       const sub = {
         type: subscriptionType,
-        // destroy: () => {
-        //   blockTracker.removeListener('latest', sub.update)
-        //   delete subscriptions[filterId]
-        // },
+        destroy: () => {
+          blockTracker.removeListener('sync', sub.update)
+        },
         update: async ({ oldBlock, newBlock }) => {
           // for newHeads
           const toBlock = newBlock
           const fromBlock = incrementHexInt(oldBlock)
-          console.log('newHeads update', {fromBlock, toBlock})
           const rawBlocks = await getBlocksForRange({ provider, fromBlock, toBlock })
           const results = rawBlocks.map(normalizeBlock)
           results.forEach((value) => {
@@ -73,33 +71,34 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     function createSubFromFilter({ subId, filterIdHex }){
       const sub = {
         type: subscriptionType,
-        // destroy: () => {
-        //   blockTracker.removeListener('latest', sub.update)
-        //   delete subscriptions[filterId]
-        // },
+        destroy: () => {
+          blockTracker.removeListener('sync', sub.update)
+        },
         update: async () => {
           // check filter for updates
-          console.log('filter check start', filterIdHex)
           const results = await filterManager.getFilterChanges({ params: [filterIdHex] })
-          console.log('filter check done', filterIdHex, results)
           // emit updates
           results.forEach(async (result) => {
-            _emitSubscriptionResult(filterIdHex, subscriptionResult)
+            _emitSubscriptionResult(subId, result)
           })
         }
       }
       return sub
     }
-
-      // ???
-      //   if (subscriptionType === 'newPendingTransactions') {
-      //     self.checkForPendingBlocks()
-      //   }
-
   }
 
-  async function unsubscribe(req) {
-
+  async function unsubscribe(req, res) {
+    const id = req.params[0]
+    const subscription = subscriptions[id]
+    // if missing, return "false" to indicate it was not removed
+    if (!subscription) {
+      res.result = false
+      return
+    }
+    // cleanup subscription
+    delete subscriptions[id]
+    subscription.destroy()
+    res.result = true
   }
 
   function _emitSubscriptionResult(filterIdHex, value) {
@@ -111,30 +110,6 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
         result: value,
       },
     })
-  }
-
-  async function _createFilter(req) {
-    const subscriptionType = req.params[0]
-
-    let filterIdHex
-
-    // identify filter constructor
-    switch (subscriptionType) {
-      case 'logs':
-        filterIdHex = await filterManager.newLogFilter(req)
-        break
-      case 'newPendingTransactions':
-        filterIdHex = await filterManager.newPendingTransactionFilter(req)
-        break
-      case 'newHeads':
-        filterIdHex = await filterManager.newBlockFilter(req)
-        break
-      default:
-        throw new Error(`SubscriptionManager - unsupported subscription type "${subscriptionType}"`)
-        return
-    }
-
-    return filterIdHex
   }
 
 }
