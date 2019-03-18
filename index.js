@@ -100,7 +100,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
-      throw new Error('No filter for index "${filterIndex}"')
+      throw new Error(`No filter for index "${filterIndex}"`)
     }
     const results = filter.getChangesAndClear()
     return results
@@ -110,7 +110,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     const filterIndex = hexToInt(filterIndexHex)
     const filter = filters[filterIndex]
     if (!filter) {
-      throw new Error('No filter for index "${filterIndex}"')
+      throw new Error(`No filter for index "${filterIndex}"`)
     }
     const results = filter.getAllResults()
     return results
