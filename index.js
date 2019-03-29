@@ -1,5 +1,4 @@
 const Mutex = require('await-semaphore').Mutex
-const EthQuery = require('ethjs-query')
 const createAsyncMiddleware = require('json-rpc-engine/src/createAsyncMiddleware')
 const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
 const LogFilter = require('./log-filter.js')
@@ -11,8 +10,6 @@ module.exports = createEthFilterMiddleware
 
 function createEthFilterMiddleware({ blockTracker, provider }) {
 
-  // ethQuery for log lookups
-  const ethQuery = new EthQuery(provider)
   // create filter collection
   let filterIndex = 0
   let filters = {}
@@ -75,19 +72,19 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   //
 
   async function newLogFilter(params) {
-    const filter = new LogFilter({ provider, ethQuery, params })
+    const filter = new LogFilter({ provider, params })
     const filterIndex = await installFilter(filter)
     return filter
   }
 
   async function newBlockFilter() {
-    const filter = new BlockFilter({ provider, ethQuery })
+    const filter = new BlockFilter({ provider })
     const filterIndex = await installFilter(filter)
     return filter
   }
 
   async function newPendingTransactionFilter() {
-    const filter = new TxFilter({ provider, ethQuery })
+    const filter = new TxFilter({ provider })
     const filterIndex = await installFilter(filter)
     return filter
   }
@@ -112,7 +109,12 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     if (!filter) {
       throw new Error(`No filter for index "${filterIndex}"`)
     }
-    const results = filter.getAllResults()
+    // only return results for log filters
+    if (filter.type === 'log') {
+      results = filter.getAllResults()
+    } else {
+      results = []
+    }
     return results
   }
 

@@ -1,20 +1,29 @@
-const BaseFilter = require('./base-filter')
+const EthQuery = require('eth-query')
+const pify = require('pify')
+const BaseFilterWithHistory = require('./base-filter-history')
 const { bnToHex, hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
 
-class LogFilter extends BaseFilter {
+class LogFilter extends BaseFilterWithHistory {
 
-  constructor ({ ethQuery, params }) {
+  constructor ({ provider, params }) {
     super()
     this.type = 'log'
-    this.ethQuery = ethQuery
+    this.ethQuery = new EthQuery(provider)
     this.params = Object.assign({
       fromBlock: 'latest',
       toBlock: 'latest',
       address: undefined,
       topics: [],
     }, params)
-    // normalize address
-    if (this.params.address) this.params.address = this.params.address.toLowerCase()
+    // normalize address parameter
+    if (this.params.address) {
+      // ensure array
+      if (!Array.isArray(this.params.address)) {
+        this.params.address = [this.params.address]
+      }
+      // ensure lowercase
+      this.params.address = this.params.address.map(address => address.toLowerCase())
+    }
   }
 
   async initialize({ currentBlock }) {
@@ -51,13 +60,7 @@ class LogFilter extends BaseFilter {
   }
 
   async _fetchLogs (params) {
-    const newLogs = await this.ethQuery.getLogs(params)
-    // de-BN ethQuery results
-    newLogs.forEach((log) => {
-      log.blockNumber = bnToHex(log.blockNumber)
-      log.logIndex = bnToHex(log.logIndex)
-      log.transactionIndex = bnToHex(log.transactionIndex)
-    })
+    const newLogs = await pify(cb => this.ethQuery.getLogs(params, cb))()
     // add to results
     return newLogs
   }
@@ -68,7 +71,8 @@ class LogFilter extends BaseFilter {
     if (blockRefIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
 
     // address is correct:
-    if (this.params.address && this.params.address !== log.address) return false
+    const normalizedLogAddress = log.address && log.address.toLowerCase()
+    if (this.params.address && normalizedLogAddress && !this.params.address.includes(normalizedLogAddress)) return false
 
     // topics match:
     // topics are position-dependant
@@ -76,12 +80,15 @@ class LogFilter extends BaseFilter {
     // topics can be null, representing a wild card for that position
     const topicsMatch = this.params.topics.every((topicPattern, index) => {
       // pattern is longer than actual topics
-      const logTopic = log.topics[index]
+      let logTopic = log.topics[index]
       if (!logTopic) return false
-      // wild card
-      const subtopicsToMatch = Array.isArray(topicPattern) ? topicPattern : [topicPattern]
+      logTopic = logTopic.toLowerCase()
+      // normalize subTopics
+      let subtopicsToMatch = Array.isArray(topicPattern) ? topicPattern : [topicPattern]
+      // check for wild card
       const subtopicsIncludeWildcard = subtopicsToMatch.includes(null)
       if (subtopicsIncludeWildcard) return true
+      subtopicsToMatch = subtopicsToMatch.map(topic => topic.toLowerCase())
       // check each possible matching topic
       const topicDoesMatch = subtopicsToMatch.includes(logTopic)
       return topicDoesMatch

@@ -5,7 +5,6 @@ class BaseFilter extends SafeEventEmitter {
   constructor () {
     super()
     this.updates = []
-    this.allResults = []
   }
 
   async initialize () {}
@@ -16,24 +15,17 @@ class BaseFilter extends SafeEventEmitter {
 
   addResults (newResults) {
     this.updates = this.updates.concat(newResults)
-    this.allResults = this.allResults.concat(newResults)
     newResults.forEach(result => this.emit('update', result))
   }
 
-  addInitialResults (newResults) {
-    this.allResults = this.allResults.concat(newResults)
-  }
+  addInitialResults (newResults) {}
 
   getChangesAndClear () {
     const updates = this.updates
     this.updates = []
     return updates
   }
-
-  getAllResults () {
-    return this.allResults
-  }
-
+  
 }
 
 module.exports = BaseFilter
