@@ -20,6 +20,7 @@
     "@babel/core": "^7.3.4",
     "deep-clone": "^3.0.3",
     "eth-block-tracker": "^4.0.3",
+    "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
     "ganache-core": "^2.5.3",
     "pify": "^3.0.0",
