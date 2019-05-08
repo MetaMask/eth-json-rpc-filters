@@ -1,6 +1,6 @@
 {
   "name": "eth-json-rpc-filters",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "[json-rpc-engine](https://github.com/kumavis/json-rpc-engine) middleware implementing ethereum filter methods. Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).",
   "main": "index.js",
   "scripts": {
