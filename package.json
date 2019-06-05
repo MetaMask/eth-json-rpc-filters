@@ -18,10 +18,10 @@
   },
   "devDependencies": {
     "deep-clone": "^3.0.3",
-    "eth-block-tracker": "^4.0.3",
-    "ganache-core": "^2.5.3",
+    "eth-block-tracker": "^4.4.1",
+    "ganache-core": "^2.5.5",
     "pify": "^3.0.0",
-    "tape": "^4.9.1"
+    "tape": "^4.10.2"
   },
   "directories": {
     "test": "test"
