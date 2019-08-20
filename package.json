@@ -10,9 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "await-semaphore": "^0.1.3",
-    "eth-json-rpc-middleware": "github:rekmarks/eth-json-rpc-middleware#node-10",
+    "eth-json-rpc-middleware": "^4.1.4",
     "eth-query": "^2.1.2",
-    "json-rpc-engine": "github:rekmarks/json-rpc-engine#errors",
+    "json-rpc-engine": "^5.1.3",
     "lodash.flatmap": "^4.5.0",
     "safe-event-emitter": "^1.0.1"
   },
