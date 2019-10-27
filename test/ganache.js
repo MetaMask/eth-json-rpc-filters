@@ -1,13 +1,7 @@
 const test = require('tape')
-const clone = require('deep-clone')
-const JsonRpcEngine = require('json-rpc-engine')
-const asMiddleware = require('json-rpc-engine/src/asMiddleware')
-const createScaffoldMiddleware = require('eth-json-rpc-middleware/scaffold')
-const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const ethUtil = require('ethereumjs-util')
 const {
   createTestSetup,
-  createPayload,
   asyncTest,
   deployLogEchoContract,
 } = require('./util')

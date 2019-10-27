@@ -19,6 +19,9 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     eth_subscribe: createAsyncMiddleware(subscribe),
     eth_unsubscribe: createAsyncMiddleware(unsubscribe),
   })
+  middleware.destroy = () => {
+    events.removeAllListeners()
+  }
   return { events, middleware }
 
   async function subscribe(req, res) {

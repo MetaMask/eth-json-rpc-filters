@@ -5,13 +5,13 @@ const { incrementHexInt } = require('./hexUtils')
 
 class TxFilter extends BaseFilter {
 
-  constructor ({ provider, params }) {
+  constructor ({ provider }) {
     super()
     this.type = 'tx'
     this.provider = provider
   }
 
-  async update ({ oldBlock, newBlock }) {
+  async update ({ oldBlock }) {
     const toBlock = oldBlock
     const fromBlock = incrementHexInt(oldBlock)
     const blocks = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
