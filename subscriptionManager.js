@@ -19,9 +19,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     eth_subscribe: createAsyncMiddleware(subscribe),
     eth_unsubscribe: createAsyncMiddleware(unsubscribe),
   })
-  middleware.destroy = () => {
-    events.removeAllListeners()
-  }
+  middleware.destroy = destroyMiddleware
   return { events, middleware }
 
   async function subscribe(req, res) {
@@ -108,6 +106,13 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     })
   }
 
+  function destroyMiddleware () {
+    events.removeAllListeners()
+    for (const id in subscriptions) {
+      subscriptions[id].destroy()
+      delete subscriptions[id]
+    }
+  }
 }
 
 function normalizeBlock(block) {
