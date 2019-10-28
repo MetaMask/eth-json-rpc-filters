@@ -13,16 +13,24 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
   const subscriptions = {}
   const filterManager = createFilterMiddleware({ blockTracker, provider })
 
+  // internal flag
+  let isDestroyed = false
+
   // create subscriptionManager api object
   const events = new SafeEventEmitter()
   const middleware = createScaffoldMiddleware({
     eth_subscribe: createAsyncMiddleware(subscribe),
     eth_unsubscribe: createAsyncMiddleware(unsubscribe),
   })
-  middleware.destroy = destroyMiddleware
+  middleware.destroy = destroy
   return { events, middleware }
 
   async function subscribe(req, res) {
+
+    if (isDestroyed) throw new Error(
+      'SubscriptionManager - attempting to use after destroying'
+    )
+
     const subscriptionType = req.params[0]
     // subId is 16 byte hex string
     const subId = unsafeRandomBytes(16)
@@ -82,6 +90,11 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
   }
 
   async function unsubscribe(req, res) {
+
+    if (isDestroyed) throw new Error(
+      'SubscriptionManager - attempting to use after destroying'
+    )
+
     const id = req.params[0]
     const subscription = subscriptions[id]
     // if missing, return "false" to indicate it was not removed
@@ -106,12 +119,13 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     })
   }
 
-  function destroyMiddleware () {
+  function destroy () {
     events.removeAllListeners()
     for (const id in subscriptions) {
       subscriptions[id].destroy()
       delete subscriptions[id]
     }
+    isDestroyed = true
   }
 }
 
