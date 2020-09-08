@@ -11,7 +11,8 @@
   "license": "ISC",
   "resolutions": {
     "ganache-core/**/elliptic": "^6.4.1",
-    "ganache-core/**/lodash": "^4.17.19"
+    "ganache-core/**/lodash": "^4.17.19",
+    "ganache-core/**/mkdirp": "^0.5.5"
   },
   "dependencies": {
     "await-semaphore": "^0.1.3",
