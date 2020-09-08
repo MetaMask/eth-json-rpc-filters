@@ -3806,7 +3806,6 @@ json-rpc-engine@^3.4.0, json-rpc-engine@^3.6.0:
 
 json-rpc-engine@^5.1.3:
   version "5.1.3"
-  uid "6e639002b6bfa020b6b0effb2b60d93e6607f1f5"
   resolved "https://codeload.github.com/rekmarks/json-rpc-engine/tar.gz/6e639002b6bfa020b6b0effb2b60d93e6607f1f5"
   dependencies:
     async "^2.0.1"
@@ -6722,7 +6721,6 @@ websocket@1.0.29:
   dependencies:
     debug "^2.2.0"
     es5-ext "^0.10.50"
-    gulp "^4.0.2"
     nan "^2.14.0"
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"
