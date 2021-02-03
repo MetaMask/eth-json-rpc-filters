@@ -23,6 +23,7 @@
     "eth-query": "^2.1.2",
     "json-rpc-engine": "^5.3.0",
     "lodash.flatmap": "^4.5.0",
+    "pify": "^3.0.0",
     "safe-event-emitter": "^1.0.1"
   },
   "devDependencies": {
@@ -30,7 +31,6 @@
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
     "ganache-core": "^2.7.0",
-    "pify": "^3.0.0",
     "tape": "^4.9.1"
   },
   "directories": {
