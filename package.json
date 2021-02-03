@@ -35,9 +35,6 @@
     "pify": "^3.0.0",
     "tape": "^4.9.1"
   },
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kumavis/eth-json-rpc-filters.git"
