@@ -1,4 +1,4 @@
-const SafeEventEmitter = require('safe-event-emitter')
+const SafeEventEmitter = require('@metamask/safe-event-emitter').default
 
 class BaseFilter extends SafeEventEmitter {
 

@@ -12,13 +12,13 @@
     "*.js"
   ],
   "dependencies": {
+    "@metamask/safe-event-emitter": "^2.0.0",
     "async-mutex": "^0.2.6",
     "eth-json-rpc-middleware": "^6.0.0",
     "eth-query": "^2.1.2",
     "json-rpc-engine": "^6.1.0",
     "lodash.flatmap": "^4.5.0",
-    "pify": "^3.0.0",
-    "safe-event-emitter": "^1.0.1"
+    "pify": "^3.0.0"
   },
   "devDependencies": {
     "eth-block-tracker": "^4.4.1",
