@@ -1,7 +1,7 @@
 const EventEmitter = require('events')
 const EthBlockTracker = require('eth-block-tracker')
 const EthQuery = require('ethjs-query')
-const JsonRpcEngine = require('json-rpc-engine')
+const { JsonRpcEngine } = require('json-rpc-engine')
 const providerAsMiddleware = require('eth-json-rpc-middleware/providerAsMiddleware')
 const providerFromEngine = require('eth-json-rpc-middleware/providerFromEngine')
 const GanacheCore = require('ganache-core')
