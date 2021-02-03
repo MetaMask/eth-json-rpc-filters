@@ -1,4 +1,3 @@
-const flatMap = require('lodash.flatmap')
 const BaseFilter = require('./base-filter')
 const getBlocksForRange = require('./getBlocksForRange')
 const { incrementHexInt } = require('./hexUtils')
@@ -15,7 +14,10 @@ class TxFilter extends BaseFilter {
     const toBlock = oldBlock
     const fromBlock = incrementHexInt(oldBlock)
     const blocks = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
-    const blockTxHashes = flatMap(blocks, (block) => block.transactions)
+    const blockTxHashes = []
+    for (const block of blocks) {
+      blockTxHashes.push(...block.transactions)
+    }
     // add to results
     this.addResults(blockTxHashes)
   }
