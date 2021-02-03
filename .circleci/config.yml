@@ -2,19 +2,30 @@ version: 2.1
 
 executors:
   node:
+    parameters:
+        node_version:
+          type: integer
+          default: 10
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:<< parameters.node_version >>
 
 workflows:
   build-test:
     jobs:
-      - prep-deps
+      - prep-deps:
+          name: prep-deps-<< matrix.node_version >>
+          matrix:
+            parameters:
+              node_version: [10, 12, 14]
       - test-lint:
           requires:
-            - prep-deps
+            - prep-deps-10
       - test-unit:
+          matrix:
+            parameters:
+              node_version: [10, 12, 14]
           requires:
-            - prep-deps
+            - prep-deps-<< matrix.node_version >>
       - all-tests-pass:
           requires:
             - test-lint
@@ -22,7 +33,12 @@ workflows:
 
 jobs:
   prep-deps:
-    executor: node
+    parameters:
+      node_version:
+        type: integer
+    executor:
+      name: node
+      node_version: << parameters.node_version >>
     steps:
       - checkout
       - run:
@@ -40,7 +56,8 @@ jobs:
           - build-artifacts
 
   test-lint:
-    executor: node
+    executor:
+      name: node
     steps:
       - checkout
       - attach_workspace:
@@ -50,7 +67,12 @@ jobs:
           command: yarn lint
 
   test-unit:
-    executor: node
+    parameters:
+      node_version:
+        type: integer
+    executor:
+      name: node
+      node_version: << parameters.node_version >>
     steps:
       - checkout
       - attach_workspace:
