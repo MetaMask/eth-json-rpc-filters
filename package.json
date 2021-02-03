@@ -17,7 +17,7 @@
     "eth-json-rpc-middleware": "^6.0.0",
     "eth-query": "^2.1.2",
     "json-rpc-engine": "^6.1.0",
-    "pify": "^3.0.0"
+    "pify": "^5.0.0"
   },
   "devDependencies": {
     "eth-block-tracker": "^4.4.1",
