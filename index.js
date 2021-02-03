@@ -1,4 +1,4 @@
-const Mutex = require('await-semaphore').Mutex
+const Mutex = require('async-mutex').Mutex
 const createAsyncMiddleware = require('json-rpc-engine/src/createAsyncMiddleware')
 const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
 const LogFilter = require('./log-filter.js')
