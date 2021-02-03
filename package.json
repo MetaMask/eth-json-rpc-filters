@@ -8,12 +8,6 @@
     "test": "node test"
   },
   "license": "ISC",
-  "resolutions": {
-    "ganache-core/**/elliptic": "^6.4.1",
-    "ganache-core/**/lodash": "^4.17.19",
-    "ganache-core/**/mkdirp": "^0.5.5",
-    "ganache-core/websocket": "^1.0.32"
-  },
   "files": [
     "*.js"
   ],
@@ -30,7 +24,7 @@
     "eth-block-tracker": "^4.4.1",
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
-    "ganache-core": "^2.7.0",
+    "ganache-core": "^2.13.2",
     "tape": "^4.9.1"
   },
   "repository": {
