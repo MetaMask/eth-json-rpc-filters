@@ -26,8 +26,6 @@
     "safe-event-emitter": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "deep-clone": "^3.0.3",
     "eth-block-tracker": "^4.4.1",
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
