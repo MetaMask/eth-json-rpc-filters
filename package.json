@@ -45,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/kumavis/eth-json-rpc-filters/issues"
   },
-  "homepage": "https://github.com/kumavis/eth-json-rpc-filters#readme"
+  "homepage": "https://github.com/kumavis/eth-json-rpc-filters#readme",
+  "engines": {
+    "node": ">=v10"
+  }
 }
