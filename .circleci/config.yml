@@ -1,5 +1,10 @@
 version: 2.1
 
+executors:
+  node:
+    docker:
+      - image: circleci/node:10
+
 workflows:
   build-test:
     jobs:
@@ -17,8 +22,7 @@ workflows:
 
 jobs:
   prep-deps:
-    docker:
-      - image: circleci/node:10
+    executor: node
     steps:
       - checkout
       - run:
@@ -36,8 +40,7 @@ jobs:
           - build-artifacts
 
   test-lint:
-    docker:
-      - image: circleci/node:10
+    executor: node
     steps:
       - checkout
       - attach_workspace:
@@ -47,8 +50,7 @@ jobs:
           command: yarn lint
 
   test-unit:
-    docker:
-      - image: circleci/node:10
+    executor: node
     steps:
       - checkout
       - attach_workspace:
@@ -58,8 +60,7 @@ jobs:
           command: yarn test
 
   all-tests-pass:
-    docker:
-      - image: circleci/node:10
+    executor: node
     steps:
       - run:
           name: All tests passed
