@@ -33,8 +33,5 @@
   "bugs": {
     "url": "https://github.com/MetaMask/eth-json-rpc-filters/issues"
   },
-  "homepage": "https://github.com/MetaMask/eth-json-rpc-filters#readme",
-  "engines": {
-    "node": ">=v10"
-  }
+  "homepage": "https://github.com/MetaMask/eth-json-rpc-filters#readme"
 }
