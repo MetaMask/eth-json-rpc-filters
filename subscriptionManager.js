@@ -1,4 +1,4 @@
-const SafeEventEmitter = require('safe-event-emitter')
+const SafeEventEmitter = require('@metamask/safe-event-emitter').default
 const createScaffoldMiddleware = require('eth-json-rpc-middleware/scaffold')
 const { createAsyncMiddleware } = require('json-rpc-engine')
 const createFilterMiddleware = require('./index.js')
