@@ -27,7 +27,8 @@
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
     "ganache-core": "^2.13.2",
-    "tape": "^4.9.1"
+    "tape": "^4.9.1",
+    "sinon": "^13.0.2"
   },
   "repository": {
     "type": "git",

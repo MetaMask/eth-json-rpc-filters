@@ -33,19 +33,6 @@ function intToHex(int) {
   return '0x' + hexString
 }
 
-function sendRequest(provider, method, params, noOfTrials, resolve, reject) {
-  provider.sendAsync({ id: 1, jsonrpc: "2.0", method, params }, (err, res) => {
-    if ((err || !res.result) && noOfTrials < 5) {
-      sendRequest(provider, method, params, noOfTrials + 1, resolve, reject)
-      return
-    }
-    if (err) {
-      throw new Error(`Block not found for params: ${params}`)
-    }
-    resolve(res.result)
-  })
-}
-
 function sendAsync(provider, request) {
   return new Promise((resolve, reject) => {
     provider.sendAsync(request, (error, response) => {
