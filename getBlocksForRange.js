@@ -60,7 +60,7 @@ async function query(provider, method, params) {
       });
     } catch (error) {
       console.error(
-        `provider.sendAsync failed: ${error.stack ?? error.message ?? error}`
+        `provider.sendAsync failed: ${error.stack || error.message || error}`
       );
     }
   }
