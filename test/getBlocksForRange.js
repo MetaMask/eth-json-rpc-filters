@@ -48,7 +48,7 @@ test("looks for a block number 3 times until throwing", async (t) => {
     await getBlocksForRange({ provider, fromBlock: "0x1", toBlock: "0x1" });
     t.fail("Promise resolved when it was not supposed to");
   } catch (error) {
-    t.equal(error.message, "Block not found for params: 0x1,false");
+    t.equal(error.message, 'Block not found for params: ["0x1",false]');
   }
   t.end();
 });
