@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
+    "@metamask/auto-changelog": "^2.5.0",
     "eth-block-tracker": "^4.4.1",
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
@@ -36,7 +37,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MetaMask/eth-json-rpc-filters.git"
+    "url": "https://github.com/MetaMask/eth-json-rpc-filters.git"
   },
   "bugs": {
     "url": "https://github.com/MetaMask/eth-json-rpc-filters/issues"
