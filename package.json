@@ -7,6 +7,8 @@
     "node": ">=12.0.0"
   },
   "scripts": {
+    "build": "echo 'this does nothing'",
+    "build:clean": "rimraf dist && yarn build",
     "lint": "printf '%s\\n' 'No lint command'",
     "setup": "yarn install && yarn allow-scripts",
     "test": "node test"
