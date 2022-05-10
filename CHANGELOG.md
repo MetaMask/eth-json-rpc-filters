@@ -6,18 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.0.0]
-### Uncategorized
-- Use GitHub Actions instead of CircleCI for automation ([#64](https://github.com/MetaMask/eth-json-rpc-filters/pull/64))
-- Bump minimist from 1.2.5 to 1.2.6 ([#59](https://github.com/MetaMask/eth-json-rpc-filters/pull/59))
-- Bump cross-fetch from 2.2.3 to 2.2.6 ([#62](https://github.com/MetaMask/eth-json-rpc-filters/pull/62))
-- Bump simple-get from 2.8.1 to 2.8.2 ([#63](https://github.com/MetaMask/eth-json-rpc-filters/pull/63))
-- Adding handling for null block in getBlocksForRange ([#61](https://github.com/MetaMask/eth-json-rpc-filters/pull/61))
-- Bump tar from 4.4.15 to 4.4.19 ([#56](https://github.com/MetaMask/eth-json-rpc-filters/pull/56))
-- Bump path-parse from 1.0.6 to 1.0.7 ([#55](https://github.com/MetaMask/eth-json-rpc-filters/pull/55))
-- Bump tar from 4.4.13 to 4.4.15 ([#54](https://github.com/MetaMask/eth-json-rpc-filters/pull/54))
-- Bump normalize-url from 4.5.0 to 4.5.1 ([#53](https://github.com/MetaMask/eth-json-rpc-filters/pull/53))
-- Repo standardization ([#50](https://github.com/MetaMask/eth-json-rpc-filters/pull/50))
+## [5.0.0] - 2022-05-10
+### Added
+- Add retry logic to `getBlocksForRange`, treating a null block number as failure ([#61](https://github.com/MetaMask/eth-json-rpc-filters/pull/61))
+
+### Changed
+- **BREAKING:** Drop support for Node 10 ([#50](https://github.com/MetaMask/eth-json-rpc-filters/pull/50))
 
 ## [4.2.2] - 2021-02-04
 ### Changed
