@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add retry logic to `getBlocksForRange`, treating a null block number as failure ([#61](https://github.com/MetaMask/eth-json-rpc-filters/pull/61))
 
 ### Changed
-- **BREAKING:** Drop support for Node 10 ([#50](https://github.com/MetaMask/eth-json-rpc-filters/pull/50))
+- **BREAKING:** Set minimum Node.js version to v12 ([#50](https://github.com/MetaMask/eth-json-rpc-filters/pull/50))
   - We officially support Node 12, 14, and 16, in alignment with our other packages.
 
 ## [4.2.2] - 2021-02-04
