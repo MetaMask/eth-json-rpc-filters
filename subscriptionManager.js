@@ -66,7 +66,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
           const toBlock = newBlock
           const fromBlock = incrementHexInt(oldBlock)
           const rawBlocks = await getBlocksForRange({ provider, fromBlock, toBlock })
-          const results = rawBlocks.map(normalizeBlock)
+          const results = rawBlocks.filter(Boolean).map(normalizeBlock)
           results.forEach((value) => {
             _emitSubscriptionResult(subId, value)
           })
