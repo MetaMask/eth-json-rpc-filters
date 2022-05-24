@@ -13,7 +13,8 @@ async function getBlocksForRange({ provider, fromBlock, toBlock }) {
   const blockBodies = await Promise.all(
     missingBlockNumbers.map(blockNum => query(provider, 'eth_getBlockByNumber', [blockNum, false]))
   )
-  return blockBodies
+  const nonNullBlocks = blockBodies.filter(Boolean);
+  return nonNullBlocks
 }
 
 function hexToInt(hexString) {
