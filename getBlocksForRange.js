@@ -1,3 +1,5 @@
+const { intToHex, hexToInt } = require('./hexUtils')
+
 module.exports = getBlocksForRange
 
 async function getBlocksForRange({ provider, fromBlock, toBlock }) {
@@ -14,23 +16,6 @@ async function getBlocksForRange({ provider, fromBlock, toBlock }) {
     missingBlockNumbers.map(blockNum => query(provider, 'eth_getBlockByNumber', [blockNum, false]))
   )
   return blockBodies
-}
-
-function hexToInt(hexString) {
-  if (hexString === undefined || hexString === null) return hexString
-  return Number.parseInt(hexString, 16)
-}
-
-function incrementHexInt(hexString){
-  if (hexString === undefined || hexString === null) return hexString
-  const value = hexToInt(hexString)
-  return intToHex(value + 1)
-}
-
-function intToHex(int) {
-  if (int === undefined || int === null) return int
-  const hexString = int.toString(16)
-  return '0x' + hexString
 }
 
 function sendAsync(provider, request) {
