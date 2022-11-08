@@ -234,10 +234,10 @@
     "@npmcli/run-script" "^1.8.1"
     yargs "^16.2.0"
 
-"@metamask/auto-changelog@^2.5.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@metamask/auto-changelog/-/auto-changelog-2.6.0.tgz#3cef14905635b144b0fc86aed8957e0942a91cc4"
-  integrity sha512-YzZ/Uc/3nfvDxZxZT9YMa0CJn8/kpxif/2y8TXi5blzxBiaYop9zUh9a+7PV3C4EQVUNZuTvkE816Ua3AZ0jHA==
+"@metamask/auto-changelog@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/auto-changelog/-/auto-changelog-3.0.0.tgz#ac55d9093179ab4a6c46323550436cc9d8a76dd6"
+  integrity sha512-yr2ZI7t8SZHcZ0lw1pc5d9mKPasyqIqJ+b9Q70Q7YMqDIc+jgy6j5WtLI/BxbnHkxdVHXQq0GMf5+k1aY4F5gg==
   dependencies:
     diff "^5.0.0"
     execa "^5.1.1"

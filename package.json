@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
-    "@metamask/auto-changelog": "^2.5.0",
+    "@metamask/auto-changelog": "^3.0.0",
     "eth-block-tracker": "^4.4.1",
     "ethereumjs-util": "^6.1.0",
     "ethjs-query": "^0.3.8",
