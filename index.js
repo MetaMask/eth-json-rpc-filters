@@ -1,6 +1,5 @@
 const Mutex = require('async-mutex').Mutex
-const { createAsyncMiddleware } = require('json-rpc-engine')
-const createJsonRpcMiddleware = require('eth-json-rpc-middleware/scaffold')
+const { createAsyncMiddleware, createScaffoldMiddleware } = require('json-rpc-engine')
 const LogFilter = require('./log-filter.js')
 const BlockFilter = require('./block-filter.js')
 const TxFilter = require('./tx-filter.js')
@@ -17,7 +16,7 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
   const mutex = new Mutex()
   const waitForFree = mutexMiddlewareWrapper({ mutex })
 
-  const middleware = createJsonRpcMiddleware({
+  const middleware = createScaffoldMiddleware({
     // install filters
     eth_newFilter:                   waitForFree(toFilterCreationMiddleware(newLogFilter)),
     eth_newBlockFilter:              waitForFree(toFilterCreationMiddleware(newBlockFilter)),
