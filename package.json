@@ -20,7 +20,7 @@
   "dependencies": {
     "@metamask/safe-event-emitter": "^2.0.0",
     "async-mutex": "^0.2.6",
-    "eth-json-rpc-middleware": "^6.0.0",
+    "eth-json-rpc-middleware": "^9.0.1",
     "eth-query": "^2.1.2",
     "json-rpc-engine": "^6.1.0",
     "pify": "^5.0.0"
