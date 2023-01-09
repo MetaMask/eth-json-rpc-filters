@@ -25,6 +25,12 @@ cleanup:
 filterMiddleware.destroy()
 ```
 
+## Running Tests
+
+```bash
+yarn test
+```
+
 ### Changelog
 
 ##### 2.0

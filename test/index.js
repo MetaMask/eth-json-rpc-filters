@@ -5,3 +5,4 @@ process.on('unhandledRejection', function(err){
 require('./logs')
 require('./ganache')
 require('./subscriptions')
+require('./getBlocksForRange')
