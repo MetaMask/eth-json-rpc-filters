@@ -66,7 +66,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
           const toBlock = newBlock
           const fromBlock = incrementHexInt(oldBlock)
           const rawBlocks = await getBlocksForRange({ provider, fromBlock, toBlock })
-          const results = rawBlocks.map(normalizeBlock)
+          const results = rawBlocks.map(normalizeBlock).filter(block => block !== null)
           results.forEach((value) => {
             _emitSubscriptionResult(subId, value)
           })
@@ -77,7 +77,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
       return sub
     }
 
-    function createSubFromFilter({ subId, filter }){
+    function createSubFromFilter({ subId, filter }) {
       filter.on('update', result => _emitSubscriptionResult(subId, result))
       const sub = {
         type: subscriptionType,
@@ -119,7 +119,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     })
   }
 
-  function destroy () {
+  function destroy() {
     events.removeAllListeners()
     for (const id in subscriptions) {
       subscriptions[id].destroy()
@@ -130,6 +130,9 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
 }
 
 function normalizeBlock(block) {
+  if (block === null || block === undefined) {
+    return null;
+  }
   return {
     hash: block.hash,
     parentHash: block.parentHash,
