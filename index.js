@@ -110,10 +110,9 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
       throw new Error(`No filter for index "${filterIndex}"`)
     }
     // only return results for log filters
+    let results = []
     if (filter.type === 'log') {
       results = filter.getAllResults()
-    } else {
-      results = []
     }
     return results
   }
