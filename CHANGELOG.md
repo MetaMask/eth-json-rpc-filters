@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Fix `eth_getFilterLogs` (#84) ([#84](https://github.com/MetaMask/eth-json-rpc-filters/pull/84))
 - Fix for null reference exception when normalizing the block ([#83](https://github.com/MetaMask/eth-json-rpc-filters/pull/83))
+- Chore: update eth-json-rpc-middleware to ^9 ([#76](https://github.com/MetaMask/eth-json-rpc-filters/pull/76))
 
 ## [5.0.0] - 2022-05-10
 ### Added
