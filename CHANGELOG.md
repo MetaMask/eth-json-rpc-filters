@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.1.0]
 ### Changed
-- Lint fix: fix for invalid syntax in index.js (#84) ([#84](https://github.com/MetaMask/eth-json-rpc-filters/pull/84))
+- Fix `eth_getFilterLogs` (#84) ([#84](https://github.com/MetaMask/eth-json-rpc-filters/pull/84))
 - Fix for null reference exception when normalizing the block ([#83](https://github.com/MetaMask/eth-json-rpc-filters/pull/83))
 
 ## [5.0.0] - 2022-05-10
