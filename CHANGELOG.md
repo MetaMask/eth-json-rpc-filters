@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.0.0]
 ### Changed
-- Fix: changes in subscription middleware to not throw error if block for a block number is not found ([#89](https://github.com/MetaMask/eth-json-rpc-filters/pull/89))
+- **BREAKING:** Block filter middleware will not throw an error if a block is not found ([#89](https://github.com/MetaMask/eth-json-rpc-filters/pull/89))
 
 ## [5.1.0]
 ### Changed
