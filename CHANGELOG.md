@@ -7,9 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.0.0]
-### Uncategorized
-- Fix: not throw error if block for a block number is not found ([#89](https://github.com/MetaMask/eth-json-rpc-filters/pull/89))
-- Bump cookiejar from 2.1.2 to 2.1.4 ([#87](https://github.com/MetaMask/eth-json-rpc-filters/pull/87))
+### Changed
+- Fix: changes in subscription middleware to not throw error if block for a block number is not found ([#89](https://github.com/MetaMask/eth-json-rpc-filters/pull/89))
 
 ## [5.1.0]
 ### Changed
