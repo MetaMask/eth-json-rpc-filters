@@ -64,5 +64,5 @@ async function query(provider, method, params) {
       );
     }
   }
-  throw new Error(`Block not found for params: ${JSON.stringify(params)}`);
+  return null;
 }
