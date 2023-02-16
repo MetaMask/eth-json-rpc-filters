@@ -10,9 +10,10 @@ async function getBlocksForRange({ provider, fromBlock, toBlock }) {
   const missingBlockNumbers = Array(blockCountToQuery).fill()
                               .map((_,index) => fromBlockNumber + index)
                               .map(intToHex)
-  const blockBodies = await Promise.all(
+  let blockBodies = await Promise.all(
     missingBlockNumbers.map(blockNum => query(provider, 'eth_getBlockByNumber', [blockNum, false]))
   )
+  blockBodies = blockBodies.filter(block => block !== null);
   return blockBodies
 }
 

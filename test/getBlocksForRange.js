@@ -28,7 +28,7 @@ test("return block number if there is no error", async (t) => {
   t.end();
 });
 
-test("looks for a block number 3 times and not throw error even if it fails", async (t) => {
+test("not throw error even if it is not found and filter out null", async (t) => {
   const sendAsync = sinon
     .stub()
     .withArgs({
@@ -46,7 +46,7 @@ test("looks for a block number 3 times and not throw error even if it fails", as
   const provider = { sendAsync };
   try {
     const result = await getBlocksForRange({ provider, fromBlock: "0x1", toBlock: "0x1" });
-    t.deepEquals(result, [null]);
+    t.deepEquals(result, []);
   } catch (error) {
     t.fail("Should not throw error if result is obtained");
   }
