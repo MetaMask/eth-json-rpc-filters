@@ -4,14 +4,14 @@ const EthQuery = require('@metamask/eth-query')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
 const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
-const GanacheCore = require('ganache-core')
+const Ganache = require('ganache-cli')
 const pify = require('pify')
 const createFilterMiddleware = require('../index.js')
 const createSubscriptionMiddleware = require('../subscriptionManager.js')
 
 module.exports = {
   createPayload,
-  createEngineFromGanacheCore,
+  createEngineFromGanache,
   createEngineFromTestBlockMiddleware,
   createTestSetup,
   asyncTest,
@@ -21,7 +21,7 @@ module.exports = {
 
 function createTestSetup() {
   // raw data source
-  const { ganacheProvider, forceNextBlock } = createEngineFromGanacheCore()
+  const { ganacheProvider, forceNextBlock } = createEngineFromGanache()
   // create block trackerfilterId
   const blockTracker = new PollingBlockTracker({
     provider: ganacheProvider,
@@ -99,12 +99,12 @@ function createNewSub({ id, provider }) {
   }
 }
 
-function createEngineFromGanacheCore() {
-  const ganacheProvider = GanacheCore.provider()
+function createEngineFromGanache () {
+  const ganacheProvider = Ganache.provider()
   return { ganacheProvider, forceNextBlock }
 
   async function forceNextBlock() {
-    // custom ganache-core method
+    // custom ganache method
     await pify(ganacheProvider.sendAsync).call(ganacheProvider, createPayload({ method: 'evm_mine' }))
   }
 }
