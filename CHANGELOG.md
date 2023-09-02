@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.1]
+### Uncategorized
+- Bump @metamask/auto-changelog from 3.1.0 to 3.2.0 ([#97](https://github.com/MetaMask/eth-json-rpc-filters/pull/97))
+- Bump @metamask/eth-sig-util from 5.0.3 to 5.1.0 ([#96](https://github.com/MetaMask/eth-json-rpc-filters/pull/96))
+- Bump @metamask/eth-sig-util from 5.0.2 to 5.0.3 ([#95](https://github.com/MetaMask/eth-json-rpc-filters/pull/95))
+- Bump @metamask/safe-event-emitter from 2.0.0 to 3.0.0 ([#94](https://github.com/MetaMask/eth-json-rpc-filters/pull/94))
+- Bump @metamask/utils from 3.4.1 to 3.6.0 ([#93](https://github.com/MetaMask/eth-json-rpc-filters/pull/93))
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#88](https://github.com/MetaMask/eth-json-rpc-filters/pull/88))
+
 ## [6.0.0]
 ### Changed
 - **BREAKING:** Block filter middleware will not throw an error if a block is not found ([#89](https://github.com/MetaMask/eth-json-rpc-filters/pull/89))
@@ -46,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `json-rpc-engine@5.3.0`
   - `eth-json-rpc-middleware@6.0.0`
 
-[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.1...HEAD
+[6.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v5.1.0...v6.0.0
 [5.1.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v4.2.2...v5.0.0
