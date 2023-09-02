@@ -7,13 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.0.1]
-### Uncategorized
-- Bump @metamask/auto-changelog from 3.1.0 to 3.2.0 ([#97](https://github.com/MetaMask/eth-json-rpc-filters/pull/97))
-- Bump @metamask/eth-sig-util from 5.0.3 to 5.1.0 ([#96](https://github.com/MetaMask/eth-json-rpc-filters/pull/96))
-- Bump @metamask/eth-sig-util from 5.0.2 to 5.0.3 ([#95](https://github.com/MetaMask/eth-json-rpc-filters/pull/95))
-- Bump @metamask/safe-event-emitter from 2.0.0 to 3.0.0 ([#94](https://github.com/MetaMask/eth-json-rpc-filters/pull/94))
-- Bump @metamask/utils from 3.4.1 to 3.6.0 ([#93](https://github.com/MetaMask/eth-json-rpc-filters/pull/93))
-- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#88](https://github.com/MetaMask/eth-json-rpc-filters/pull/88))
+### Changed
+- Bump `@metamask/safe-event-emitter` from `^2.0.0` to `^3.0.0` ([#94](https://github.com/MetaMask/eth-json-rpc-filters/pull/94))
 
 ## [6.0.0]
 ### Changed
