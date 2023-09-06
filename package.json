@@ -21,7 +21,7 @@
     "@metamask/safe-event-emitter": "^3.0.0",
     "async-mutex": "^0.2.6",
     "eth-query": "^2.1.2",
-    "json-rpc-engine": "^6.1.0",
+    "@metamask/json-rpc-engine": "^7.1.0",
     "pify": "^5.0.0"
   },
   "devDependencies": {

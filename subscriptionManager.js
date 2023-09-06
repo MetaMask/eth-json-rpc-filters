@@ -1,5 +1,5 @@
 const SafeEventEmitter = require('@metamask/safe-event-emitter').default
-const { createAsyncMiddleware, createScaffoldMiddleware } = require('json-rpc-engine')
+const { createAsyncMiddleware, createScaffoldMiddleware } = require('@metamask/json-rpc-engine')
 const createFilterMiddleware = require('./index.js')
 const { unsafeRandomBytes, incrementHexInt } = require('./hexUtils.js')
 const getBlocksForRange = require('./getBlocksForRange.js')
