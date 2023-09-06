@@ -57,7 +57,9 @@
       "ganache-core>keccak": false,
       "ganache-core>web3": false,
       "ganache-core>websocket>bufferutil": false,
-      "ganache-core>websocket>utf-8-validate": false
+      "ganache-core>websocket>utf-8-validate": false,
+      "ganache-core>ethereumjs-util>ethereum-cryptography>keccak": false,
+      "ganache-core>ethereumjs-util>ethereum-cryptography>secp256k1": false
     }
   }
 }
