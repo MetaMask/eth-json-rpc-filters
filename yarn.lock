@@ -258,7 +258,7 @@
     "@metamask/utils" "^8.0.0"
     superstruct "^1.0.3"
 
-"@metamask/auto-changelog@^3.1.0":
+"@metamask/auto-changelog@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@metamask/auto-changelog/-/auto-changelog-3.3.0.tgz#9b9c2c4e4f5d65d85abcb3d9f6eedc32ea4518fd"
   integrity sha512-Azv5WhR8N6iFUqcVfogM+aqkj/vWNv7CXD9TeSdlE1eoKV/TVtDe/dhRz+SjFJ8KK3u1dBuIrYypb2qBTh8Q8A==
