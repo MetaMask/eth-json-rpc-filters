@@ -31,8 +31,5 @@ filterMiddleware.destroy()
 yarn test
 ```
 
-### Changelog
-
-##### 2.0
-
-- expect EthBlockTracker@4
+## Changelog
+[`CHANGELOG.md`](./CHANGELOG.md)
