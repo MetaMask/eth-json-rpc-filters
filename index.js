@@ -1,5 +1,5 @@
 const Mutex = require('async-mutex').Mutex
-const { createAsyncMiddleware, createScaffoldMiddleware } = require('json-rpc-engine')
+const { createAsyncMiddleware, createScaffoldMiddleware } = require('@metamask/json-rpc-engine')
 const LogFilter = require('./log-filter.js')
 const BlockFilter = require('./block-filter.js')
 const TxFilter = require('./tx-filter.js')
