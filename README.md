@@ -1,6 +1,6 @@
-# eth-json-rpc-filters
+# `@metamask/eth-json-rpc-filters`
 
-[json-rpc-engine](https://github.com/kumavis/json-rpc-engine) middleware implementing ethereum filter methods.
+[json-rpc-engine](https://github.com/MetaMask/json-rpc-engine) middleware implementing Ethereum filter methods.
 Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).
 
 ### supported rpc methods
@@ -31,8 +31,5 @@ filterMiddleware.destroy()
 yarn test
 ```
 
-### Changelog
-
-##### 2.0
-
-- expect EthBlockTracker@4
+## Changelog
+[`CHANGELOG.md`](./CHANGELOG.md)
