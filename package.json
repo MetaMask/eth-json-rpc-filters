@@ -43,6 +43,10 @@
     "url": "https://github.com/MetaMask/eth-json-rpc-filters/issues"
   },
   "homepage": "https://github.com/MetaMask/eth-json-rpc-filters#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "lavamoat": {
     "allowScripts": {
       "@lavamoat/preinstall-always-fail": false,
