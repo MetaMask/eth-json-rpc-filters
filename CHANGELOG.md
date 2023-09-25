@@ -7,13 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [7.0.0]
-### Uncategorized
-- Bump @metamask/auto-changelog from 3.1.0 to 3.2.0 ([#97](https://github.com/MetaMask/eth-json-rpc-filters/pull/97))
-- Bump @metamask/eth-sig-util from 5.0.3 to 5.1.0 ([#96](https://github.com/MetaMask/eth-json-rpc-filters/pull/96))
-- Bump @metamask/eth-sig-util from 5.0.2 to 5.0.3 ([#95](https://github.com/MetaMask/eth-json-rpc-filters/pull/95))
-- Bump @metamask/safe-event-emitter from 2.0.0 to 3.0.0 ([#94](https://github.com/MetaMask/eth-json-rpc-filters/pull/94))
-- Bump @metamask/utils from 3.4.1 to 3.6.0 ([#93](https://github.com/MetaMask/eth-json-rpc-filters/pull/93))
-- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#88](https://github.com/MetaMask/eth-json-rpc-filters/pull/88))
+### Changed
+- **BREAKING:** Set minimum Node.js version to v16 ([#102](https://github.com/MetaMask/eth-json-rpc-filters/pull/102))
+- **BREAKING:** Renamed package from `eth-json-rpc-filters` to `@metamask/eth-json-rpc-filters` ([#103](https://github.com/MetaMask/eth-json-rpc-filters/pull/103))
+- Bump `@metamask/json-rpc-engine` from `^6.0.0` to `^7.1.0` ([#104](https://github.com/MetaMask/eth-json-rpc-filters/pull/104))
 
 ## [6.0.1]
 ### Changed
