@@ -677,7 +677,7 @@ array-unique@^0.3.2:
   resolved "https://registry.yarnpkg.com/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
-array.prototype.every@^1.1.4:
+array.prototype.every@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/array.prototype.every/-/array.prototype.every-1.1.5.tgz#f8ca86a1a82a91eb5173187ef68935dc47215922"
   integrity sha512-FfMQJ+/joFGXpRCltbzV3znaP5QxIhLFySo0fEPn3GuoYlud9LhknMCIxdYKC2qsM/6VHoSp6YGwe3EZXrEcwQ==
@@ -3208,7 +3208,7 @@ functional-red-black-tree@^1.0.1, functional-red-black-tree@~1.0.1:
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-functions-have-names@^1.2.3:
+functions-have-names@^1.2.2, functions-have-names@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
@@ -4799,6 +4799,16 @@ mock-fs@^4.1.0:
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.13.0.tgz#31c02263673ec3789f90eb7b6963676aa407a598"
   integrity sha512-DD0vOdofJdoaRNtnWcrXe6RQbpHkPPmtqGq14uRX0F8ZKJ5nv89CVTYl/BZdppDxBDaV0hl75htg3abpEWlPZA==
 
+mock-property@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mock-property/-/mock-property-1.0.0.tgz#301518a59fb545312a407c8d1a861aba0357b4a6"
+  integrity sha512-imC60k5A55GPUU43PqczbubOyyxCudIgneACKzL3PKfsBk08dc1HgNNU8siQbEIAPPjVUhc+gb0v0ypZ/iP9pw==
+  dependencies:
+    functions-have-names "^1.2.2"
+    has "^1.0.3"
+    has-property-descriptors "^1.0.0"
+    isarray "^2.0.5"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -6139,7 +6149,7 @@ string-width@^5.0.1, string-width@^5.1.2:
     emoji-regex "^9.2.2"
     strip-ansi "^7.0.1"
 
-string.prototype.trim@^1.2.7, string.prototype.trim@^1.2.8, string.prototype.trim@~1.2.1:
+string.prototype.trim@^1.2.8, string.prototype.trim@~1.2.1:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/string.prototype.trim/-/string.prototype.trim-1.2.8.tgz#f9ac6f8af4bd55ddfa8895e6aea92a96395393bd"
   integrity sha512-lfjY4HcixfQXOfaqCvcBuOIapyaroTXhbkfJN3gcB1OtyupngWK4sEET9Knd0cXd28kTUqu/kHoV4HKSJdnjiQ==
@@ -6285,14 +6295,14 @@ tape@^4.6.3:
     string.prototype.trim "~1.2.1"
     through "~2.3.8"
 
-tape@^5.6.6:
-  version "5.6.6"
-  resolved "https://registry.yarnpkg.com/tape/-/tape-5.6.6.tgz#dc555729d557184764a0d61130304d21977e4ca2"
-  integrity sha512-rGp2cZ3rfZ6QfTBm6yvohf8aXmDqPyzMKZwTMV12w4i+b/N2Adwlg8PlW8jLqWzlJUZhglyYaLOSrMt/ZlZkAA==
+tape@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/tape/-/tape-5.7.0.tgz#7f31bf116159d3cdbc6f65baa11aaa025d34ccfc"
+  integrity sha512-6EZoHjMDUUhet8+k32w/9onULL1U8idXKvBCnZxuZF2iFe+tMYOsKo4bpCtXbTSngZmYBnkU08TMhJwsKaHhaw==
   dependencies:
     "@ljharb/resumer" "^0.0.1"
     "@ljharb/through" "^2.3.9"
-    array.prototype.every "^1.1.4"
+    array.prototype.every "^1.1.5"
     call-bind "^1.0.2"
     deep-equal "^2.2.2"
     defined "^1.0.1"
@@ -6305,12 +6315,13 @@ tape@^5.6.6:
     inherits "^2.0.4"
     is-regex "^1.1.4"
     minimist "^1.2.8"
+    mock-property "^1.0.0"
     object-inspect "^1.12.3"
     object-is "^1.1.5"
     object-keys "^1.1.1"
     object.assign "^4.1.4"
     resolve "^2.0.0-next.4"
-    string.prototype.trim "^1.2.7"
+    string.prototype.trim "^1.2.8"
 
 tar@^4.0.2:
   version "4.4.19"
