@@ -1,5 +1,5 @@
 const test = require('tape')
-const ethUtil = require('ethereumjs-util')
+const ethUtil = require('@ethereumjs/util')
 const {
   createTestSetup,
   asyncTest,

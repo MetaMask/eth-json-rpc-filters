@@ -1,5 +1,5 @@
 const EventEmitter = require('events')
-const EthBlockTracker = require('eth-block-tracker')
+const { PollingBlockTracker } = require('eth-block-tracker')
 const EthQuery = require('ethjs-query')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
@@ -23,7 +23,7 @@ function createTestSetup () {
   // raw data source
   const { ganacheProvider, forceNextBlock } = createEngineFromGanacheCore()
   // create block trackerfilterId
-  const blockTracker = new EthBlockTracker({
+  const blockTracker = new PollingBlockTracker({
     provider: ganacheProvider,
     pollingInterval: 200,
   })
