@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0]
+### Changed
+- **BREAKING:** Set minimum Node.js version to v16 ([#102](https://github.com/MetaMask/eth-json-rpc-filters/pull/102))
+- **BREAKING:** Rename package from `eth-json-rpc-filters` to `@metamask/eth-json-rpc-filters` ([#103](https://github.com/MetaMask/eth-json-rpc-filters/pull/103))
+- Bump `@metamask/json-rpc-engine` from `^6.0.0` to `^7.1.0` ([#104](https://github.com/MetaMask/eth-json-rpc-filters/pull/104))
+- Replace `@metamask/eth-query`@`^2.1.2` with `@metamask/eth-query`@`^3.0.1` ([#107](https://github.com/MetaMask/eth-json-rpc-filters/pull/107))
+
 ## [6.0.1]
 ### Changed
 - Bump `@metamask/safe-event-emitter` from `^2.0.0` to `^3.0.0` ([#94](https://github.com/MetaMask/eth-json-rpc-filters/pull/94))
@@ -58,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING**: expect EthBlockTracker@4 (062fd0849631a9862780c0591a3987bcadfe880f)
 
-[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.1...HEAD
+[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.1...v7.0.0
 [6.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v5.1.0...v6.0.0
 [5.1.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v5.0.0...v5.1.0
