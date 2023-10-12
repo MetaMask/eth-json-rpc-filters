@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [7.0.0]
 ### Changed
 - **BREAKING:** Set minimum Node.js version to v16 ([#102](https://github.com/MetaMask/eth-json-rpc-filters/pull/102))
-- **BREAKING:** Renamed package from `eth-json-rpc-filters` to `@metamask/eth-json-rpc-filters` ([#103](https://github.com/MetaMask/eth-json-rpc-filters/pull/103))
+- **BREAKING:** Rename package from `eth-json-rpc-filters` to `@metamask/eth-json-rpc-filters` ([#103](https://github.com/MetaMask/eth-json-rpc-filters/pull/103))
 - Bump `@metamask/json-rpc-engine` from `^6.0.0` to `^7.1.0` ([#104](https://github.com/MetaMask/eth-json-rpc-filters/pull/104))
+- Replace `@metamask/eth-query`@`^2.1.2` with `@metamask/eth-query`@`^3.0.1` ([#107](https://github.com/MetaMask/eth-json-rpc-filters/pull/107))
 
 ## [6.0.1]
 ### Changed
