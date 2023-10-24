@@ -259,10 +259,11 @@
     superstruct "^1.0.3"
 
 "@metamask/auto-changelog@^3.3.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@metamask/auto-changelog/-/auto-changelog-3.4.0.tgz#c21da1076745e692043b26b61f1e72ef59e50ab9"
-  integrity sha512-H7aF40DGLtUynyFzESskltpGZIaA1v+Lhv9HoeJsG2ooGN78IaiguF/i8Uxg5sJvIuvSzugWvQ+ZF4I/5Rh/hw==
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@metamask/auto-changelog/-/auto-changelog-3.4.1.tgz#e8a407f579512f61344463cb2261a103e4ffd0e3"
+  integrity sha512-zQpU7pKikC6ZDHCLoWb6iTGBuqbLpMAER5VYi6l2VOll0LEcJjZHFQ3V1tzmcPOT+9GTsSfR6KA9anB3jjCR+A==
   dependencies:
+    "@metamask/utils" "^8.1.0"
     diff "^5.0.0"
     execa "^5.1.1"
     prettier "^2.8.8"
