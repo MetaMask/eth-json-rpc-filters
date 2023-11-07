@@ -270,9 +270,9 @@
     yargs "^17.0.1"
 
 "@metamask/eth-json-rpc-middleware@^12.0.0":
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-12.0.0.tgz#d7178d8c3bf85c6978b14dd1c3b9bbe4a90facde"
-  integrity sha512-ZxNmnM2e2Yt/ChjHjhPVHokRr/mwMY5o/W65b8y4tNI6PWuaaIYzN6CzKZVJr4c/XuYkYnzaT0CL63/QkA6edw==
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-12.0.1.tgz#fc16df51ef7aa490ed356070947e85e558a193ec"
+  integrity sha512-gPYixBh2oN0tDOs3jV4KCcsjKoZ1NGokLsYi8EyO1VTfeSKGmSHS4izyGo8NCOgv3paYO+3IJX10qT4m+4P1rg==
   dependencies:
     "@metamask/eth-json-rpc-provider" "^2.1.0"
     "@metamask/eth-sig-util" "^7.0.0"
