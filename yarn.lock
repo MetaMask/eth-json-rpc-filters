@@ -285,13 +285,13 @@
     safe-stable-stringify "^2.4.3"
 
 "@metamask/eth-json-rpc-provider@^2.1.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-2.2.0.tgz#7d7551ff075a42992cd7fd4054868f6a5f9ee541"
-  integrity sha512-pJk533YEEH/GbZMHoV4CEDQhH2/HeG/2M3JhNnhblcAMIYKaLDkl/+01hc0mDAgYs4vxf8FBkniBUlX5o7FLSQ==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-2.3.0.tgz#09bc28077292e7e6d56e7c9095e70eb314d778aa"
+  integrity sha512-PZpeOBksEuyFb30ObH9JTqdjVuaskFvRamDwpKNcgL+UexPNdB0jdjgVRWwquuBHn6thKNxsBIO1z8belpBVUQ==
   dependencies:
-    "@metamask/json-rpc-engine" "^7.1.0"
+    "@metamask/json-rpc-engine" "^7.3.0"
     "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.1.0"
+    "@metamask/utils" "^8.2.0"
 
 "@metamask/eth-query@^3.0.1":
   version "3.0.1"
@@ -314,7 +314,7 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
-"@metamask/json-rpc-engine@^7.1.0", "@metamask/json-rpc-engine@^7.1.1":
+"@metamask/json-rpc-engine@^7.1.0", "@metamask/json-rpc-engine@^7.1.1", "@metamask/json-rpc-engine@^7.3.0":
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.0.tgz#eec5505f0ea41bd46c785c8722c5a10a3afd9850"
   integrity sha512-93cOdqnpt0P9uU/aC65GZulaDh6qNFEm8IFXHbI4lisK7oebU2SLarJUBZPebjko7hzwmfV1M1h7FQAlyRkVLg==
