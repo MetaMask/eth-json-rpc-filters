@@ -315,15 +315,15 @@
     tweetnacl-util "^0.15.1"
 
 "@metamask/json-rpc-engine@^7.1.0", "@metamask/json-rpc-engine@^7.1.1":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.2.0.tgz#568a0159d44aa2f46979dd27a3b9e6c490891950"
-  integrity sha512-i3tiaKJ9pmk9vuyeV52D9STMNLzHS5J7WXuWSuri1/GTObQNxga8OdUdWHocX3jsY4j6XpfPVUu5dX4+SFkO4g==
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.0.tgz#eec5505f0ea41bd46c785c8722c5a10a3afd9850"
+  integrity sha512-93cOdqnpt0P9uU/aC65GZulaDh6qNFEm8IFXHbI4lisK7oebU2SLarJUBZPebjko7hzwmfV1M1h7FQAlyRkVLg==
   dependencies:
-    "@metamask/rpc-errors" "^6.0.0"
+    "@metamask/rpc-errors" "^6.1.0"
     "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.1.0"
+    "@metamask/utils" "^8.2.0"
 
-"@metamask/rpc-errors@^6.0.0":
+"@metamask/rpc-errors@^6.0.0", "@metamask/rpc-errors@^6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@metamask/rpc-errors/-/rpc-errors-6.1.0.tgz#dfdef7cba4b9ad01ca3f99e990b5980575b89b4f"
   integrity sha512-JQElKxai26FpDyRKO/yH732wI+BV90i1u6pOuDOpdADSbppB2g1pPh3AGST1zkZqEE9eIKIUw8UdBQ4rp3VTSg==
@@ -336,10 +336,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-3.0.0.tgz#8c2b9073fe0722d48693143b0dc8448840daa3bd"
   integrity sha512-j6Z47VOmVyGMlnKXZmL0fyvWfEYtKWCA9yGZkU3FCsGZUT5lHGmvaV9JA5F2Y+010y7+ROtR3WMXIkvl/nVzqQ==
 
-"@metamask/utils@^8.0.0", "@metamask/utils@^8.1.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-8.2.0.tgz#51d608faf1ba7ba021084682160f275bb127d137"
-  integrity sha512-Zjx6y0PPrf9B4pdZ8JHl0grwJf/qNJ1dzYQh10/QSlj7Ct9Qy+r9PzdgGUHgA4oHohe1Phwy8MFnzB6TWZE11A==
+"@metamask/utils@^8.0.0", "@metamask/utils@^8.1.0", "@metamask/utils@^8.2.0":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-8.2.1.tgz#2f8b60c3b3c49423ca9d15061bb797464440e385"
+  integrity sha512-dlnpow8r0YHDDL1xKCEwUoTGOAo9icdv+gaJG0EbgDnkD/BDqW2eH1XMtm9i7rPaiHWo/aLtcrh9WBhkCq/viw==
   dependencies:
     "@ethereumjs/tx" "^4.2.0"
     "@noble/hashes" "^1.3.1"
