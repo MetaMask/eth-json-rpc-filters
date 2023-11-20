@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 const { PollingBlockTracker } = require('eth-block-tracker')
-const EthQuery = require('ethjs-query')
+const EthQuery = require('@metamask/eth-query')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
 const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
@@ -19,7 +19,7 @@ module.exports = {
   deployLogEchoContract,
 }
 
-function createTestSetup () {
+function createTestSetup() {
   // raw data source
   const { ganacheProvider, forceNextBlock } = createEngineFromGanacheCore()
   // create block trackerfilterId
@@ -31,6 +31,7 @@ function createTestSetup () {
   const engine = new JsonRpcEngine()
   const provider = providerFromEngine(engine)
   const query = new EthQuery(provider)
+  const sendAsync = pify(query.sendAsync.bind(query));
   // add filter middleware
   engine.push(createFilterMiddleware({ blockTracker, provider }))
   // add subscription middleware
@@ -43,7 +44,7 @@ function createTestSetup () {
   // subs helper
   const subs = createSubsHelper({ provider })
 
-  return { ganacheProvider, forceNextBlock, engine, provider, query, subs, blockTracker, trackNextBlock }
+  return { ganacheProvider, forceNextBlock, engine, provider, sendAsync, subs, blockTracker, trackNextBlock }
 
   async function trackNextBlock() {
     return new Promise((resolve) => blockTracker.once('latest', resolve))
@@ -59,7 +60,7 @@ function createSubsHelper({ provider }) {
 }
 
 function createSubGenerator({ subType, provider }) {
-  return pify(function() {
+  return pify(function () {
     const args = [].slice.call(arguments)
     const cb = args.pop()
     args.unshift(subType)
@@ -98,7 +99,7 @@ function createNewSub({ id, provider }) {
   }
 }
 
-function createEngineFromGanacheCore () {
+function createEngineFromGanacheCore() {
   const ganacheProvider = GanacheCore.provider()
   return { ganacheProvider, forceNextBlock }
 
@@ -108,7 +109,7 @@ function createEngineFromGanacheCore () {
   }
 }
 
-function createEngineFromTestBlockMiddleware () {
+function createEngineFromTestBlockMiddleware() {
   const engine = new JsonRpcEngine()
   const testBlockSource = new TestBlockMiddleware()
   engine.push(testBlockSource.createMiddleware())
@@ -119,8 +120,8 @@ function createPayload(payload) {
   return Object.assign({ id: 1, jsonrpc: '2.0', params: [] }, payload)
 }
 
-function asyncTest(asyncTestFn){
-  return async function(t) {
+function asyncTest(asyncTestFn) {
+  return async function (t) {
     try {
       await asyncTestFn(t)
       t.end()
@@ -135,12 +136,21 @@ function timeout(duration) {
 }
 
 
-async function deployLogEchoContract({ tools, from }){
+async function deployLogEchoContract({ tools, from }) {
   // https://github.com/kumavis/eth-needlepoint/blob/master/examples/emit-log.js
-  const eth = tools.query
-  const deployTxHash = await eth.sendTransaction({ from, data: '0x600e600c600039600e6000f336600060003760005160206000a1' })
+  const { sendAsync } = tools;
+  const deployTxHash = await sendAsync({
+    method: 'eth_sendTransaction',
+    params: {
+      from,
+      data: '0x600e600c600039600e6000f336600060003760005160206000a1'
+    }
+  })
   await tools.trackNextBlock()
-  const deployTxRx = await eth.getTransactionReceipt(deployTxHash)
+  const deployTxRx = await sendAsync({
+    method: 'eth_getTransactionReceipt',
+    params: [deployTxHash]
+  })
   const contractAddress = deployTxRx.contractAddress
   return {
     deployTxHash,
