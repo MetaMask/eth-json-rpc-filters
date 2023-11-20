@@ -1,7 +1,6 @@
 const test = require('tape')
 const {
   createTestSetup,
-  createPayload,
   asyncTest,
   timeout,
   deployLogEchoContract,
@@ -10,10 +9,7 @@ const {
 test('subscriptions - newHeads', asyncTest(async (t) => {
 
   const tools = createTestSetup()
-  const eth = tools.query
   const subs = tools.subs
-
-  const { blockTracker } = tools
 
   // await first block
   await tools.forceNextBlock()
@@ -57,11 +53,10 @@ test('subscriptions - newHeads', asyncTest(async (t) => {
 test('subscriptions - log', asyncTest(async (t) => {
 
   const tools = createTestSetup()
-  const eth = tools.query
-  const { query, subs, blockTracker } = tools
+  const { sendAsync, subs, blockTracker } = tools
 
   // deploy log-echo contract
-  const coinbase = await query.coinbase()
+  const coinbase = await sendAsync({ method: 'eth_coinbase' })
   const { contractAddress } = await deployLogEchoContract({ tools, from: coinbase })
   t.ok(contractAddress, 'got deployed contract address')
   // deploy secondary "wrong" log contract
@@ -84,15 +79,28 @@ test('subscriptions - log', asyncTest(async (t) => {
   t.equal(typeof subId, 'string', `got sub id as hex string (${typeof subId})`)
 
   // trigger matching log
-  const triggeringTxHash = await query.sendTransaction({ from: coinbase, to: contractAddress, data: targetTopic })
+  const triggeringTxHash = await sendAsync({
+    method: 'eth_sendTransaction',
+    params: { from: coinbase, to: contractAddress, data: targetTopic }
+  })
   await tools.trackNextBlock()
 
   // trigger non-matching log
-  await query.sendTransaction({ from: coinbase, to: contractAddress, data: wrongTopic })
+  await sendAsync({
+    method: 'eth_sendTransaction',
+    params: {
+      from: coinbase,
+      to: contractAddress,
+      data: wrongTopic
+    }
+  })
   await tools.trackNextBlock()
 
   // trigger non-matching contract
-  await query.sendTransaction({ from: coinbase, to: wrongContractAddress, data: targetTopic })
+  await sendAsync({
+    method: 'eth_sendTransaction',
+    params: { from: coinbase, to: wrongContractAddress, data: targetTopic }
+  })
   await tools.trackNextBlock()
 
   // wait for subscription results to update
