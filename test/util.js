@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 const { PollingBlockTracker } = require('eth-block-tracker')
-const EthQuery = require('ethjs-query')
+const EthQuery = require('@metamask/ethjs-query')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
 const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
