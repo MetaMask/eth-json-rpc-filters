@@ -128,15 +128,14 @@
     xtend "^4.0.1"
 
 "@metamask/eth-sig-util@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-7.0.0.tgz#b035a2b826018578a5d463668bb64828271376d8"
-  integrity sha512-8KeXZB4SKx3EfNS5ahbjUMegyGvDQYk6Nk3hmM658sXpfAQR5ZlIXBgj+9RF+ZROqsU6EuNVgKt7Fr10re60PQ==
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-7.0.1.tgz#ad3227d6120f15f9293478de7dd9685a5c329586"
+  integrity sha512-59GSrMyFH2fPfu7nKeIQdZ150zxXNNhAQIUaFRUW+MGtVA4w/ONbiQobcRBLi+jQProfIyss51G8pfLPcQ0ylg==
   dependencies:
     "@ethereumjs/util" "^8.1.0"
     "@metamask/abi-utils" "^2.0.2"
     "@metamask/utils" "^8.1.0"
     ethereum-cryptography "^2.1.2"
-    ethjs-util "^0.1.6"
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
@@ -970,7 +969,7 @@ ethereumjs-util@6.2.1:
     ethjs-util "0.1.6"
     rlp "^2.2.3"
 
-ethjs-util@0.1.6, ethjs-util@^0.1.6:
+ethjs-util@0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/ethjs-util/-/ethjs-util-0.1.6.tgz#f308b62f185f9fe6237132fb2a9818866a5cd536"
   integrity sha512-CUnVOQq7gSpDHZVVrQW8ExxUETWrnrvXYvYz55wOU8Uj4VCgw56XC2B/fVqQN+f7gmrnRHSLVnFAwsCuNwji8w==
