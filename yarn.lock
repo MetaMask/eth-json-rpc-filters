@@ -140,9 +140,9 @@
     tweetnacl-util "^0.15.1"
 
 "@metamask/json-rpc-engine@^7.1.0", "@metamask/json-rpc-engine@^7.1.1", "@metamask/json-rpc-engine@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.0.tgz#eec5505f0ea41bd46c785c8722c5a10a3afd9850"
-  integrity sha512-93cOdqnpt0P9uU/aC65GZulaDh6qNFEm8IFXHbI4lisK7oebU2SLarJUBZPebjko7hzwmfV1M1h7FQAlyRkVLg==
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.1.tgz#f5ea9d4299382345a58a090e9fba76f6d4b0b244"
+  integrity sha512-OVxccX/IFOjPzCzSFAEceccPIAf7A7IwnvjyWjyHCkLrO+LWV4e7Tpe79JNXiORywNulHxrg+q6QrmrnGEwssQ==
   dependencies:
     "@metamask/rpc-errors" "^6.1.0"
     "@metamask/safe-event-emitter" "^3.0.0"
