@@ -4,7 +4,8 @@
   "description": "[json-rpc-engine](https://github.com/MetaMask/json-rpc-engine) middleware implementing ethereum filter methods. Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).",
   "main": "index.js",
   "engines": {
-    "node": "^16.20 || ^18.16 || >=20"
+    "node": "^16.20 || ^18.16 || >=20",
+    "yarn": "^1.22.22"
   },
   "scripts": {
     "build": "echo 'this does nothing'",
@@ -54,5 +55,6 @@
       "ganache-cli>ethereumjs-util>ethereum-cryptography>keccak": false,
       "ganache-cli>ethereumjs-util>ethereum-cryptography>secp256k1": false
     }
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
