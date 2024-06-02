@@ -1,7 +1,7 @@
 const EthQuery = require('@metamask/eth-query')
 const pify = require('pify')
 const BaseFilterWithHistory = require('./base-filter-history')
-const { bnToHex, hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
+const { hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
 
 class LogFilter extends BaseFilterWithHistory {
 

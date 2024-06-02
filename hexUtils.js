@@ -50,10 +50,7 @@ function incrementHexInt(hexString){
 
 function intToHex(int) {
   if (int === undefined || int === null) return int
-  let hexString = int.toString(16)
-  const needsLeftPad = hexString.length % 2
-  if (needsLeftPad) hexString = '0' + hexString
-  return '0x' + hexString
+  return '0x' + int.toString(16)
 }
 
 function unsafeRandomBytes(byteCount) {
