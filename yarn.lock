@@ -95,7 +95,7 @@
     semver "^7.3.5"
     yargs "^17.0.1"
 
-"@metamask/eth-block-tracker@^9.0.3":
+"@metamask/eth-block-tracker@^9.0.2", "@metamask/eth-block-tracker@^9.0.3":
   version "9.0.3"
   resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-9.0.3.tgz#ceebe9bc720a54c3a4749fc09c8f8bb9fe206255"
   integrity sha512-I29IwdhnSJtk/A05vFsiOV92ADXXtBymXfC0naSvHP9TYNNOryG9y2l0jmnSzBsP3+wefCkHJWEzEwF4YSKogw==
@@ -107,28 +107,28 @@
     pify "^5.0.0"
 
 "@metamask/eth-json-rpc-middleware@^12.0.0":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-12.0.1.tgz#fc16df51ef7aa490ed356070947e85e558a193ec"
-  integrity sha512-gPYixBh2oN0tDOs3jV4KCcsjKoZ1NGokLsYi8EyO1VTfeSKGmSHS4izyGo8NCOgv3paYO+3IJX10qT4m+4P1rg==
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-12.1.1.tgz#5b6a19386f420211cb554c637f0927b76dc3167a"
+  integrity sha512-6N5y5CIo3mjJlD3oUaCPsAR5KGkxzt2pL+nQaRKwZ0Z0HtXIu0dIKf4awtfzJDNNQGhlPG5Im+kG1oxkh0FkSQ==
   dependencies:
+    "@metamask/eth-block-tracker" "^9.0.2"
     "@metamask/eth-json-rpc-provider" "^2.1.0"
     "@metamask/eth-sig-util" "^7.0.0"
     "@metamask/json-rpc-engine" "^7.1.1"
     "@metamask/rpc-errors" "^6.0.0"
     "@metamask/utils" "^8.1.0"
-    eth-block-tracker "^8.0.0"
     klona "^2.0.6"
     pify "^5.0.0"
     safe-stable-stringify "^2.4.3"
 
 "@metamask/eth-json-rpc-provider@^2.1.0":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-2.3.1.tgz#06305e5927040a959eed7a9d28f5488d49553c21"
-  integrity sha512-zalPFnXnS0cy8syjc/BJArxcRWslO/Mn9Hu+SUFE7frg7dm9uo2w9KTTQwP7+xa1ygm2zdD2xIft+Njk4svsrQ==
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-2.3.2.tgz#39a3ec6cdf82b6f2ce764ebfd9ff78997a2aa608"
+  integrity sha512-VaZx++3gfi85+j9zB5TvqSWLeZ6QpsNjIk56Nq6OMDp2U8iUEPgjdA8CybOtkyDb88EbpuOSzHZcdHEeIX3zPw==
   dependencies:
-    "@metamask/json-rpc-engine" "^7.3.1"
+    "@metamask/json-rpc-engine" "^7.3.2"
     "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.2.0"
+    "@metamask/utils" "^8.3.0"
 
 "@metamask/eth-json-rpc-provider@^3.0.2":
   version "3.0.2"
@@ -148,25 +148,25 @@
     xtend "^4.0.1"
 
 "@metamask/eth-sig-util@^7.0.0":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-7.0.1.tgz#ad3227d6120f15f9293478de7dd9685a5c329586"
-  integrity sha512-59GSrMyFH2fPfu7nKeIQdZ150zxXNNhAQIUaFRUW+MGtVA4w/ONbiQobcRBLi+jQProfIyss51G8pfLPcQ0ylg==
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-7.0.2.tgz#741de634b0d6ca96ce1ee3d064ac6a27756d8d21"
+  integrity sha512-DhTDMNEtED0ihIc4Tysm6qUJTvArCdgSTeeJWdo526W/cAk5mrSAvEYYgv8idAiBumDtcPWGimMTaB7MvY64bg==
   dependencies:
     "@ethereumjs/util" "^8.1.0"
     "@metamask/abi-utils" "^2.0.2"
     "@metamask/utils" "^8.1.0"
+    "@scure/base" "~1.1.3"
     ethereum-cryptography "^2.1.2"
     tweetnacl "^1.0.3"
-    tweetnacl-util "^0.15.1"
 
-"@metamask/json-rpc-engine@^7.1.0", "@metamask/json-rpc-engine@^7.1.1", "@metamask/json-rpc-engine@^7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.1.tgz#f5ea9d4299382345a58a090e9fba76f6d4b0b244"
-  integrity sha512-OVxccX/IFOjPzCzSFAEceccPIAf7A7IwnvjyWjyHCkLrO+LWV4e7Tpe79JNXiORywNulHxrg+q6QrmrnGEwssQ==
+"@metamask/json-rpc-engine@^7.1.1", "@metamask/json-rpc-engine@^7.3.2":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-7.3.3.tgz#f2b30a2164558014bfcca45db10f5af291d989af"
+  integrity sha512-dwZPq8wx9yV3IX2caLi9q9xZBw2XeIoYqdyihDDDpuHVCEiqadJLwqM3zy+uwf6F1QYQ65A8aOMQg1Uw7LMLNg==
   dependencies:
-    "@metamask/rpc-errors" "^6.1.0"
+    "@metamask/rpc-errors" "^6.2.1"
     "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.2.0"
+    "@metamask/utils" "^8.3.0"
 
 "@metamask/json-rpc-engine@^8.0.2":
   version "8.0.2"
@@ -177,15 +177,7 @@
     "@metamask/safe-event-emitter" "^3.0.0"
     "@metamask/utils" "^8.3.0"
 
-"@metamask/rpc-errors@^6.0.0", "@metamask/rpc-errors@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@metamask/rpc-errors/-/rpc-errors-6.1.0.tgz#dfdef7cba4b9ad01ca3f99e990b5980575b89b4f"
-  integrity sha512-JQElKxai26FpDyRKO/yH732wI+BV90i1u6pOuDOpdADSbppB2g1pPh3AGST1zkZqEE9eIKIUw8UdBQ4rp3VTSg==
-  dependencies:
-    "@metamask/utils" "^8.1.0"
-    fast-safe-stringify "^2.0.6"
-
-"@metamask/rpc-errors@^6.2.1":
+"@metamask/rpc-errors@^6.0.0", "@metamask/rpc-errors@^6.2.1":
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@metamask/rpc-errors/-/rpc-errors-6.3.0.tgz#adc63f3c1c50ec812d3631a471fe2beca0c3707d"
   integrity sha512-B1UIG/0xWkaDs/d6xrxsRf7kmFLdk8YE0HUToaFumjwQM36AjBsqEzVyemPTQv0SIrAPFnSmkLt053JOWcu5iw==
@@ -194,30 +186,16 @@
     fast-safe-stringify "^2.0.6"
 
 "@metamask/safe-event-emitter@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-3.0.0.tgz#8c2b9073fe0722d48693143b0dc8448840daa3bd"
-  integrity sha512-j6Z47VOmVyGMlnKXZmL0fyvWfEYtKWCA9yGZkU3FCsGZUT5lHGmvaV9JA5F2Y+010y7+ROtR3WMXIkvl/nVzqQ==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-3.1.1.tgz#e89b840a7af8097a8ed4953d8dc8470d1302d3ef"
+  integrity sha512-ihb3B0T/wJm1eUuArYP4lCTSEoZsClHhuWyfo/kMX3m/odpqNcPfsz5O2A3NT7dXCAgWPGDQGPqygCpgeniKMw==
 
 "@metamask/superstruct@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/superstruct/-/superstruct-3.0.0.tgz#0200d0a627522904a7e0fd751dcc6fb863cefacb"
   integrity sha512-TOm+Lt/lCJk9j/3QT2LucrPewRmqI7/GKT+blK2IIOAkBMS+9TmeNjd2Y+TlfpSSYstaYsGZyz1XwpiTCg6RLA==
 
-"@metamask/utils@^8.0.0", "@metamask/utils@^8.1.0", "@metamask/utils@^8.2.0":
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-8.2.1.tgz#2f8b60c3b3c49423ca9d15061bb797464440e385"
-  integrity sha512-dlnpow8r0YHDDL1xKCEwUoTGOAo9icdv+gaJG0EbgDnkD/BDqW2eH1XMtm9i7rPaiHWo/aLtcrh9WBhkCq/viw==
-  dependencies:
-    "@ethereumjs/tx" "^4.2.0"
-    "@noble/hashes" "^1.3.1"
-    "@scure/base" "^1.1.3"
-    "@types/debug" "^4.1.7"
-    debug "^4.3.4"
-    pony-cause "^2.1.10"
-    semver "^7.5.4"
-    superstruct "^1.0.3"
-
-"@metamask/utils@^8.3.0":
+"@metamask/utils@^8.0.0", "@metamask/utils@^8.1.0", "@metamask/utils@^8.3.0":
   version "8.5.0"
   resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-8.5.0.tgz#ddd0d4012d5191809404c97648a837ea9962cceb"
   integrity sha512-I6bkduevXb72TIM9q2LRO63JSsF9EXduh3sBr9oybNX2hNNpr/j1tEjXrsG0Uabm4MJ1xkGAQEMwifvKZIkyxQ==
@@ -288,6 +266,11 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.3.tgz#8584115565228290a6c6c4961973e0903bb3df2f"
   integrity sha512-/+SgoRjLq7Xlf0CWuLHq2LUZeL/w65kfzAPG5NH9pcmBhs+nunQTn4gvdwgMTIXnt9b2C/1SeL2XiysZEyIC9Q==
+
+"@scure/base@~1.1.3":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.6.tgz#8ce5d304b436e4c84f896e0550c83e4d88cb917d"
+  integrity sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==
 
 "@scure/bip32@1.3.1":
   version "1.3.1"
@@ -970,17 +953,6 @@ escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
   integrity sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==
-
-eth-block-tracker@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/eth-block-tracker/-/eth-block-tracker-8.0.0.tgz#56b758efaaeb745658e2716855f83741f45d2cb4"
-  integrity sha512-Z7GX5rYLWpi/gHD2CMlTH0aqF6eIIXl5Z/W2c+qZ7QHPLQzxMLoY45nuqOzDFXAyXUZTc0PY77+tzxZeXRNjwQ==
-  dependencies:
-    "@metamask/eth-json-rpc-provider" "^2.1.0"
-    "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.1.0"
-    json-rpc-random-id "^1.0.1"
-    pify "^5.0.0"
 
 ethereum-cryptography@^0.1.3:
   version "0.1.3"
@@ -2555,11 +2527,6 @@ tslib@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
-
-tweetnacl-util@^0.15.1:
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/tweetnacl-util/-/tweetnacl-util-0.15.1.tgz#b80fcdb5c97bcc508be18c44a4be50f022eea00b"
-  integrity sha512-RKJBIj8lySrShN4w6i/BonWp2Z/uxwC3h4y7xsRrpP59ZboCd0GpEVsOnMDYLMmKBpYhb5TgHzZXy7wTfYFBRw==
 
 tweetnacl@^1.0.3:
   version "1.0.3"
