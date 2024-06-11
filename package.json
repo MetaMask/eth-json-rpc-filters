@@ -29,7 +29,7 @@
     "@lavamoat/allow-scripts": "^2.5.1",
     "@metamask/auto-changelog": "^3.3.0",
     "@metamask/eth-json-rpc-middleware": "^12.0.0",
-    "eth-block-tracker": "^8.0.0",
+    "@metamask/eth-block-tracker": "^9.0.3",
     "ganache-cli": "^6.12.2",
     "sinon": "^15.2.0",
     "tape": "^5.7.0"
