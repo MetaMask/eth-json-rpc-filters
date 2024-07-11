@@ -53,14 +53,18 @@ test('subscriptions - newHeads', asyncTest(async (t) => {
 test('subscriptions - log', asyncTest(async (t) => {
 
   const tools = createTestSetup()
-  const { sendAsync, subs, blockTracker } = tools
+  const { request, subs, blockTracker } = tools
 
   // deploy log-echo contract
-  const coinbase = await sendAsync({ method: 'eth_coinbase' })
-  const { contractAddress } = await deployLogEchoContract({ tools, from: coinbase })
+  const accounts = await request({
+    method: "eth_accounts",
+    params: []
+  });
+  const fromAcccount = accounts[0];
+  const { contractAddress } = await deployLogEchoContract({ tools, from: fromAcccount })
   t.ok(contractAddress, 'got deployed contract address')
   // deploy secondary "wrong" log contract
-  const wrongContractAddress = (await deployLogEchoContract({ tools, from: coinbase })).contractAddress
+  const wrongContractAddress = (await deployLogEchoContract({ tools, from: fromAcccount })).contractAddress
 
   // create subscription
   const subResults = []
@@ -79,27 +83,27 @@ test('subscriptions - log', asyncTest(async (t) => {
   t.equal(typeof subId, 'string', `got sub id as hex string (${typeof subId})`)
 
   // trigger matching log
-  const triggeringTxHash = await sendAsync({
+  const triggeringTxHash = await request({
     method: 'eth_sendTransaction',
-    params: { from: coinbase, to: contractAddress, data: targetTopic }
+    params: [{ from: fromAcccount, to: contractAddress, data: targetTopic }]
   })
   await tools.trackNextBlock()
 
   // trigger non-matching log
-  await sendAsync({
+  await request({
     method: 'eth_sendTransaction',
-    params: {
-      from: coinbase,
+    params: [{
+      from: fromAcccount,
       to: contractAddress,
       data: wrongTopic
-    }
+    }]
   })
   await tools.trackNextBlock()
 
   // trigger non-matching contract
-  await sendAsync({
+  await request({
     method: 'eth_sendTransaction',
-    params: { from: coinbase, to: wrongContractAddress, data: targetTopic }
+    params: [{ from: fromAcccount, to: wrongContractAddress, data: targetTopic }]
   })
   await tools.trackNextBlock()
 

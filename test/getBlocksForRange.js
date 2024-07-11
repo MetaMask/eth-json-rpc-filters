@@ -4,7 +4,7 @@ const test = require("tape");
 const getBlocksForRange = require("../getBlocksForRange");
 
 test("return block number if there is no error", async (t) => {
-  const sendAsync = sinon
+  const request = sinon
     .stub()
     .withArgs({
       id: 1,
@@ -13,8 +13,8 @@ test("return block number if there is no error", async (t) => {
       params: ["0x1", false],
     })
     .onCall(0)
-    .callsArgWith(1, null, { result: "0x5c377193f05cb9aa0f44bcc77d05492f" });
-  const provider = { sendAsync };
+    .returns("0x5c377193f05cb9aa0f44bcc77d05492f");
+  const provider = { request };
   try {
     const result = await getBlocksForRange({
       provider,
@@ -29,7 +29,7 @@ test("return block number if there is no error", async (t) => {
 });
 
 test("not throw error even if it is not found and filter out null", async (t) => {
-  const sendAsync = sinon
+  const request = sinon
     .stub()
     .withArgs({
       id: 1,
@@ -38,12 +38,10 @@ test("not throw error even if it is not found and filter out null", async (t) =>
       params: ["0x1", false],
     })
     .onCall(0)
-    .callsArgWith(1, new Error("some error"), null)
+    .throws(new Error("some error"))
     .onCall(1)
-    .callsArgWith(1, null, { error: "some error" })
-    .onCall(2)
-    .callsArgWith(1, null, { result: null });
-  const provider = { sendAsync };
+    .returns(null);
+  const provider = { request };
   try {
     const result = await getBlocksForRange({ provider, fromBlock: "0x1", toBlock: "0x1" });
     t.deepEquals(result, []);

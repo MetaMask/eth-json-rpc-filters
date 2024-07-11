@@ -1,10 +1,9 @@
 const EventEmitter = require('events')
 const { PollingBlockTracker } = require('eth-block-tracker')
-const EthQuery = require('@metamask/eth-query')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
 const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
-const Ganache = require('ganache-cli')
+const Ganache = require('ganache')
 const pify = require('pify')
 const createFilterMiddleware = require('../index.js')
 const createSubscriptionMiddleware = require('../subscriptionManager.js')
@@ -30,8 +29,7 @@ function createTestSetup() {
   // create higher level
   const engine = new JsonRpcEngine()
   const provider = providerFromEngine(engine)
-  const query = new EthQuery(provider)
-  const sendAsync = pify(query.sendAsync.bind(query));
+  const request = provider.request.bind(provider);
   // add filter middleware
   engine.push(createFilterMiddleware({ blockTracker, provider }))
   // add subscription middleware
@@ -44,7 +42,7 @@ function createTestSetup() {
   // subs helper
   const subs = createSubsHelper({ provider })
 
-  return { ganacheProvider, forceNextBlock, engine, provider, sendAsync, subs, blockTracker, trackNextBlock }
+  return { ganacheProvider, forceNextBlock, engine, provider, request, subs, blockTracker, trackNextBlock }
 
   async function trackNextBlock() {
     return new Promise((resolve) => blockTracker.once('latest', resolve))
@@ -60,16 +58,13 @@ function createSubsHelper({ provider }) {
 }
 
 function createSubGenerator({ subType, provider }) {
-  return pify(function () {
+  return pify(async function () {
     const args = [].slice.call(arguments)
     const cb = args.pop()
     args.unshift(subType)
-    provider.sendAsync({ method: 'eth_subscribe', params: args }, (err, res) => {
-      if (err) return cb(err)
-      const id = res.result
-      const result = createNewSub({ id, provider })
-      cb(null, result)
-    })
+    const id = await provider.request({ method: 'eth_subscribe', params: args });
+    const result = createNewSub({ id, provider })
+    cb(null, result)
   })
 }
 
@@ -85,11 +80,9 @@ function createNewSub({ id, provider }) {
     events.emit('notification', value)
   })
   // subscription uninstall method
-  function uninstall(cb) {
-    provider.sendAsync({ method: 'eth_unsubscribe', params: [id] }, (err, res) => {
-      if (err) return cb(err)
-      cb(null, res.result)
-    })
+  async function uninstall(cb) {
+    const res = await provider.request({ method: 'eth_unsubscribe', params: [id] });
+    cb(null, res)
   }
   // return custom "subscription" api object
   return {
@@ -138,16 +131,17 @@ function timeout(duration) {
 
 async function deployLogEchoContract({ tools, from }) {
   // https://github.com/kumavis/eth-needlepoint/blob/master/examples/emit-log.js
-  const { sendAsync } = tools;
-  const deployTxHash = await sendAsync({
+  const { request } = tools;
+  const deployTxHash = await request({
     method: 'eth_sendTransaction',
-    params: {
+    params: [{
       from,
       data: '0x600e600c600039600e6000f336600060003760005160206000a1'
-    }
+    }]
   })
+
   await tools.trackNextBlock()
-  const deployTxRx = await sendAsync({
+  const deployTxRx = await request({
     method: 'eth_getTransactionReceipt',
     params: [deployTxHash]
   })
