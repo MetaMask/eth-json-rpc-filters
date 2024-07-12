@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [7.0.1]
 ### Changed
 - yarn version 1.22.22 declared as packageManager in package.json ([#156](https://github.com/MetaMask/eth-json-rpc-filters/pull/156))
-- Bump `@metamask/json-rpc-engine` from `^7.1.0` to `^8.0.2` ([#126](https://github.com/MetaMask/eth-json-rpc-filters/pull/126))
+- Bump `@metamask/json-rpc-engine` from `^7.1.0` to `^8.0.2` ([#162](https://github.com/MetaMask/eth-json-rpc-filters/pull/162))
 
 ### Fixed
 - Bump `async-mutex` from `^0.2.6` to `^0.5.0` ([#163](https://github.com/MetaMask/eth-json-rpc-filters/pull/163))
