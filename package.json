@@ -22,7 +22,7 @@
     "@metamask/eth-query": "^4.0.0",
     "@metamask/json-rpc-engine": "^7.1.0",
     "@metamask/safe-event-emitter": "^3.0.0",
-    "async-mutex": "^0.2.6",
+    "async-mutex": "^0.5.0",
     "pify": "^5.0.0"
   },
   "devDependencies": {
