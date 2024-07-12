@@ -7,30 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [7.0.1]
-### Uncategorized
-- fix(deps): async-mutex@^0.2.6->^0.5.0 ([#163](https://github.com/MetaMask/eth-json-rpc-filters/pull/163))
-- Update CODEOWNERS ([#158](https://github.com/MetaMask/eth-json-rpc-filters/pull/158))
-- chore: declare yarn version 1.22.22 in package.json ([#156](https://github.com/MetaMask/eth-json-rpc-filters/pull/156))
-- Enabling MetaMask security code scanner ([#143](https://github.com/MetaMask/eth-json-rpc-filters/pull/143))
-- Fix missing newline ([#140](https://github.com/MetaMask/eth-json-rpc-filters/pull/140))
-- Add Shared Libraries team in codeowners file ([#132](https://github.com/MetaMask/eth-json-rpc-filters/pull/132))
-- Bump @metamask/eth-json-rpc-provider from 2.3.0 to 2.3.1 ([#134](https://github.com/MetaMask/eth-json-rpc-filters/pull/134))
-- Bump @metamask/json-rpc-engine from 7.3.0 to 7.3.1 ([#133](https://github.com/MetaMask/eth-json-rpc-filters/pull/133))
-- Bump @metamask/auto-changelog from 3.4.3 to 3.4.4 ([#131](https://github.com/MetaMask/eth-json-rpc-filters/pull/131))
-- Bump @metamask/eth-sig-util from 7.0.0 to 7.0.1 ([#130](https://github.com/MetaMask/eth-json-rpc-filters/pull/130))
-- devDeps: replace ganache-core v2 with ganache-cli v6 ([#99](https://github.com/MetaMask/eth-json-rpc-filters/pull/99))
-- Replace ethjs-query with @metamask/eth-query ([#129](https://github.com/MetaMask/eth-json-rpc-filters/pull/129))
-- Bump @metamask/eth-query from 3.0.1 to 4.0.0 ([#126](https://github.com/MetaMask/eth-json-rpc-filters/pull/126))
-- Bump @metamask/eth-json-rpc-provider from 2.2.0 to 2.3.0 ([#125](https://github.com/MetaMask/eth-json-rpc-filters/pull/125))
-- Bump @metamask/json-rpc-engine from 7.2.0 to 7.3.0 ([#123](https://github.com/MetaMask/eth-json-rpc-filters/pull/123))
-- Bump @metamask/auto-changelog from 3.4.2 to 3.4.3 ([#122](https://github.com/MetaMask/eth-json-rpc-filters/pull/122))
-- Bump @metamask/eth-json-rpc-middleware from 12.0.0 to 12.0.1 ([#121](https://github.com/MetaMask/eth-json-rpc-filters/pull/121))
-- Bump browserify-sign from 4.2.1 to 4.2.2 ([#120](https://github.com/MetaMask/eth-json-rpc-filters/pull/120))
-- Bump @metamask/auto-changelog from 3.4.1 to 3.4.2 ([#119](https://github.com/MetaMask/eth-json-rpc-filters/pull/119))
-- Bump @metamask/auto-changelog from 3.4.0 to 3.4.1 ([#118](https://github.com/MetaMask/eth-json-rpc-filters/pull/118))
-- Bump @metamask/auto-changelog from 3.3.0 to 3.4.0 ([#115](https://github.com/MetaMask/eth-json-rpc-filters/pull/115))
-- Bump @metamask/utils from 8.1.0 to 8.2.0 ([#117](https://github.com/MetaMask/eth-json-rpc-filters/pull/117))
-- Bump @metamask/json-rpc-engine from 7.1.1 to 7.2.0 ([#116](https://github.com/MetaMask/eth-json-rpc-filters/pull/116))
+### Changed
+- yarn version 1.22.22 declared as packageManager in package.json ([#156](https://github.com/MetaMask/eth-json-rpc-filters/pull/156))
+
+### Fixed
+- Bump `async-mutex` from `^0.2.6` to `^0.5.0` ([#163](https://github.com/MetaMask/eth-json-rpc-filters/pull/163))
+- Bump `@metamask/eth-query` from `^3.0.1` to `^4.0.0` ([#126](https://github.com/MetaMask/eth-json-rpc-filters/pull/126))
 
 ## [7.0.0]
 ### Changed
