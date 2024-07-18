@@ -55,8 +55,14 @@
       "ethereumjs-util>ethereum-cryptography>keccak": false,
       "ethereumjs-util>ethereum-cryptography>secp256k1": false,
       "ethjs-query>babel-runtime>core-js": false,
-      "ganache-cli>ethereumjs-util>ethereum-cryptography>keccak": false,
-      "ganache-cli>ethereumjs-util>ethereum-cryptography>secp256k1": false
+      "ganache>keccak": false,
+      "ganache>secp256k1": false,
+      "ganache>@trufflesuite/bigint-buffer": false,
+      "ganache>@trufflesuite/uws-js-unofficial>bufferutil": false,
+      "ganache>@trufflesuite/uws-js-unofficial>utf-8-validate": false,
+      "ganache>bufferutil": false,
+      "ganache>leveldown": false,
+      "ganache>utf-8-validate": false
     }
   },
   "packageManager": "yarn@1.22.22"
