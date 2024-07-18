@@ -1,6 +1,6 @@
 {
   "name": "@metamask/eth-json-rpc-filters",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "[json-rpc-engine](https://github.com/MetaMask/json-rpc-engine) middleware implementing ethereum filter methods. Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).",
   "main": "index.js",
   "engines": {
@@ -20,9 +20,9 @@
   ],
   "dependencies": {
     "@metamask/eth-query": "^4.0.0",
-    "@metamask/json-rpc-engine": "^7.1.0",
+    "@metamask/json-rpc-engine": "^8.0.2",
     "@metamask/safe-event-emitter": "^3.0.0",
-    "async-mutex": "^0.2.6",
+    "async-mutex": "^0.5.0",
     "pify": "^5.0.0"
   },
   "devDependencies": {

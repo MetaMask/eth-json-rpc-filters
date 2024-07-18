@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.1]
+### Changed
+- yarn version 1.22.22 declared as packageManager in package.json ([#156](https://github.com/MetaMask/eth-json-rpc-filters/pull/156))
+- Bump `@metamask/eth-query` from `^3.0.1` to `^4.0.0` ([#126](https://github.com/MetaMask/eth-json-rpc-filters/pull/126))
+- Bump `@metamask/json-rpc-engine` from `^7.1.0` to `^8.0.2` ([#162](https://github.com/MetaMask/eth-json-rpc-filters/pull/162))
+
+### Fixed
+- Bump `async-mutex` from `^0.2.6` to `^0.5.0` ([#163](https://github.com/MetaMask/eth-json-rpc-filters/pull/163))
+
 ## [7.0.0]
 ### Changed
 - **BREAKING:** Set minimum Node.js version to v16 ([#102](https://github.com/MetaMask/eth-json-rpc-filters/pull/102))
@@ -65,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING**: expect EthBlockTracker@4 (062fd0849631a9862780c0591a3987bcadfe880f)
 
-[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.1...HEAD
+[7.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.1...v7.0.0
 [6.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v5.1.0...v6.0.0
