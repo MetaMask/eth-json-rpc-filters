@@ -58,14 +58,15 @@ function createSubsHelper({ provider }) {
 }
 
 function createSubGenerator({ subType, provider }) {
-  return pify(async function () {
-    const args = [].slice.call(arguments)
-    const cb = args.pop()
-    args.unshift(subType)
-    const id = await provider.request({ method: 'eth_subscribe', params: args });
-    const result = createNewSub({ id, provider })
-    cb(null, result)
-  })
+  return async function () {
+    const args = [].slice.call(arguments);
+    args.unshift(subType);
+    const id = await provider.request({
+      method: "eth_subscribe",
+      params: args,
+    });
+    return createNewSub({ id, provider });
+  };
 }
 
 function createNewSub({ id, provider }) {
