@@ -7,10 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [8.0.0]
-### Uncategorized
-- deps: @metamask/eth-block-tracker@^9.0.3->~10.0.0 || ^10.1.1 ([#176](https://github.com/MetaMask/eth-json-rpc-filters/pull/176))
-- deps: @metamask/json-rpc-engine@^8.0.2->^9.0.0 ([#165](https://github.com/MetaMask/eth-json-rpc-filters/pull/165))
-- BREAKING: drop support for Node.js v16, v21 ([#164](https://github.com/MetaMask/eth-json-rpc-filters/pull/164))
+### Changed
+- BREAKING: Drop support for Node.js v16, v21 ([#164](https://github.com/MetaMask/eth-json-rpc-filters/pull/164))
+- Update `@metamask/json-rpc-engine` from `^8.0.2` to `^9.0.0` ([#165](https://github.com/MetaMask/eth-json-rpc-filters/pull/165))
 
 ## [7.0.1]
 ### Changed
