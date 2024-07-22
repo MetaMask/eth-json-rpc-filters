@@ -172,15 +172,6 @@
     "@metamask/safe-event-emitter" "^3.0.0"
     "@metamask/utils" "^8.2.0"
 
-"@metamask/json-rpc-engine@^8.0.2":
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-8.0.2.tgz#29510a871a8edef892f838ee854db18de0bf0d14"
-  integrity sha512-IoQPmql8q7ABLruW7i4EYVHWUbF74yrp63bRuXV5Zf9BQwcn5H9Ww1eLtROYvI1bUXwOiHZ6qT5CWTrDc/t/AA==
-  dependencies:
-    "@metamask/rpc-errors" "^6.2.1"
-    "@metamask/safe-event-emitter" "^3.0.0"
-    "@metamask/utils" "^8.3.0"
-
 "@metamask/json-rpc-engine@^9.0.0":
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-9.0.0.tgz#41224ee7dae6b58befb883fb643fe56f47682fd4"
@@ -189,6 +180,15 @@
     "@metamask/rpc-errors" "^6.2.1"
     "@metamask/safe-event-emitter" "^3.0.0"
     "@metamask/utils" "^8.3.0"
+
+"@metamask/json-rpc-engine@^9.0.1":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@metamask/json-rpc-engine/-/json-rpc-engine-9.0.1.tgz#202f6b5d24957c4bc949c113c3b60fa134478e11"
+  integrity sha512-A+iKxI/iMaOKYBcwsGQIaN+LAHOjVdogaGoOe8s52nLQuWmxwAzXIwlvm4RSAM4WG1XnoUPilFoGMHTx+fDteg==
+  dependencies:
+    "@metamask/rpc-errors" "^6.3.1"
+    "@metamask/safe-event-emitter" "^3.0.0"
+    "@metamask/utils" "^9.0.0"
 
 "@metamask/rpc-errors@^6.0.0", "@metamask/rpc-errors@^6.2.1":
   version "6.3.0"

@@ -34,6 +34,9 @@
     "sinon": "^15.2.0",
     "tape": "^5.7.0"
   },
+  "resolutions": {
+    "@metamask/eth-json-rpc-provider": "^4.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/eth-json-rpc-filters.git"
