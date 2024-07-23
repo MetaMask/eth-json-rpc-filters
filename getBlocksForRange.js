@@ -34,14 +34,10 @@ function intToHex(int) {
   return '0x' + hexString
 }
 
-async function request(provider, request) {
-  return provider.request(request);
-}
-
 async function query(provider, method, params) {
   for (let i = 0; i < 3; i++) {
     try {
-      return await request(provider, {
+      return provider.request({
         id: 1,
         jsonrpc: "2.0",
         method,
