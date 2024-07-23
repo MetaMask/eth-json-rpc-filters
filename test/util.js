@@ -98,7 +98,7 @@ function createEngineFromGanache () {
 
   async function forceNextBlock() {
     // custom ganache method
-    await pify(ganacheProvider.sendAsync).call(ganacheProvider, createPayload({ method: 'evm_mine' }))
+    await ganacheProvider.request(createPayload({ method: 'evm_mine' }))
   }
 }
 
