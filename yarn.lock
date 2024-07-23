@@ -95,12 +95,23 @@
     semver "^7.3.5"
     yargs "^17.0.1"
 
-"@metamask/eth-block-tracker@^10.0.0", "@metamask/eth-block-tracker@~10.0.0 || ^10.1.1":
+"@metamask/eth-block-tracker@^10.0.0":
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-10.0.0.tgz#22078b62cba7eb4df45381f3325231f8a07db316"
   integrity sha512-Fir1M6fUCR5HRVBL5DBKGV2TOsVfj5an23eggVRgGwY965i3TglMC2rA5IVA60rl6MxAHP//QQz5N/hK+uN7Hg==
   dependencies:
     "@metamask/eth-json-rpc-provider" "^4.0.0"
+    "@metamask/safe-event-emitter" "^3.0.0"
+    "@metamask/utils" "^8.1.0"
+    json-rpc-random-id "^1.0.1"
+    pify "^5.0.0"
+
+"@metamask/eth-block-tracker@~11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.0.tgz#0d00b575054a276ad8ad90906583a3101bbb36ba"
+  integrity sha512-bEs/0ndKSrewAEIgxKkU31E3H9yT8SLwFXD2jypECoROaaRpX7ZeFClTJOACiFs14PdJNfIRhahVAMya1Fb2tg==
+  dependencies:
+    "@metamask/eth-json-rpc-provider" "^4.1.0"
     "@metamask/safe-event-emitter" "^3.0.0"
     "@metamask/utils" "^8.1.0"
     json-rpc-random-id "^1.0.1"
@@ -123,7 +134,7 @@
     pify "^5.0.0"
     safe-stable-stringify "^2.4.3"
 
-"@metamask/eth-json-rpc-provider@^4.0.0":
+"@metamask/eth-json-rpc-provider@^4.0.0", "@metamask/eth-json-rpc-provider@^4.1.0":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-4.1.1.tgz#93155567f0c9b48534058bf4d7bde455fe3fe99e"
   integrity sha512-lUqKqKG4A88DW1d5LZG/wzAA8p9N9ClA6Jo51EfEOZ6rn3jH+u4DtoPbBKl8ZXYivuFE/36rxus0KcmZpumjhA==
