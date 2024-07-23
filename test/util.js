@@ -81,15 +81,14 @@ function createNewSub({ id, provider }) {
     events.emit('notification', value)
   })
   // subscription uninstall method
-  async function uninstall(cb) {
-    const res = await provider.request({ method: 'eth_unsubscribe', params: [id] });
-    cb(null, res)
+  async function uninstall() {
+    return await provider.request({ method: 'eth_unsubscribe', params: [id] });
   }
   // return custom "subscription" api object
   return {
     id,
     events,
-    uninstall: pify(uninstall),
+    uninstall,
   }
 }
 
