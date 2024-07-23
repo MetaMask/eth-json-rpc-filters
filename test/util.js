@@ -4,7 +4,6 @@ const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
 const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
 const Ganache = require('ganache')
-const pify = require('pify')
 const createFilterMiddleware = require('../index.js')
 const createSubscriptionMiddleware = require('../subscriptionManager.js')
 
