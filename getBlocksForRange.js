@@ -34,26 +34,10 @@ function intToHex(int) {
   return '0x' + hexString
 }
 
-function sendAsync(provider, request) {
-  return new Promise((resolve, reject) => {
-    provider.sendAsync(request, (error, response) => {
-      if (error) {
-        reject(error);
-      } else if (response.error) {
-        reject(response.error);
-      } else if (response.result) {
-        resolve(response.result);
-      } else {
-        reject(new Error("Result was empty"));
-      }
-    });
-  });
-}
-
 async function query(provider, method, params) {
   for (let i = 0; i < 3; i++) {
     try {
-      return await sendAsync(provider, {
+      return provider.request({
         id: 1,
         jsonrpc: "2.0",
         method,
@@ -61,7 +45,7 @@ async function query(provider, method, params) {
       });
     } catch (error) {
       console.error(
-        `provider.sendAsync failed: ${error.stack || error.message || error}`
+        `provider.request failed: ${error.stack || error.message || error}`
       );
     }
   }
