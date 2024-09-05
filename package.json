@@ -28,7 +28,7 @@
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.5.1",
     "@metamask/auto-changelog": "^3.3.0",
-    "@metamask/eth-json-rpc-middleware": "^13.0.0",
+    "@metamask/eth-json-rpc-middleware": "^14.0.1",
     "@metamask/eth-block-tracker": "~10.0.0 || ^10.1.1",
     "ganache": "^7.9.2",
     "sinon": "^15.2.0",
