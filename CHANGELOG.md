@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [9.0.0]
 ### Uncategorized
-- ci: update actions ([#195](https://github.com/MetaMask/eth-json-rpc-filters/pull/195))
-- deps: @metamask/json-rpc-engine@^9.0.0->^10.0.0 ([#194](https://github.com/MetaMask/eth-json-rpc-filters/pull/194))
 - adapt to eip-1193 provider changes ([#170](https://github.com/MetaMask/eth-json-rpc-filters/pull/170))
+
+### Fixed
+- Bump `@metamask/json-rpc-engine` from `^9.0.0` to `^10.0.0` ([#194](https://github.com/MetaMask/eth-json-rpc-filters/pull/194))
 
 ## [8.0.0]
 ### Changed
