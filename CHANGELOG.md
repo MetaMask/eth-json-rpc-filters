@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0]
+### Uncategorized
+- ci: update actions ([#195](https://github.com/MetaMask/eth-json-rpc-filters/pull/195))
+- deps: @metamask/json-rpc-engine@^9.0.0->^10.0.0 ([#194](https://github.com/MetaMask/eth-json-rpc-filters/pull/194))
+- adapt to eip-1193 provider changes ([#170](https://github.com/MetaMask/eth-json-rpc-filters/pull/170))
+
 ## [8.0.0]
 ### Changed
 - BREAKING: Drop support for Node.js v16, v21 ([#164](https://github.com/MetaMask/eth-json-rpc-filters/pull/164))
@@ -79,7 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING**: expect EthBlockTracker@4 (062fd0849631a9862780c0591a3987bcadfe880f)
 
-[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v8.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v8.0.0...v9.0.0
 [8.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.1...v8.0.0
 [7.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v6.0.1...v7.0.0
