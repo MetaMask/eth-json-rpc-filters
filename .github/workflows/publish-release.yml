@@ -13,7 +13,7 @@ jobs:
       startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           # We check out the release pull request's base branch, which will be
           # used as the base branch for all git operations.
@@ -21,7 +21,7 @@ jobs:
       - name: Get Node.js version
         id: nvm
         run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - uses: MetaMask/action-publish-release@v1
