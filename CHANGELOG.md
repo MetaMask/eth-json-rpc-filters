@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.1]
+### Uncategorized
+- build(deps-dev): bump @metamask/eth-json-rpc-middleware ([#197](https://github.com/MetaMask/eth-json-rpc-filters/pull/197))
+
 ## [9.0.0]
 ### Changed
 - **BREAKING:** Adapt to EIP-1193 provider changes by replacing the deprecated `sendAsync` method with the `request` method ([#170](https://github.com/MetaMask/eth-json-rpc-filters/pull/170))
@@ -86,7 +90,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING**: expect EthBlockTracker@4 (062fd0849631a9862780c0591a3987bcadfe880f)
 
-[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v9.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v9.0.1...HEAD
+[9.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v8.0.0...v9.0.0
 [8.0.0]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.1...v8.0.0
 [7.0.1]: https://github.com/MetaMask/eth-json-rpc-filters/compare/v7.0.0...v7.0.1
