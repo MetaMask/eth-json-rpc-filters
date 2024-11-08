@@ -96,11 +96,11 @@
     yargs "^17.0.1"
 
 "@metamask/eth-block-tracker@^11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.1.tgz#0c67dfd4321d5c2cba66e4eac516501a81bb089c"
-  integrity sha512-ePLppUUpkFftgg/3/0XVMb37PQuHlOxX/TXd+/rMMRxmhum21KdViiwIQvjiLnwILmc+FJ+umJMZWuyhYcqWcQ==
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.2.tgz#7890a4430bd6a92577585a66d7958771bfd88ec8"
+  integrity sha512-R1J3n2WY3PyEfYELc45MVFw7+6iKu7O3S/nBU0icmM3Q2mVqDMpctF5Z5pAZDYYEW35h7tTU2KJfUb1DrXzWcg==
   dependencies:
-    "@metamask/eth-json-rpc-provider" "^4.1.1"
+    "@metamask/eth-json-rpc-provider" "^4.1.5"
     "@metamask/safe-event-emitter" "^3.1.1"
     "@metamask/utils" "^9.1.0"
     json-rpc-random-id "^1.0.1"
@@ -123,7 +123,7 @@
     pify "^5.0.0"
     safe-stable-stringify "^2.4.3"
 
-"@metamask/eth-json-rpc-provider@^4.1.1", "@metamask/eth-json-rpc-provider@^4.1.5":
+"@metamask/eth-json-rpc-provider@^4.1.5":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-provider/-/eth-json-rpc-provider-4.1.6.tgz#5d86ee7db6ff94b0abe1f00ef02aeffa60536497"
   integrity sha512-32gz41C416E0P+b6YpG/2Ne1UoyqxHRGT9xBh1LTFaWvZXfGQxjSTdK+AEVG01pZ8Mf8Bgp8z2SpEsWcE9ZCng==
