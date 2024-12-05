@@ -96,9 +96,9 @@
     yargs "^17.0.1"
 
 "@metamask/eth-block-tracker@^11.0.1":
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.2.tgz#7890a4430bd6a92577585a66d7958771bfd88ec8"
-  integrity sha512-R1J3n2WY3PyEfYELc45MVFw7+6iKu7O3S/nBU0icmM3Q2mVqDMpctF5Z5pAZDYYEW35h7tTU2KJfUb1DrXzWcg==
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.3.tgz#0e70aaa63f90c2fb18a308a9d67ca750641cde28"
+  integrity sha512-Lvm6oZcL5vRGnyulFVde5kbS5/IQ2hwmolYUiyZVqTPQGoKX5AdGAIJvAwXnXVgMMhNw177tYu//jBy78M13hA==
   dependencies:
     "@metamask/eth-json-rpc-provider" "^4.1.5"
     "@metamask/safe-event-emitter" "^3.1.1"
