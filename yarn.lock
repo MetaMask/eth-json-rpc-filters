@@ -95,10 +95,10 @@
     semver "^7.3.5"
     yargs "^17.0.1"
 
-"@metamask/eth-block-tracker@^11.0.1":
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.2.tgz#7890a4430bd6a92577585a66d7958771bfd88ec8"
-  integrity sha512-R1J3n2WY3PyEfYELc45MVFw7+6iKu7O3S/nBU0icmM3Q2mVqDMpctF5Z5pAZDYYEW35h7tTU2KJfUb1DrXzWcg==
+"@metamask/eth-block-tracker@^11.0.1", "@metamask/eth-block-tracker@^11.0.3":
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-block-tracker/-/eth-block-tracker-11.0.3.tgz#0e70aaa63f90c2fb18a308a9d67ca750641cde28"
+  integrity sha512-Lvm6oZcL5vRGnyulFVde5kbS5/IQ2hwmolYUiyZVqTPQGoKX5AdGAIJvAwXnXVgMMhNw177tYu//jBy78M13hA==
   dependencies:
     "@metamask/eth-json-rpc-provider" "^4.1.5"
     "@metamask/safe-event-emitter" "^3.1.1"
@@ -107,11 +107,11 @@
     pify "^5.0.0"
 
 "@metamask/eth-json-rpc-middleware@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-15.0.0.tgz#167288ad4618438af9d1bda75d238cb0facfde3f"
-  integrity sha512-RkmaPQPWGH1qggaq0sStwVIeamiJOjf/2jBJfbX78r/nDCai8ddY/zHpATJr42SvtRYD0JrCPjo6v356IDzjQw==
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/@metamask/eth-json-rpc-middleware/-/eth-json-rpc-middleware-15.0.1.tgz#65a4382bdf87fa6c84fe9dc97a4d9c40b47bcbcb"
+  integrity sha512-AstO4eE6HmAn81pYyTeCIiFGYKJIRY2x7dWENF/IBkxYrf7eg90mFr1zjldZiacMeEMnkgzd9/tipanWGXT+wA==
   dependencies:
-    "@metamask/eth-block-tracker" "^11.0.1"
+    "@metamask/eth-block-tracker" "^11.0.3"
     "@metamask/eth-json-rpc-provider" "^4.1.5"
     "@metamask/eth-sig-util" "^7.0.3"
     "@metamask/json-rpc-engine" "^10.0.0"
