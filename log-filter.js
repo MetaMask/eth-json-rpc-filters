@@ -1,7 +1,20 @@
 const EthQuery = require('@metamask/eth-query')
 const pify = require('pify')
 const BaseFilterWithHistory = require('./base-filter-history')
-const { bnToHex, hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
+const { hexToInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
+
+// Workaround: This local intToHex function does not add leading zero.
+function incrementHexInt(hexString){
+  if (hexString === undefined || hexString === null) return hexString
+  const value = hexToInt(hexString)
+  return intToHex(value + 1)
+}
+
+function intToHex(int) {
+  if (int === undefined || int === null) return int
+  const hexString = int.toString(16)
+  return '0x' + hexString
+}
 
 class LogFilter extends BaseFilterWithHistory {
 
