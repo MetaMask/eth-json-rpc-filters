@@ -11,7 +11,6 @@
     "build": "echo 'this does nothing'",
     "build:clean": "rimraf dist && yarn build",
     "lint": "printf '%s\\n' 'No lint command'",
-    "setup": "yarn install && yarn allow-scripts",
     "test": "node test"
   },
   "license": "ISC",
@@ -28,8 +27,8 @@
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.5.1",
     "@metamask/auto-changelog": "^3.3.0",
-    "@metamask/eth-json-rpc-middleware": "^15.0.0",
     "@metamask/eth-block-tracker": "^11.0.1",
+    "@metamask/eth-json-rpc-middleware": "^15.0.0",
     "ganache": "^7.9.2",
     "sinon": "^15.2.0",
     "tape": "^5.7.0"
@@ -62,5 +61,5 @@
       "ganache>utf-8-validate": false
     }
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.7.0"
 }
