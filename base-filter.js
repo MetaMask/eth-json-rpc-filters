@@ -1,31 +1,33 @@
-const SafeEventEmitter = require('@metamask/safe-event-emitter').default
+const SafeEventEmitter = require('@metamask/safe-event-emitter').default;
 
 class BaseFilter extends SafeEventEmitter {
-
-  constructor () {
-    super()
-    this.updates = []
+  constructor() {
+    super();
+    this.updates = [];
   }
 
-  async initialize () {}
-
-  async update () {
-    throw new Error('BaseFilter - no update method specified')
+  async initialize() {
+    // do nothing
   }
 
-  addResults (newResults) {
-    this.updates = this.updates.concat(newResults)
-    newResults.forEach(result => this.emit('update', result))
+  async update() {
+    throw new Error('BaseFilter - no update method specified');
   }
 
-  addInitialResults (newResults) {}
-
-  getChangesAndClear () {
-    const updates = this.updates
-    this.updates = []
-    return updates
+  addResults(newResults) {
+    this.updates = this.updates.concat(newResults);
+    newResults.forEach((result) => this.emit('update', result));
   }
-  
+
+  addInitialResults(_newResults) {
+    // do nothing
+  }
+
+  getChangesAndClear() {
+    const { updates } = this;
+    this.updates = [];
+    return updates;
+  }
 }
 
-module.exports = BaseFilter
+module.exports = BaseFilter;

@@ -1,78 +1,107 @@
-const EthQuery = require('@metamask/eth-query')
-const pify = require('pify')
-const BaseFilterWithHistory = require('./base-filter-history')
-const { bnToHex, hexToInt, incrementHexInt, minBlockRef, blockRefIsNumber } = require('./hexUtils')
+const EthQuery = require('@metamask/eth-query');
+const pify = require('pify');
+
+const BaseFilterWithHistory = require('./base-filter-history');
+const {
+  hexToInt,
+  incrementHexInt,
+  minBlockRef,
+  blockRefIsNumber,
+} = require('./hexUtils');
 
 class LogFilter extends BaseFilterWithHistory {
-
-  constructor ({ provider, params }) {
-    super()
-    this.type = 'log'
-    this.ethQuery = new EthQuery(provider)
-    this.params = Object.assign({
-      fromBlock: 'latest',
-      toBlock: 'latest',
-      address: undefined,
-      topics: [],
-    }, params)
+  constructor({ provider, params }) {
+    super();
+    this.type = 'log';
+    this.ethQuery = new EthQuery(provider);
+    this.params = Object.assign(
+      {
+        fromBlock: 'latest',
+        toBlock: 'latest',
+        address: undefined,
+        topics: [],
+      },
+      params,
+    );
     // normalize address parameter
     if (this.params.address) {
       // ensure array
       if (!Array.isArray(this.params.address)) {
-        this.params.address = [this.params.address]
+        this.params.address = [this.params.address];
       }
       // ensure lowercase
-      this.params.address = this.params.address.map(address => address.toLowerCase())
+      this.params.address = this.params.address.map((address) =>
+        address.toLowerCase(),
+      );
     }
   }
 
   async initialize({ currentBlock }) {
     // resolve params.fromBlock
-    let fromBlock = this.params.fromBlock
-    if (['latest', 'pending'].includes(fromBlock)) fromBlock = currentBlock
-    if ('earliest' === fromBlock) fromBlock = '0x0'
-    this.params.fromBlock = fromBlock
+    let { fromBlock } = this.params;
+    if (['latest', 'pending'].includes(fromBlock)) {
+      fromBlock = currentBlock;
+    }
+    if (fromBlock === 'earliest') {
+      fromBlock = '0x0';
+    }
+    this.params.fromBlock = fromBlock;
     // set toBlock for initial lookup
-    const toBlock = minBlockRef(this.params.toBlock, currentBlock)
-    const params = Object.assign({}, this.params, { toBlock })
+    const toBlock = minBlockRef(this.params.toBlock, currentBlock);
+    const params = Object.assign({}, this.params, { toBlock });
     // fetch logs and add to results
-    const newLogs = await this._fetchLogs(params)
-    this.addInitialResults(newLogs)
+    const newLogs = await this._fetchLogs(params);
+    this.addInitialResults(newLogs);
   }
 
-  async update ({ oldBlock, newBlock }) {
+  async update({ oldBlock, newBlock }) {
     // configure params for this update
-    const toBlock = newBlock
-    let fromBlock
+    const toBlock = newBlock;
+    let fromBlock;
     // oldBlock is empty on first sync
     if (oldBlock) {
-      fromBlock = incrementHexInt(oldBlock)
+      fromBlock = incrementHexInt(oldBlock);
     } else {
-      fromBlock = newBlock
+      fromBlock = newBlock;
     }
     // fetch logs
-    const params = Object.assign({}, this.params, { fromBlock, toBlock })
-    const newLogs = await this._fetchLogs(params)
-    const matchingLogs = newLogs.filter(log => this.matchLog(log))
+    const params = Object.assign({}, this.params, { fromBlock, toBlock });
+    const newLogs = await this._fetchLogs(params);
+    const matchingLogs = newLogs.filter((log) => this.matchLog(log));
 
     // add to results
-    this.addResults(matchingLogs)
+    this.addResults(matchingLogs);
   }
 
-  async _fetchLogs (params) {
-    const newLogs = await pify(cb => this.ethQuery.getLogs(params, cb))()
+  async _fetchLogs(params) {
+    const newLogs = await pify((callback) =>
+      this.ethQuery.getLogs(params, callback),
+    )();
     // add to results
-    return newLogs
+    return newLogs;
   }
 
   matchLog(log) {
     // check if block number in bounds:
-    if (hexToInt(this.params.fromBlock) >= hexToInt(log.blockNumber)) return false
-    if (blockRefIsNumber(this.params.toBlock) && hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)) return false
+    if (hexToInt(this.params.fromBlock) >= hexToInt(log.blockNumber)) {
+      return false;
+    }
+    if (
+      blockRefIsNumber(this.params.toBlock) &&
+      hexToInt(this.params.toBlock) <= hexToInt(log.blockNumber)
+    ) {
+      return false;
+    }
 
     // address is correct:
-    const normalizedLogAddress = log.address && log.address.toLowerCase()
-    if (this.params.address && normalizedLogAddress && !this.params.address.includes(normalizedLogAddress)) return false
+    const normalizedLogAddress = log.address && log.address.toLowerCase();
+    if (
+      this.params.address &&
+      normalizedLogAddress &&
+      !this.params.address.includes(normalizedLogAddress)
+    ) {
+      return false;
+    }
 
     // topics match:
     // topics are position-dependant
@@ -80,23 +109,28 @@ class LogFilter extends BaseFilterWithHistory {
     // topics can be null, representing a wild card for that position
     const topicsMatch = this.params.topics.every((topicPattern, index) => {
       // pattern is longer than actual topics
-      let logTopic = log.topics[index]
-      if (!logTopic) return false
-      logTopic = logTopic.toLowerCase()
+      let logTopic = log.topics[index];
+      if (!logTopic) {
+        return false;
+      }
+      logTopic = logTopic.toLowerCase();
       // normalize subTopics
-      let subtopicsToMatch = Array.isArray(topicPattern) ? topicPattern : [topicPattern]
+      let subtopicsToMatch = Array.isArray(topicPattern)
+        ? topicPattern
+        : [topicPattern];
       // check for wild card
-      const subtopicsIncludeWildcard = subtopicsToMatch.includes(null)
-      if (subtopicsIncludeWildcard) return true
-      subtopicsToMatch = subtopicsToMatch.map(topic => topic.toLowerCase())
+      const subtopicsIncludeWildcard = subtopicsToMatch.includes(null);
+      if (subtopicsIncludeWildcard) {
+        return true;
+      }
+      subtopicsToMatch = subtopicsToMatch.map((topic) => topic.toLowerCase());
       // check each possible matching topic
-      const topicDoesMatch = subtopicsToMatch.includes(logTopic)
-      return topicDoesMatch
-    })
+      const topicDoesMatch = subtopicsToMatch.includes(logTopic);
+      return topicDoesMatch;
+    });
 
-    return topicsMatch
+    return topicsMatch;
   }
-
 }
 
-module.exports = LogFilter
+module.exports = LogFilter;
