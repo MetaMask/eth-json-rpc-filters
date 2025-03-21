@@ -1,13 +1,18 @@
 name: MetaMask Security Code Scanner
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_call:
     secrets:
       SECURITY_SCAN_METRICS_TOKEN:
         required: false
       APPSEC_BOT_SLACK_WEBHOOK:
         required: false
-  workflow_dispatch:
 
 jobs:
   run-security-scan:
