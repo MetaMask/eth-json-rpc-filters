@@ -2,21 +2,30 @@
   "name": "@metamask/eth-json-rpc-filters",
   "version": "9.0.0",
   "description": "[json-rpc-engine](https://github.com/MetaMask/json-rpc-engine) middleware implementing ethereum filter methods. Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).",
-  "main": "index.js",
-  "engines": {
-    "node": "^18.16 || ^20 || >=22",
-    "yarn": "^1.22.22"
+  "homepage": "https://github.com/MetaMask/eth-json-rpc-filters#readme",
+  "bugs": {
+    "url": "https://github.com/MetaMask/eth-json-rpc-filters/issues"
   },
-  "scripts": {
-    "build": "echo 'this does nothing'",
-    "build:clean": "rimraf dist && yarn build",
-    "lint": "printf '%s\\n' 'No lint command'",
-    "test": "node test"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MetaMask/eth-json-rpc-filters.git"
   },
   "license": "ISC",
+  "main": "index.js",
   "files": [
     "*.js"
   ],
+  "scripts": {
+    "build": "echo 'this does nothing'",
+    "lint": "yarn lint:eslint && yarn lint:constraints && yarn lint:misc --check && yarn lint:dependencies --check && yarn lint:changelog",
+    "lint:changelog": "auto-changelog validate --prettier",
+    "lint:constraints": "yarn constraints",
+    "lint:dependencies": "depcheck && yarn dedupe",
+    "lint:eslint": "eslint . --cache",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:constraints --fix && yarn lint:misc --write && yarn lint:dependencies && yarn lint:changelog",
+    "lint:misc": "prettier '**/*.json' '**/*.md' '**/*.yml' '!.yarnrc.yml' --ignore-path .gitignore --no-error-on-unmatched-pattern",
+    "test": "node test"
+  },
   "dependencies": {
     "@metamask/eth-query": "^4.0.0",
     "@metamask/json-rpc-engine": "^10.0.0",
@@ -27,20 +36,29 @@
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.5.1",
     "@metamask/auto-changelog": "^3.3.0",
+    "@metamask/eslint-config": "^14.0.0",
+    "@metamask/eslint-config-nodejs": "^14.0.0",
     "@metamask/eth-block-tracker": "^11.0.1",
     "@metamask/eth-json-rpc-middleware": "^15.0.0",
+    "@metamask/eth-json-rpc-provider": "^4.1.8",
+    "eslint": "^9.11.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import-x": "^4.3.0",
+    "eslint-plugin-jsdoc": "^50.2.4",
+    "eslint-plugin-n": "^17.10.3",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
     "ganache": "^7.9.2",
+    "prettier": "^3.3.3",
+    "prettier-plugin-packagejson": "^2.3.0",
     "sinon": "^15.2.0",
     "tape": "^5.7.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MetaMask/eth-json-rpc-filters.git"
+  "packageManager": "yarn@4.7.0",
+  "engines": {
+    "node": "^18.16 || ^20 || >=22",
+    "yarn": "^1.22.22"
   },
-  "bugs": {
-    "url": "https://github.com/MetaMask/eth-json-rpc-filters/issues"
-  },
-  "homepage": "https://github.com/MetaMask/eth-json-rpc-filters#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -60,6 +78,5 @@
       "ganache>leveldown": false,
       "ganache>utf-8-validate": false
     }
-  },
-  "packageManager": "yarn@4.7.0"
+  }
 }

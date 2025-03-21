@@ -4,6 +4,7 @@
 Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).
 
 ### supported rpc methods
+
 - `eth_newFilter`
 - `eth_newBlockFilter`
 - `eth_newPendingTransactionFilter`
@@ -14,15 +15,17 @@ Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) 
 ### usage
 
 basic usage:
+
 ```js
-const filterMiddleware = createFilterMiddleware({ blockTracker, provider })
-engine.push(filterMiddleware)
+const filterMiddleware = createFilterMiddleware({ blockTracker, provider });
+engine.push(filterMiddleware);
 ```
 
 cleanup:
+
 ```js
 // remove blockTracker handler to free middleware for garbage collection
-filterMiddleware.destroy()
+filterMiddleware.destroy();
 ```
 
 ## Running Tests
@@ -32,4 +35,5 @@ yarn test
 ```
 
 ## Changelog
+
 [`CHANGELOG.md`](./CHANGELOG.md)
