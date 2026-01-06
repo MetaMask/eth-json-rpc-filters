@@ -1,5 +1,5 @@
 const SafeEventEmitter = require('@metamask/safe-event-emitter').default
-const { createAsyncMiddleware, createScaffoldMiddleware } = require('@metamask/json-rpc-engine')
+const { createScaffoldMiddleware } = require('@metamask/json-rpc-engine/v2')
 const createFilterMiddleware = require('./index.js')
 const { unsafeRandomBytes, incrementHexInt } = require('./hexUtils.js')
 const getBlocksForRange = require('./getBlocksForRange.js')
@@ -18,19 +18,19 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
   // create subscriptionManager api object
   const events = new SafeEventEmitter()
   const middleware = createScaffoldMiddleware({
-    eth_subscribe: createAsyncMiddleware(subscribe),
-    eth_unsubscribe: createAsyncMiddleware(unsubscribe),
+    eth_subscribe: subscribe,
+    eth_unsubscribe: unsubscribe,
   })
   middleware.destroy = destroy
   return { events, middleware }
 
-  async function subscribe(req, res) {
+  async function subscribe({ request }) {
 
     if (isDestroyed) throw new Error(
       'SubscriptionManager - attempting to use after destroying'
     )
 
-    const subscriptionType = req.params[0]
+    const subscriptionType = request.params[0]
     // subId is 16 byte hex string
     const subId = unsafeRandomBytes(16)
 
@@ -41,7 +41,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
         sub = createSubNewHeads({ subId })
         break
       case 'logs':
-        const filterParams = req.params[1]
+        const filterParams = request.params[1]
         const filter = await filterManager.newLogFilter(filterParams)
         sub = createSubFromFilter({ subId, filter })
         break
@@ -51,8 +51,7 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     }
     subscriptions[subId] = sub
 
-    res.result = subId
-    return
+    return subId
 
     function createSubNewHeads({ subId }) {
       const sub = {
@@ -88,23 +87,22 @@ function createSubscriptionMiddleware({ blockTracker, provider }) {
     }
   }
 
-  async function unsubscribe(req, res) {
+  async function unsubscribe({ request }) {
 
     if (isDestroyed) throw new Error(
       'SubscriptionManager - attempting to use after destroying'
     )
 
-    const id = req.params[0]
+    const id = request.params[0]
     const subscription = subscriptions[id]
     // if missing, return "false" to indicate it was not removed
     if (!subscription) {
-      res.result = false
-      return
+      return false
     }
     // cleanup subscription
     delete subscriptions[id]
     await subscription.destroy()
-    res.result = true
+    return true
   }
 
   function _emitSubscriptionResult(filterIdHex, value) {
