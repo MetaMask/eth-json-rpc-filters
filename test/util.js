@@ -1,8 +1,8 @@
 const EventEmitter = require('events')
 const { PollingBlockTracker } = require('@metamask/eth-block-tracker')
-const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
-const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
-const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
+const { JsonRpcEngineV2 } = require('@metamask/json-rpc-engine/v2')
+const { providerAsMiddlewareV2 } = require('@metamask/eth-json-rpc-middleware')
+const { InternalProvider } = require('@metamask/eth-json-rpc-provider')
 const Ganache = require('ganache')
 const createFilterMiddleware = require('../index.js')
 const createSubscriptionMiddleware = require('../subscriptionManager.js')
@@ -20,28 +20,42 @@ module.exports = {
 function createTestSetup() {
   // raw data source
   const { ganacheProvider, forceNextBlock } = createEngineFromGanache()
-  // create block trackerfilterId
+  // create block tracker
   const blockTracker = new PollingBlockTracker({
     provider: ganacheProvider,
     pollingInterval: 200,
   })
-  // create higher level
-  const engine = new JsonRpcEngine()
-  const provider = providerFromEngine(engine)
-  const request = provider.request.bind(provider);
-  // add filter middleware
-  engine.push(createFilterMiddleware({ blockTracker, provider }))
-  // add subscription middleware
-  const subscriptionManager = createSubscriptionMiddleware({ blockTracker, provider })
-  engine.push(subscriptionManager.middleware)
-  subscriptionManager.events.on('notification', (message) => engine.emit('notification', message))
-  // add data source
-  engine.push(providerAsMiddleware(ganacheProvider))
+
+  // create filter and subscription middleware
+  // these use ganacheProvider directly for data queries
+  const filterMiddleware = createFilterMiddleware({ blockTracker, provider: ganacheProvider })
+  const subscriptionManager = createSubscriptionMiddleware({ blockTracker, provider: ganacheProvider })
+
+  // create engine with all middleware
+  const engine = JsonRpcEngineV2.create({
+    middleware: [
+      filterMiddleware,
+      subscriptionManager.middleware,
+      providerAsMiddlewareV2(ganacheProvider),
+    ]
+  })
+
+  // create provider from engine with event support
+  const internalProvider = new InternalProvider({ engine })
+  const provider = Object.assign(new EventEmitter(), {
+    request: internalProvider.request.bind(internalProvider)
+  })
+
+  // forward subscription notifications
+  subscriptionManager.events.on('notification', (message) => {
+    provider.emit('notification', message)
+    provider.emit('data', null, message)
+  })
 
   // subs helper
   const subs = createSubsHelper({ provider })
 
-  return { ganacheProvider, forceNextBlock, engine, provider, request, subs, blockTracker, trackNextBlock }
+  return { ganacheProvider, forceNextBlock, provider, request: provider.request, subs, blockTracker, trackNextBlock }
 
   async function trackNextBlock() {
     return new Promise((resolve) => blockTracker.once('latest', resolve))
@@ -102,9 +116,10 @@ function createEngineFromGanache () {
 }
 
 function createEngineFromTestBlockMiddleware() {
-  const engine = new JsonRpcEngine()
   const testBlockSource = new TestBlockMiddleware()
-  engine.push(testBlockSource.createMiddleware())
+  const engine = JsonRpcEngineV2.create({
+    middleware: [testBlockSource.createMiddleware()]
+  })
   return { engine, testBlockSource }
 }
 

@@ -1,5 +1,5 @@
 const Mutex = require('async-mutex').Mutex
-const { createAsyncMiddleware, createScaffoldMiddleware } = require('@metamask/json-rpc-engine')
+const { createScaffoldMiddleware } = require('@metamask/json-rpc-engine/v2')
 const LogFilter = require('./log-filter.js')
 const BlockFilter = require('./block-filter.js')
 const TxFilter = require('./tx-filter.js')
@@ -22,10 +22,10 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
     eth_newBlockFilter:              waitForFree(toFilterCreationMiddleware(newBlockFilter)),
     eth_newPendingTransactionFilter: waitForFree(toFilterCreationMiddleware(newPendingTransactionFilter)),
     // uninstall filters
-    eth_uninstallFilter:             waitForFree(toAsyncRpcMiddleware(uninstallFilterHandler)),
+    eth_uninstallFilter:             waitForFree(toRpcMiddleware(uninstallFilterHandler)),
     // checking filter changes
-    eth_getFilterChanges:            waitForFree(toAsyncRpcMiddleware(getFilterChanges)),
-    eth_getFilterLogs:               waitForFree(toAsyncRpcMiddleware(getFilterLogs)),
+    eth_getFilterChanges:            waitForFree(toRpcMiddleware(getFilterChanges)),
+    eth_getFilterLogs:               waitForFree(toRpcMiddleware(getFilterLogs)),
   })
 
   // setup filter updating and destroy handler
@@ -72,19 +72,19 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
   async function newLogFilter(params) {
     const filter = new LogFilter({ provider, params })
-    const filterIndex = await installFilter(filter)
+    await installFilter(filter)
     return filter
   }
 
   async function newBlockFilter() {
     const filter = new BlockFilter({ provider })
-    const filterIndex = await installFilter(filter)
+    await installFilter(filter)
     return filter
   }
 
   async function newPendingTransactionFilter() {
     const filter = new TxFilter({ provider })
-    const filterIndex = await installFilter(filter)
+    await installFilter(filter)
     return filter
   }
 
@@ -185,30 +185,30 @@ function createEthFilterMiddleware({ blockTracker, provider }) {
 
 // helper for turning filter constructors into rpc middleware
 function toFilterCreationMiddleware(createFilterFn) {
-  return toAsyncRpcMiddleware(async (...args) => {
+  return toRpcMiddleware(async (...args) => {
     const filter = await createFilterFn(...args)
     const result = intToHex(filter.id)
     return result
   })
 }
 
-// helper for pulling out req.params and setting res.result
-function toAsyncRpcMiddleware(asyncFn) {
-  return createAsyncMiddleware(async (req, res) => {
-    const result = await asyncFn.apply(null, req.params)
-    res.result = result
-  })
+// helper for pulling out request.params and returning result (V2 middleware)
+function toRpcMiddleware(asyncFn) {
+  return async ({ request }) => {
+    const result = await asyncFn.apply(null, request.params)
+    return result
+  }
 }
 
 function mutexMiddlewareWrapper({ mutex }) {
   return (middleware) => {
-    return async (req, res, next, end) => {
+    return async (args) => {
       // wait for mutex available
       // we can release immediately because
       // we just need to make sure updates aren't active
       const releaseLock = await mutex.acquire()
       releaseLock()
-      middleware(req, res, next, end)
+      return middleware(args)
     }
   }
 }
