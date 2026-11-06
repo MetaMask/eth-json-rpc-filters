@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- **BREAKING:** Drop support for Node.js v18, v20 and v23; require `^22.14.0 || ^24 || ^26` ([#222](https://github.com/MetaMask/eth-json-rpc-filters/pull/222))
+- **BREAKING:** Drop support for Node.js v18, v20 and v23; require `^22.14.0 || ^24 || ^26` ([#222](https://github.com/MetaMask/eth-json-rpc-filters/pull/227))
 
 ## [9.0.0]
 ### Changed
