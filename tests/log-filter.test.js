@@ -1,100 +1,81 @@
-const test = require('tape')
-const LogFilter = require('../log-filter')
-const testData0 = require('./data/logs0.json')
-const testData1 = require('./data/logs1.json')
-const testData2 = require('./data/logs2.json')
-const testData3 = require('./data/logs3.json')
-const testData4 = require('./data/logs4.json')
-const testData5 = require('./data/logs5.json')
-const testData6 = require('./data/logs6.json')
+import { describe, expect, it } from 'vitest'
+import LogFilter from '../log-filter'
+import testData0 from './data/logs0.json'
+import testData1 from './data/logs1.json'
+import testData2 from './data/logs2.json'
+import testData3 from './data/logs3.json'
+import testData4 from './data/logs4.json'
+import testData5 from './data/logs5.json'
+import testData6 from './data/logs6.json'
 
-test('log filter match 0', (t) => {
+describe('LogFilter', () => {
+  it('matches test data 0', () => {
+    const params = testData0['eth_newFilter-req'].params[0]
+    const inputLogs = testData0['eth_getLogs-res'].result
 
-  const params = testData0['eth_newFilter-req'].params[0]
-  const inputLogs = testData0['eth_getLogs-res'].result
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(2)
+    expect(matchingLogs).toHaveLength(2)
+  })
 
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 2, 'start with two logs')
-  t.equal(matchingLogs.length, 2, 'correct number of logs matched')
-  t.end()
+  it('matches test data 1', () => {
+    const params = testData1.params
+    const inputLogs = testData1.newLogs
 
-})
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(2)
+    expect(matchingLogs).toHaveLength(0)
+  })
 
-test('log filter - match 1', (t) => {
+  it('matches test data 2', () => {
+    const params = testData2['eth_newFilter-req'].params[0]
+    const inputLogs = testData2['eth_getLogs-res'].result
 
-  const params = testData1.params
-  const inputLogs = testData1.newLogs
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(2)
+    expect(matchingLogs).toHaveLength(1)
+  })
 
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 2, 'start with two logs')
-  t.equal(matchingLogs.length, 0, 'correct number of logs matched')
-  t.end()
+  it('match case-sensitive', () => {
+    const params = testData3['eth_newFilter-req'].params[0]
+    const inputLogs = testData3['eth_getLogs-res'].result
 
-})
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(2)
+    expect(matchingLogs).toHaveLength(2)
+  })
 
-test('log filter - match 2', (t) => {
+  it('"and" logic', () => {
+    const params = testData4.filterParams
+    const inputLogs = testData4.inputLogs
 
-  const params = testData2['eth_newFilter-req'].params[0]
-  const inputLogs = testData2['eth_getLogs-res'].result
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(2)
+    expect(matchingLogs).toHaveLength(1)
+  })
 
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 2, 'start with two logs')
-  t.equal(matchingLogs.length, 1, 'correct number of logs matched')
-  t.end()
+  it('"or" logic', () => {
+    const params = testData5.filterParams
+    const inputLogs = testData5.inputLogs
 
-})
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(3)
+    expect(matchingLogs).toHaveLength(2)
+  })
 
-test('log filter - match case-sensitive', (t) => {
+  it('"wildcard" logic', () => {
+    const params = testData6.filterParams
+    const inputLogs = testData6.inputLogs
 
-  const params = testData3['eth_newFilter-req'].params[0]
-  const inputLogs = testData3['eth_getLogs-res'].result
-
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 2, 'start with two logs')
-  t.equal(matchingLogs.length, 2, 'correct number of logs matched')
-  t.end()
-
-})
-
-test('log filter - "and" logic', (t) => {
-
-  const params = testData4.filterParams
-  const inputLogs = testData4.inputLogs
-
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 2, 'start with two logs')
-  t.equal(matchingLogs.length, 1, 'correct number of logs matched')
-  t.end()
-
-})
-
-test('log filter - "or" logic', (t) => {
-
-  const params = testData5.filterParams
-  const inputLogs = testData5.inputLogs
-
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 3, 'start with three logs')
-  t.equal(matchingLogs.length, 2, 'correct number of logs matched')
-  t.end()
-
-})
-
-test('log filter - "wildcard" logic', (t) => {
-
-  const params = testData6.filterParams
-  const inputLogs = testData6.inputLogs
-
-  const filter = new LogFilter({ params })
-  const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
-  t.equal(inputLogs.length, 3, 'start with three logs')
-  t.equal(matchingLogs.length, 2, 'correct number of logs matched')
-  t.end()
-
+    const filter = new LogFilter({ params })
+    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    expect(inputLogs).toHaveLength(3)
+    expect(matchingLogs).toHaveLength(2)
+  })
 })
