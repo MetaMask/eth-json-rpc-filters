@@ -1,51 +1,64 @@
-module.exports = getBlocksForRange
+import type { InternalProvider } from '@metamask/eth-json-rpc-provider';
+import type { Json } from '@metamask/utils';
 
-async function getBlocksForRange({ provider, fromBlock, toBlock }) {
-  if (!fromBlock) fromBlock = toBlock
+export type Block = {
+  hash: string;
+  parentHash: string;
+  transactions: string[];
+  [key: string]: Json;
+};
 
-  const fromBlockNumber = hexToInt(fromBlock)
-  const toBlockNumber = hexToInt(toBlock)
-  const blockCountToQuery = toBlockNumber - fromBlockNumber + 1
+export async function getBlocksForRange({
+  provider,
+  fromBlock,
+  toBlock,
+}: {
+  provider: InternalProvider;
+  fromBlock?: string | null;
+  toBlock: string;
+}): Promise<Block[]> {
+  const startBlock = fromBlock || toBlock;
+
+  const fromBlockNumber = hexToInt(startBlock);
+  const toBlockNumber = hexToInt(toBlock);
+  const blockCountToQuery = toBlockNumber - fromBlockNumber + 1;
   // load all blocks from old to new (inclusive)
-  const missingBlockNumbers = Array(blockCountToQuery).fill()
-                              .map((_,index) => fromBlockNumber + index)
-                              .map(intToHex)
-  let blockBodies = await Promise.all(
-    missingBlockNumbers.map(blockNum => query(provider, 'eth_getBlockByNumber', [blockNum, false]))
-  )
-  blockBodies = blockBodies.filter(block => block !== null);
-  return blockBodies
+  const missingBlockNumbers = Array(blockCountToQuery)
+    .fill(undefined)
+    .map((_, index) => fromBlockNumber + index)
+    .map(intToHex);
+  const blockBodies = await Promise.all(
+    missingBlockNumbers.map((blockNum) =>
+      query(provider, 'eth_getBlockByNumber', [blockNum, false]),
+    ),
+  );
+  return blockBodies.filter((block): block is Block => block !== null);
 }
 
-function hexToInt(hexString) {
-  if (hexString === undefined || hexString === null) return hexString
-  return Number.parseInt(hexString, 16)
+function hexToInt(hexString: string): number {
+  return Number.parseInt(hexString, 16);
 }
 
-function incrementHexInt(hexString){
-  if (hexString === undefined || hexString === null) return hexString
-  const value = hexToInt(hexString)
-  return intToHex(value + 1)
+function intToHex(int: number): string {
+  return `0x${int.toString(16)}`;
 }
 
-function intToHex(int) {
-  if (int === undefined || int === null) return int
-  const hexString = int.toString(16)
-  return '0x' + hexString
-}
-
-async function query(provider, method, params) {
+async function query(
+  provider: InternalProvider,
+  method: string,
+  params: Json[],
+): Promise<Block | null> {
   for (let i = 0; i < 3; i++) {
     try {
       return provider.request({
         id: 1,
-        jsonrpc: "2.0",
+        jsonrpc: '2.0',
         method,
         params,
-      });
+      }) as Promise<Block | null>;
     } catch (error) {
       console.error(
-        `provider.request failed: ${error.stack || error.message || error}`
+        `provider.request failed: ${(error as Error).stack || (error as Error).message || error}`,
       );
     }
   }

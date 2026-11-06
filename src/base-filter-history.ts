@@ -1,31 +1,29 @@
-const BaseFilter = require('./base-filter')
+import { BaseFilter } from './base-filter.js';
+import type { FilterUpdate } from './base-filter.js';
 
-// tracks all results ever recorded
-class BaseFilterWithHistory extends BaseFilter {
+/**
+ * A filter that tracks all results ever recorded.
+ */
+export abstract class BaseFilterWithHistory<
+  Result = unknown,
+> extends BaseFilter<Result> {
+  allResults: Result[] = [];
 
-  constructor () {
-    super()
-    this.allResults = []
+  override async update(_args: FilterUpdate): Promise<void> {
+    throw new Error('BaseFilterWithHistory - no update method specified');
   }
 
-  async update () {
-    throw new Error('BaseFilterWithHistory - no update method specified')
+  override addResults(newResults: Result[]): void {
+    this.allResults = this.allResults.concat(newResults);
+    super.addResults(newResults);
   }
 
-  addResults (newResults) {
-    this.allResults = this.allResults.concat(newResults)
-    super.addResults(newResults)
+  override addInitialResults(newResults: Result[]): void {
+    this.allResults = this.allResults.concat(newResults);
+    super.addInitialResults(newResults);
   }
 
-  addInitialResults (newResults) {
-    this.allResults = this.allResults.concat(newResults)
-    super.addInitialResults(newResults)
+  getAllResults(): Result[] {
+    return this.allResults;
   }
-
-  getAllResults () {
-    return this.allResults
-  }
-
 }
-
-module.exports = BaseFilterWithHistory
