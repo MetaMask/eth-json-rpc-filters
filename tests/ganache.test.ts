@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   createTestSetup,
   deployLogEchoContract,
-} from './util'
+} from './util.js'
 
 describe('eth filter middleware', () => {
   it('LogFilter - basic', async () => {

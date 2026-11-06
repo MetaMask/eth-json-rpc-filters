@@ -14,13 +14,15 @@ Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) 
 ### usage
 
 basic usage:
-```js
+```ts
+import { createEthFilterMiddleware as createFilterMiddleware } from '@metamask/eth-json-rpc-filters'
+
 const filterMiddleware = createFilterMiddleware({ blockTracker, provider })
 engine.push(filterMiddleware)
 ```
 
 cleanup:
-```js
+```ts
 // remove blockTracker handler to free middleware for garbage collection
 filterMiddleware.destroy()
 ```

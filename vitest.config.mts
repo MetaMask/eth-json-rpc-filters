@@ -10,7 +10,7 @@ export default defineConfig({
     // explicitly enabled with `yarn test:watch`.
     watch: false,
 
-    include: ['tests/**/*.test.js'],
+    include: ['tests/**/*.test.ts'],
 
     // The ganache-backed tests mine blocks and poll for them.
     testTimeout: 30_000,
@@ -20,7 +20,7 @@ export default defineConfig({
 
     coverage: {
       enabled: false,
-      include: ['src/**/*.js'],
+      include: ['src/**/*.ts'],
       reporter: ['text', 'html', 'json-summary', 'lcovonly'],
 
       // Floors set from the coverage at the time of the Vitest migration.

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import LogFilter from '../src/log-filter'
+import { LogFilter } from '../src/log-filter.js'
+import type { Log } from '../src/log-filter.js'
 import testData0 from './data/logs0.json'
 import testData1 from './data/logs1.json'
 import testData2 from './data/logs2.json'
@@ -14,7 +15,7 @@ describe('LogFilter', () => {
     const inputLogs = testData0['eth_getLogs-res'].result
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(2)
     expect(matchingLogs).toHaveLength(2)
   })
@@ -24,7 +25,7 @@ describe('LogFilter', () => {
     const inputLogs = testData1.newLogs
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(2)
     expect(matchingLogs).toHaveLength(0)
   })
@@ -34,7 +35,7 @@ describe('LogFilter', () => {
     const inputLogs = testData2['eth_getLogs-res'].result
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(2)
     expect(matchingLogs).toHaveLength(1)
   })
@@ -44,7 +45,7 @@ describe('LogFilter', () => {
     const inputLogs = testData3['eth_getLogs-res'].result
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(2)
     expect(matchingLogs).toHaveLength(2)
   })
@@ -54,7 +55,7 @@ describe('LogFilter', () => {
     const inputLogs = testData4.inputLogs
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(2)
     expect(matchingLogs).toHaveLength(1)
   })
@@ -64,7 +65,7 @@ describe('LogFilter', () => {
     const inputLogs = testData5.inputLogs
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(3)
     expect(matchingLogs).toHaveLength(2)
   })
@@ -74,7 +75,7 @@ describe('LogFilter', () => {
     const inputLogs = testData6.inputLogs
 
     const filter = new LogFilter({ params })
-    const matchingLogs = inputLogs.filter(log => filter.matchLog(log))
+    const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log))
     expect(inputLogs).toHaveLength(3)
     expect(matchingLogs).toHaveLength(2)
   })
