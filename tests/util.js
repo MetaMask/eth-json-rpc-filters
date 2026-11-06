@@ -1,23 +1,13 @@
-const EventEmitter = require('events')
-const { PollingBlockTracker } = require('@metamask/eth-block-tracker')
-const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
-const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
-const { InternalProvider } = require('@metamask/eth-json-rpc-provider')
-const Ganache = require('ganache')
-const createFilterMiddleware = require('../index.js')
-const createSubscriptionMiddleware = require('../subscriptionManager.js')
+import EventEmitter from 'node:events'
+import { PollingBlockTracker } from '@metamask/eth-block-tracker'
+import { JsonRpcEngine } from '@metamask/json-rpc-engine'
+import { providerAsMiddleware } from '@metamask/eth-json-rpc-middleware'
+import { InternalProvider } from '@metamask/eth-json-rpc-provider'
+import Ganache from 'ganache'
+import createFilterMiddleware from '../index.js'
+import createSubscriptionMiddleware from '../subscriptionManager.js'
 
-module.exports = {
-  createPayload,
-  createEngineFromGanache,
-  createEngineFromTestBlockMiddleware,
-  createTestSetup,
-  asyncTest,
-  timeout,
-  deployLogEchoContract,
-}
-
-function createTestSetup() {
+export function createTestSetup() {
   // raw data source
   const { ganacheProvider, forceNextBlock } = createEngineFromGanache()
   // create block trackerfilterId
@@ -101,34 +91,16 @@ function createEngineFromGanache () {
   }
 }
 
-function createEngineFromTestBlockMiddleware() {
-  const engine = new JsonRpcEngine()
-  const testBlockSource = new TestBlockMiddleware()
-  engine.push(testBlockSource.createMiddleware())
-  return { engine, testBlockSource }
-}
-
-function createPayload(payload) {
+export function createPayload(payload) {
   return Object.assign({ id: 1, jsonrpc: '2.0', params: [] }, payload)
 }
 
-function asyncTest(asyncTestFn) {
-  return async function (t) {
-    try {
-      await asyncTestFn(t)
-      t.end()
-    } catch (err) {
-      t.end(err)
-    }
-  }
-}
-
-function timeout(duration) {
+export function timeout(duration) {
   return new Promise(resolve => setTimeout(resolve, duration))
 }
 
 
-async function deployLogEchoContract({ tools, from }) {
+export async function deployLogEchoContract({ tools, from }) {
   // https://github.com/kumavis/eth-needlepoint/blob/master/examples/emit-log.js
   const { request } = tools;
   const deployTxHash = await request({
