@@ -20,8 +20,7 @@ export default defineConfig({
 
     coverage: {
       enabled: false,
-      include: ['*.js'],
-      exclude: ['vitest.config.mts'],
+      include: ['src/**/*.js'],
       reporter: ['text', 'html', 'json-summary', 'lcovonly'],
 
       // Floors set from the coverage at the time of the Vitest migration.
