@@ -4,8 +4,8 @@ import { JsonRpcEngine } from '@metamask/json-rpc-engine'
 import { providerAsMiddleware } from '@metamask/eth-json-rpc-middleware'
 import { InternalProvider } from '@metamask/eth-json-rpc-provider'
 import Ganache from 'ganache'
-import createFilterMiddleware from '../index.js'
-import createSubscriptionMiddleware from '../subscriptionManager.js'
+import createFilterMiddleware from '../src/index.js'
+import createSubscriptionMiddleware from '../src/subscriptionManager.js'
 
 export function createTestSetup() {
   // raw data source

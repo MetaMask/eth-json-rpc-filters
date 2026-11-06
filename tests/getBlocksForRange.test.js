@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import getBlocksForRange from '../getBlocksForRange'
+import getBlocksForRange from '../src/getBlocksForRange'
 
 describe('getBlocksForRange', () => {
   it('returns the block if there is no error', async () => {
