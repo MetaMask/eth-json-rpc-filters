@@ -18,7 +18,6 @@ jobs:
         with:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
-          cache-node-modules: ${{ matrix.node-version == '26.x' }}
       - run: yarn build
       - run: yarn test
       - name: Validate RC changelog
