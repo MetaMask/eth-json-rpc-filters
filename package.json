@@ -11,7 +11,7 @@
     "build:clean": "rimraf dist && yarn build",
     "lint": "printf '%s\\n' 'No lint command'",
     "setup": "yarn install",
-    "test": "node test"
+    "test": "node tests"
   },
   "license": "ISC",
   "files": [
