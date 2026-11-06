@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { createTestSetup, deployLogEchoContract } from './util.js';
 
 describe('eth filter middleware', () => {
-  it('LogFilter - basic', async () => {
+  it('logFilter - basic', async () => {
     const tools = createTestSetup();
     const { request } = tools;
 
@@ -54,14 +54,14 @@ describe('eth filter middleware', () => {
     expect(filterChanges).toHaveLength(1);
     const matchingFilter = filterChanges[0];
     expect(matchingFilter.transactionHash).toBe(triggeringTxHash);
-    expect(matchingFilter.topics.length).toBe(1);
+    expect(matchingFilter.topics).toHaveLength(1);
     const matchedTopic = matchingFilter.topics[0];
     expect(matchedTopic).toBe(targetTopic);
 
     await request({ method: 'eth_uninstallFilter', params: [filterId] });
   });
 
-  it('LogFilter - multiple blocks', async () => {
+  it('logFilter - multiple blocks', async () => {
     const tools = createTestSetup();
     const { request } = tools;
 
@@ -129,14 +129,14 @@ describe('eth filter middleware', () => {
     expect(filterChanges).toHaveLength(1);
     const matchingFilter = filterChanges[0];
     expect(matchingFilter.transactionHash).toBe(triggeringTxHash);
-    expect(matchingFilter.topics.length).toBe(1);
+    expect(matchingFilter.topics).toHaveLength(1);
     const matchedTopic = matchingFilter.topics[0];
     expect(matchedTopic).toBe(targetTopic);
 
     await request({ method: 'eth_uninstallFilter', params: [filterId] });
   });
 
-  it('BlockFilter - basic', async () => {
+  it('blockFilter - basic', async () => {
     const tools = createTestSetup();
     const { request } = tools;
 
