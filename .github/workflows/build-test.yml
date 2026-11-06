@@ -8,17 +8,17 @@ on:
 jobs:
   build-lint-test:
     name: Build, Lint, and Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [22.x, 24.x]
     steps:
       - name: Checkout and setup environment
         uses: MetaMask/action-checkout-and-setup@v1
         with:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
-          cache-node-modules: ${{ matrix.node-version == '20.x' }}
+          cache-node-modules: ${{ matrix.node-version == '24.x' }}
       - run: yarn allow-scripts
       - run: yarn build
       - run: yarn test
@@ -37,7 +37,7 @@ jobs:
           fi
   all-jobs-pass:
     name: All jobs pass
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     needs:
       - build-lint-test
     steps:
