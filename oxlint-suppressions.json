@@ -1,0 +1,81 @@
+{
+  "src/getBlocksForRange.ts": {
+    "id-denylist": {
+      "count": 2
+    },
+    "typescript/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "typescript/restrict-template-expressions": {
+      "count": 1
+    }
+  },
+  "src/hexUtils.ts": {
+    "id-denylist": {
+      "count": 8
+    }
+  },
+  "src/index.ts": {
+    "typescript/explicit-function-return-type": {
+      "count": 2
+    },
+    "typescript/no-floating-promises": {
+      "count": 1
+    },
+    "typescript/no-misused-promises": {
+      "count": 3
+    }
+  },
+  "src/log-filter.ts": {
+    "typescript/prefer-promise-reject-errors": {
+      "count": 1
+    }
+  },
+  "src/subscriptionManager.ts": {
+    "typescript/explicit-function-return-type": {
+      "count": 2
+    },
+    "typescript/no-floating-promises": {
+      "count": 1
+    },
+    "typescript/no-misused-promises": {
+      "count": 2
+    }
+  },
+  "tests/ganache.test.ts": {
+    "typescript/no-unsafe-member-access": {
+      "count": 13
+    },
+    "vitest/no-restricted-matchers": {
+      "count": 5
+    }
+  },
+  "tests/subscriptions.test.ts": {
+    "typescript/no-explicit-any": {
+      "count": 2
+    },
+    "typescript/no-unsafe-member-access": {
+      "count": 4
+    },
+    "vitest/no-restricted-matchers": {
+      "count": 3
+    }
+  },
+  "tests/util.ts": {
+    "import/no-named-as-default": {
+      "count": 1
+    },
+    "typescript/explicit-function-return-type": {
+      "count": 11
+    },
+    "typescript/no-explicit-any": {
+      "count": 4
+    },
+    "typescript/no-unsafe-argument": {
+      "count": 1
+    },
+    "typescript/no-unsafe-member-access": {
+      "count": 3
+    }
+  }
+}

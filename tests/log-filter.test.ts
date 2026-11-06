@@ -22,7 +22,7 @@ describe('LogFilter', () => {
   });
 
   it('matches test data 1', () => {
-    const params = testData1.params;
+    const { params } = testData1;
     const inputLogs = testData1.newLogs;
 
     const filter = new LogFilter({ params });
@@ -53,7 +53,7 @@ describe('LogFilter', () => {
 
   it('"and" logic', () => {
     const params = testData4.filterParams;
-    const inputLogs = testData4.inputLogs;
+    const { inputLogs } = testData4;
 
     const filter = new LogFilter({ params });
     const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log));
@@ -63,7 +63,7 @@ describe('LogFilter', () => {
 
   it('"or" logic', () => {
     const params = testData5.filterParams;
-    const inputLogs = testData5.inputLogs;
+    const { inputLogs } = testData5;
 
     const filter = new LogFilter({ params });
     const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log));
@@ -73,7 +73,7 @@ describe('LogFilter', () => {
 
   it('"wildcard" logic', () => {
     const params = testData6.filterParams;
-    const inputLogs = testData6.inputLogs;
+    const { inputLogs } = testData6;
 
     const filter = new LogFilter({ params });
     const matchingLogs = inputLogs.filter((log) => filter.matchLog(log as Log));
