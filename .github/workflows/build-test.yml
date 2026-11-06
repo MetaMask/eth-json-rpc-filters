@@ -11,15 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x, 24.x]
+        node-version: [22.x, 24.x, 26.x]
     steps:
       - name: Checkout and setup environment
-        uses: MetaMask/action-checkout-and-setup@v1
+        uses: MetaMask/action-checkout-and-setup@v3
         with:
           is-high-risk-environment: false
           node-version: ${{ matrix.node-version }}
-          cache-node-modules: ${{ matrix.node-version == '24.x' }}
-      - run: yarn allow-scripts
+          cache-node-modules: ${{ matrix.node-version == '26.x' }}
       - run: yarn build
       - run: yarn test
       - name: Validate RC changelog
