@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - **BREAKING:** Drop support for Node.js v18, v20 and v23; require `^22.14.0 || ^24 || ^26` ([#227](https://github.com/MetaMask/eth-json-rpc-filters/pull/227))
+- Bump `@metamask/json-rpc-engine` from `^10.0.0` to `^11.0.0` ([#230](https://github.com/MetaMask/eth-json-rpc-filters/pull/230))
+- Bump `@metamask/safe-event-emitter` from `^3.0.0` to `^3.1.3` ([#230](https://github.com/MetaMask/eth-json-rpc-filters/pull/230))
 
 ## [9.0.0]
 ### Changed
