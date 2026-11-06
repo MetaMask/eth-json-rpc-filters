@@ -64,15 +64,17 @@ export function createSubscriptionMiddleware({
   middleware.destroy = destroy;
   return { events, middleware };
 
-  async function subscribe(
-    req: Request,
-    res: Response,
-  ): Promise<void> {
+  async function subscribe(req: Request, res: Response): Promise<void> {
     if (isDestroyed) {
-      throw new Error('SubscriptionManager - attempting to use after destroying');
+      throw new Error(
+        'SubscriptionManager - attempting to use after destroying',
+      );
     }
 
-    const [subscriptionType, filterParams] = req.params as unknown as [string, LogFilterParams?];
+    const [subscriptionType, filterParams] = req.params as unknown as [
+      string,
+      LogFilterParams?,
+    ];
     // subId is 16 byte hex string
     const subId = unsafeRandomBytes(16);
 
@@ -144,12 +146,11 @@ export function createSubscriptionMiddleware({
     }
   }
 
-  async function unsubscribe(
-    req: Request,
-    res: Response,
-  ): Promise<void> {
+  async function unsubscribe(req: Request, res: Response): Promise<void> {
     if (isDestroyed) {
-      throw new Error('SubscriptionManager - attempting to use after destroying');
+      throw new Error(
+        'SubscriptionManager - attempting to use after destroying',
+      );
     }
 
     const [id] = req.params as [string];

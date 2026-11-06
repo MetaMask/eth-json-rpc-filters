@@ -1,5 +1,5 @@
-import EthQuery from '@metamask/eth-query';
 import type { InternalProvider } from '@metamask/eth-json-rpc-provider';
+import EthQuery from '@metamask/eth-query';
 
 import { BaseFilterWithHistory } from './base-filter-history.js';
 import type { FilterUpdate } from './base-filter.js';
