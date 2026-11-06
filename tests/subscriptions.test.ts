@@ -5,7 +5,7 @@ import { createTestSetup, timeout, deployLogEchoContract } from './util.js';
 describe('subscription middleware', () => {
   it('subscriptions - newHeads', async () => {
     const tools = createTestSetup();
-    const subs = tools.subs;
+    const { subs } = tools;
 
     // await first block
     await tools.forceNextBlock();
@@ -125,7 +125,7 @@ describe('subscription middleware', () => {
     expect(subResults).toHaveLength(1);
     const matchingResults = subResults[0];
     expect(matchingResults.transactionHash).toBe(triggeringTxHash);
-    expect(matchingResults.topics.length).toBe(1);
+    expect(matchingResults.topics).toHaveLength(1);
     const matchedTopic = matchingResults.topics[0];
     expect(matchedTopic).toBe(targetTopic);
 

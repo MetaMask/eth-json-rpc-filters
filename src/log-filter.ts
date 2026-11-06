@@ -150,7 +150,7 @@ export class LogFilter extends BaseFilterWithHistory<Log> {
         ? topicPattern
         : [topicPattern];
       // check for wild card
-      if (subtopicsToMatch.includes(null as never)) {
+      if (subtopicsToMatch.includes(null)) {
         return true;
       }
       // check each possible matching topic
