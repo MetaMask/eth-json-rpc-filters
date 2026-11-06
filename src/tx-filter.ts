@@ -1,27 +1,35 @@
-const BaseFilter = require('./base-filter')
-const getBlocksForRange = require('./getBlocksForRange')
-const { incrementHexInt } = require('./hexUtils')
+import type { InternalProvider } from '@metamask/eth-json-rpc-provider';
 
-class TxFilter extends BaseFilter {
+import { BaseFilter } from './base-filter.js';
+import type { FilterUpdate } from './base-filter.js';
+import { getBlocksForRange } from './getBlocksForRange.js';
+import { incrementHexInt } from './hexUtils.js';
 
-  constructor ({ provider }) {
-    super()
-    this.type = 'tx'
-    this.provider = provider
+export class TxFilter extends BaseFilter<string> {
+  readonly type = 'tx';
+
+  readonly provider: InternalProvider;
+
+  constructor({ provider }: { provider: InternalProvider }) {
+    super();
+    this.provider = provider;
   }
 
-  async update ({ oldBlock }) {
-    const toBlock = oldBlock
-    const fromBlock = incrementHexInt(oldBlock)
-    const blocks = await getBlocksForRange({ provider: this.provider, fromBlock, toBlock })
-    const blockTxHashes = []
+  override async update({ oldBlock }: FilterUpdate): Promise<void> {
+    // `oldBlock` is not guaranteed to be set on the first sync, which this
+    // preserves from the JavaScript implementation.
+    const toBlock = oldBlock as string;
+    const fromBlock = incrementHexInt(oldBlock);
+    const blocks = await getBlocksForRange({
+      provider: this.provider,
+      fromBlock,
+      toBlock,
+    });
+    const blockTxHashes: string[] = [];
     for (const block of blocks) {
-      blockTxHashes.push(...block.transactions)
+      blockTxHashes.push(...block.transactions);
     }
     // add to results
-    this.addResults(blockTxHashes)
+    this.addResults(blockTxHashes);
   }
-
 }
-
-module.exports = TxFilter

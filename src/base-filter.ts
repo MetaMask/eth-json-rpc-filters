@@ -1,31 +1,42 @@
-const SafeEventEmitter = require('@metamask/safe-event-emitter').default
+import SafeEventEmitter from '@metamask/safe-event-emitter';
 
-class BaseFilter extends SafeEventEmitter {
+export type FilterType = 'block' | 'log' | 'tx';
 
-  constructor () {
-    super()
-    this.updates = []
+export type FilterUpdate = {
+  oldBlock?: string | null;
+  newBlock: string;
+};
+
+export abstract class BaseFilter<Result = unknown> extends SafeEventEmitter {
+  abstract readonly type: FilterType;
+
+  // Assigned when the filter is installed by the filter middleware.
+  id?: number;
+
+  idHex?: string;
+
+  updates: Result[] = [];
+
+  async initialize(_args: { currentBlock: string }): Promise<void> {
+    // Nothing to initialize by default.
   }
 
-  async initialize () {}
-
-  async update () {
-    throw new Error('BaseFilter - no update method specified')
+  async update(_args: FilterUpdate): Promise<void> {
+    throw new Error('BaseFilter - no update method specified');
   }
 
-  addResults (newResults) {
-    this.updates = this.updates.concat(newResults)
-    newResults.forEach(result => this.emit('update', result))
+  addResults(newResults: Result[]): void {
+    this.updates = this.updates.concat(newResults);
+    newResults.forEach((result) => this.emit('update', result));
   }
 
-  addInitialResults (newResults) {}
-
-  getChangesAndClear () {
-    const updates = this.updates
-    this.updates = []
-    return updates
+  addInitialResults(_newResults: Result[]): void {
+    // Initial results are ignored by default.
   }
-  
+
+  getChangesAndClear(): Result[] {
+    const { updates } = this;
+    this.updates = [];
+    return updates;
+  }
 }
-
-module.exports = BaseFilter
