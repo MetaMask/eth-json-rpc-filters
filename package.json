@@ -4,7 +4,7 @@
   "description": "[json-rpc-engine](https://github.com/MetaMask/json-rpc-engine) middleware implementing ethereum filter methods. Backed by an [eth-block-tracker](https://github.com/MetaMask/eth-block-tracker) and web3 provider interface (`web3.currentProvider`).",
   "main": "index.js",
   "engines": {
-    "node": "^18.16 || ^20 || >=22",
+    "node": "^22.14.0 || ^24 || ^26",
     "yarn": "^1.22.22"
   },
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.5.1",
-    "@metamask/auto-changelog": "^3.3.0",
+    "@metamask/auto-changelog": "^7.1.0",
     "@metamask/eth-json-rpc-middleware": "^15.0.0",
     "@metamask/eth-block-tracker": "^11.0.1",
     "ganache": "^7.9.2",
