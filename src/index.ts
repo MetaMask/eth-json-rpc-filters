@@ -59,9 +59,7 @@ export function createEthFilterMiddleware({
   const middleware = createScaffoldMiddleware({
     // install filters
     eth_newFilter: waitForFree(toFilterCreationMiddleware(newLogFilter)),
-    eth_newBlockFilter: waitForFree(
-      toFilterCreationMiddleware(newBlockFilter),
-    ),
+    eth_newBlockFilter: waitForFree(toFilterCreationMiddleware(newBlockFilter)),
     eth_newPendingTransactionFilter: waitForFree(
       toFilterCreationMiddleware(newPendingTransactionFilter),
     ),

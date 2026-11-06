@@ -25,7 +25,10 @@ export function bnToHex(bn: { toString(radix: number): string }): string {
 }
 
 export function blockRefIsNumber(blockRef?: string | null): boolean {
-  return Boolean(blockRef) && !['earliest', 'latest', 'pending'].includes(blockRef as string);
+  return (
+    Boolean(blockRef) &&
+    !['earliest', 'latest', 'pending'].includes(blockRef as string)
+  );
 }
 
 export function hexToInt(hexString: string): number;
@@ -59,7 +62,9 @@ export function incrementHexInt(
 
 export function intToHex(int: number): string;
 export function intToHex(int: null | undefined): null | undefined;
-export function intToHex(int: number | null | undefined): string | null | undefined;
+export function intToHex(
+  int: number | null | undefined,
+): string | null | undefined;
 export function intToHex(
   int: number | null | undefined,
 ): string | null | undefined {
