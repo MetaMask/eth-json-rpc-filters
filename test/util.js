@@ -2,7 +2,7 @@ const EventEmitter = require('events')
 const { PollingBlockTracker } = require('@metamask/eth-block-tracker')
 const { JsonRpcEngine } = require('@metamask/json-rpc-engine')
 const { providerAsMiddleware } = require('@metamask/eth-json-rpc-middleware')
-const { providerFromEngine } = require('@metamask/eth-json-rpc-provider')
+const { InternalProvider } = require('@metamask/eth-json-rpc-provider')
 const Ganache = require('ganache')
 const createFilterMiddleware = require('../index.js')
 const createSubscriptionMiddleware = require('../subscriptionManager.js')
@@ -27,7 +27,7 @@ function createTestSetup() {
   })
   // create higher level
   const engine = new JsonRpcEngine()
-  const provider = providerFromEngine(engine)
+  const provider = new InternalProvider({ engine })
   const request = provider.request.bind(provider);
   // add filter middleware
   engine.push(createFilterMiddleware({ blockTracker, provider }))
@@ -39,7 +39,7 @@ function createTestSetup() {
   engine.push(providerAsMiddleware(ganacheProvider))
 
   // subs helper
-  const subs = createSubsHelper({ provider })
+  const subs = createSubsHelper({ provider, engine })
 
   return { ganacheProvider, forceNextBlock, engine, provider, request, subs, blockTracker, trackNextBlock }
 
@@ -48,15 +48,15 @@ function createTestSetup() {
   }
 }
 
-function createSubsHelper({ provider }) {
+function createSubsHelper({ provider, engine }) {
   return {
-    logs: createSubGenerator({ subType: 'logs', provider }),
-    newPendingTransactions: createSubGenerator({ subType: 'newPendingTransactions', provider }),
-    newHeads: createSubGenerator({ subType: 'newHeads', provider }),
+    logs: createSubGenerator({ subType: 'logs', provider, engine }),
+    newPendingTransactions: createSubGenerator({ subType: 'newPendingTransactions', provider, engine }),
+    newHeads: createSubGenerator({ subType: 'newHeads', provider, engine }),
   }
 }
 
-function createSubGenerator({ subType, provider }) {
+function createSubGenerator({ subType, provider, engine }) {
   return async function () {
     const args = [].slice.call(arguments);
     args.unshift(subType);
@@ -64,15 +64,15 @@ function createSubGenerator({ subType, provider }) {
       method: "eth_subscribe",
       params: args,
     });
-    return createNewSub({ id, provider });
+    return createNewSub({ id, provider, engine });
   };
 }
 
-function createNewSub({ id, provider }) {
+function createNewSub({ id, provider, engine }) {
   // event emitter for emiting subscription hits
   const events = new EventEmitter()
   // filter rpc notifications for matching subscription
-  provider.on('data', (_, message) => {
+  engine.on('notification', (message) => {
     if (message.method !== 'eth_subscription') return
     const subId = message.params.subscription
     if (subId !== id) return
