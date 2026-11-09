@@ -11,7 +11,11 @@
     "build:clean": "rimraf dist && yarn build",
     "lint": "printf '%s\\n' 'No lint command'",
     "setup": "yarn install",
-    "test": "node tests"
+    "test": "vitest",
+    "test:clean": "vitest --clearCache",
+    "test:coverage": "vitest --coverage",
+    "test:verbose": "vitest --reporter=verbose",
+    "test:watch": "vitest --watch"
   },
   "license": "ISC",
   "files": [
@@ -30,9 +34,10 @@
     "@metamask/eth-block-tracker": "^16.0.0",
     "@metamask/eth-json-rpc-middleware": "^26.0.0",
     "@metamask/eth-json-rpc-provider": "^7.0.0",
+    "@vitest/coverage-v8": "5.0.3",
     "ganache": "^7.9.2",
-    "sinon": "^15.2.0",
-    "tape": "^5.7.0"
+    "vite": "^8.0.8",
+    "vitest": "5.0.3"
   },
   "repository": {
     "type": "git",
