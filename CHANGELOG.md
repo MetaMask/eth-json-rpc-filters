@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **BREAKING:** Drop support for Node.js v18, v20 and v23; require `^22.14.0 || ^24 || ^26` ([#227](https://github.com/MetaMask/eth-json-rpc-filters/pull/227))
 - Bump `@metamask/json-rpc-engine` from `^10.0.0` to `^11.0.0` ([#230](https://github.com/MetaMask/eth-json-rpc-filters/pull/230))
+- **BREAKING:** Convert the package to TypeScript and ESM-only, and publish type declarations ([#235](https://github.com/MetaMask/eth-json-rpc-filters/pull/235))
+  - The package now has an `exports` map. Only `@metamask/eth-json-rpc-filters` and `@metamask/eth-json-rpc-filters/subscriptionManager` can be imported.
+  - Both entry points keep their default export, and now also have a named export (`createEthFilterMiddleware` and `createSubscriptionMiddleware`). With `require`, the function is now on `.default` or the named export.
+- Remove `pify` dependency ([#235](https://github.com/MetaMask/eth-json-rpc-filters/pull/235))
+- Add `@metamask/eth-block-tracker`, `@metamask/eth-json-rpc-provider` and `@metamask/utils` as dependencies, since their types are part of the public API ([#235](https://github.com/MetaMask/eth-json-rpc-filters/pull/235))
 - Bump `@metamask/safe-event-emitter` from `^3.0.0` to `^3.1.3` ([#230](https://github.com/MetaMask/eth-json-rpc-filters/pull/230))
 
 ## [9.0.0]

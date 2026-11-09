@@ -3,7 +3,7 @@ import {
   createTestSetup,
   timeout,
   deployLogEchoContract,
-} from './util'
+} from './util.js'
 
 describe('subscription middleware', () => {
   it('subscriptions - newHeads', async () => {
@@ -15,7 +15,7 @@ describe('subscription middleware', () => {
     await tools.trackNextBlock()
 
     // create sub
-    const subResults = []
+    const subResults: any[] = []
     const sub = await subs.newHeads()
     sub.events.on('notification', (value) => {
       subResults.push(value)
@@ -65,7 +65,7 @@ describe('subscription middleware', () => {
     const wrongContractAddress = (await deployLogEchoContract({ tools, from: fromAcccount })).contractAddress
 
     // create subscription
-    const subResults = []
+    const subResults: any[] = []
     const blockNumber = await blockTracker.getLatestBlock()
     const targetTopic = '0xaabbcce106361d4f6cd9098051596d565c1dbf7bc20b4c3acb3aaa4204aabbcc'
     const wrongTopic = '0xffffffe106361d4f6cd9098051596d565c1dbf7bc20b4c3acb3aaa4204ffffff'
