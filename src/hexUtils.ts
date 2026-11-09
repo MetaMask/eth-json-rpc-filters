@@ -1,11 +1,11 @@
 export function minBlockRef(...refs: string[]): string {
   const sortedRefs = sortBlockRefs(refs);
-  return sortedRefs[0] as string;
+  return sortedRefs[0];
 }
 
 export function maxBlockRef(...refs: string[]): string {
   const sortedRefs = sortBlockRefs(refs);
-  return sortedRefs[sortedRefs.length - 1] as string;
+  return sortedRefs[sortedRefs.length - 1];
 }
 
 export function sortBlockRefs(refs: string[]): string[] {

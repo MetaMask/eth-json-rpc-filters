@@ -108,9 +108,13 @@ function createNewSub({
   const events = new EventEmitter();
   // filter rpc notifications for matching subscription
   engine.on('notification', (message: any) => {
-    if (message.method !== 'eth_subscription') return;
+    if (message.method !== 'eth_subscription') {
+      return;
+    }
     const subId = message.params.subscription;
-    if (subId !== id) return;
+    if (subId !== id) {
+      return;
+    }
     const value = message.params.result;
     events.emit('notification', value);
   });
@@ -171,7 +175,7 @@ export async function deployLogEchoContract({
     method: 'eth_getTransactionReceipt',
     params: [deployTxHash],
   });
-  const contractAddress = deployTxRx.contractAddress;
+  const { contractAddress } = deployTxRx;
   return {
     deployTxHash,
     deployTxRx,
