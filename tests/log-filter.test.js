@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import LogFilter from '../log-filter'
+import LogFilter from '../src/log-filter'
 import testData0 from './data/logs0.json'
 import testData1 from './data/logs1.json'
 import testData2 from './data/logs2.json'
